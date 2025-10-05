@@ -1,9 +1,18 @@
+<<<<<<< HEAD
 ﻿-- Full import of ms365 accounts CSV data
 USE mccbot;
 
 -- Clear existing data
 TRUNCATE TABLE ms365_accounts;
 
+=======
+﻿-- Full import of ms365 accounts CSV data
+USE mccbot;
+
+-- Clear existing data
+TRUNCATE TABLE ms365_accounts;
+
+>>>>>>> 9f65cd005f129908c789f8b201ffb45b77651557
 -- Import all records
 
 INSERT INTO ms365_accounts (display_name, user_principal_name, first_name, last_name) VALUES
@@ -5710,4 +5719,8 @@ INSERT INTO ms365_accounts (display_name, user_principal_name, first_name, last_
 -- Verify import
 SELECT COUNT(*) as total_records FROM ms365_accounts;
 SELECT * FROM ms365_accounts LIMIT 5;
+<<<<<<< HEAD
 
+=======
+
+>>>>>>> 9f65cd005f129908c789f8b201ffb45b77651557
