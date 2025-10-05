@@ -36,6 +36,7 @@ Route::get('/', function () {
 
 Route::get('/login', [UnifiedAuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [UnifiedAuthController::class, 'login'])->name('unified.login');
+Route::post('/check-lockout-status', [UnifiedAuthController::class, 'checkLockoutStatus'])->name('check.lockout.status');
 
 // Gmail Authentication Routes
 Route::get('/signup', [UnifiedAuthController::class, 'showSignupForm'])->name('gmail.signup');

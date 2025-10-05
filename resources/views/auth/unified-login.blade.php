@@ -342,6 +342,25 @@
             margin-right: 0.5rem;
         }
 
+        .warning-message {
+            background: rgba(245, 158, 11, 0.05);
+            color: var(--warning);
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-sm);
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            display: flex;
+            align-items: center;
+        }
+
+        .warning-message::before {
+            content: '\f071';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            margin-right: 0.5rem;
+        }
+
         .form-group .error {
             border-color: var(--danger);
         }
@@ -418,6 +437,24 @@
         <div class="auth-content">
             @if(session('success'))
                 <div class="success-message" id="swal-success" data-message="{{ session('success') }}" style="display:none"></div>
+            @endif
+
+            @if(session('warning'))
+                <div class="warning-message">
+                    {{ session('warning') }}
+                </div>
+            @endif
+
+            @if(session('attempt_warning'))
+                <div class="warning-message">
+                    {{ session('attempt_warning') }}
+                </div>
+            @endif
+
+            @if(session('lockout_time'))
+                <div class="error-message" id="lockout-message">
+                    Account temporarily locked. Please try again in <span id="lockout-timer">{{ session('lockout_time') }}</span> seconds.
+                </div>
             @endif
 
             @if($errors->any())
@@ -895,6 +932,126 @@
                     }
                 }
             }, 100);
+        });
+
+        // Lockout timer functionality
+        @if(session('lockout_time'))
+        let lockoutTime = {{ session('lockout_time') }};
+        const lockoutTimer = document.getElementById('lockout-timer');
+        const lockoutMessage = document.getElementById('lockout-message');
+        const submitButton = document.getElementById('submit-btn');
+        
+        // Disable form during lockout
+        if (lockoutTime > 0) {
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<i class="fas fa-lock"></i> Account Locked';
+        }
+
+        function updateLockoutTimer() {
+            if (lockoutTime <= 0) {
+                // Lockout expired, hide message and enable form
+                if (lockoutMessage) {
+                    lockoutMessage.style.display = 'none';
+                }
+                if (submitButton) {
+                    submitButton.disabled = false;
+                    const loginType = document.getElementById('login_type').value;
+                    if (loginType === 'ms365') {
+                        submitButton.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login with MS365';
+                    } else if (loginType === 'superadmin' || loginType === 'department-admin' || loginType === 'office-admin') {
+                        submitButton.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login as Admin';
+                    } else {
+                        submitButton.innerHTML = '<i class="fas fa-sign-in-alt"></i> Select Login Type';
+                    }
+                }
+                return;
+            }
+
+            // Update timer display
+            const minutes = Math.floor(lockoutTime / 60);
+            const seconds = lockoutTime % 60;
+            const timeString = minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
+            
+            if (lockoutTimer) {
+                lockoutTimer.textContent = timeString;
+            }
+
+            lockoutTime--;
+            setTimeout(updateLockoutTimer, 1000);
+        }
+
+        // Start the countdown
+        updateLockoutTimer();
+        @endif
+
+        // Check lockout status periodically for active sessions
+        function checkLockoutStatus() {
+            const loginType = document.getElementById('login_type').value;
+            const identifier = getIdentifierForLoginType(loginType);
+            
+            if (!identifier) return;
+
+            fetch('{{ route("check.lockout.status") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    identifier: identifier,
+                    login_type: loginType
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.locked && data.remaining_time > 0) {
+                    // Show lockout message if not already shown
+                    showLockoutMessage(data.remaining_time);
+                }
+            })
+            .catch(error => console.log('Lockout check failed:', error));
+        }
+
+        function getIdentifierForLoginType(loginType) {
+            switch(loginType) {
+                case 'ms365':
+                    return document.getElementById('ms365_account')?.value || '';
+                case 'user':
+                    return document.getElementById('gmail_account')?.value || '';
+                case 'superadmin':
+                case 'department-admin':
+                case 'office-admin':
+                    return document.getElementById('username')?.value || '';
+                default:
+                    return '';
+            }
+        }
+
+        function showLockoutMessage(remainingTime) {
+            // Create or update lockout message
+            let lockoutMsg = document.getElementById('lockout-message');
+            if (!lockoutMsg) {
+                lockoutMsg = document.createElement('div');
+                lockoutMsg.id = 'lockout-message';
+                lockoutMsg.className = 'error-message';
+                lockoutMsg.innerHTML = 'Account temporarily locked. Please try again in <span id="lockout-timer"></span> seconds.';
+                
+                // Insert after other messages
+                const authContent = document.querySelector('.auth-content');
+                const form = document.querySelector('.unified-login-form');
+                authContent.insertBefore(lockoutMsg, form);
+            }
+            
+            lockoutMsg.style.display = 'flex';
+            lockoutTime = remainingTime;
+            updateLockoutTimer();
+        }
+
+        // Check lockout status when identifier changes
+        document.addEventListener('input', function(e) {
+            if (e.target.matches('#ms365_account, #gmail_account, #username')) {
+                setTimeout(checkLockoutStatus, 500); // Debounce
+            }
         });
     </script>
 </body>
