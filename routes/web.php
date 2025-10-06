@@ -31,12 +31,46 @@ use Illuminate\Support\Facades\Artisan;
 // TEMPORARY STORAGE FIX ROUTES - DELETE AFTER RUNNING ONCE
 Route::get('/fix-storage', function () {
     try {
-        Artisan::call('storage:link');
-        return response()->json([
-            'success' => true,
-            'message' => 'Storage link created successfully!',
-            'output' => Artisan::output()
-        ]);
+        // Alternative storage link creation without exec()
+        $target = public_path('storage');
+        $link = storage_path('app/public');
+        
+        // Remove existing link if it exists
+        if (file_exists($target)) {
+            if (is_link($target)) {
+                unlink($target);
+            } else {
+                // If it's a directory, we can't remove it safely
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Storage directory already exists. Please remove public/storage manually if needed.'
+                ], 500);
+            }
+        }
+        
+        // Create symbolic link
+        if (symlink($link, $target)) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Storage link created successfully!',
+                'target' => $target,
+                'link' => $link
+            ]);
+        } else {
+            // Fallback: create directory and copy files
+            if (!file_exists($target)) {
+                mkdir($target, 0755, true);
+            }
+            
+            // Create .gitignore in storage directory
+            file_put_contents($target . '/.gitignore', "*\n!.gitignore\n");
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Storage directory created (symlink not supported on this server)',
+                'note' => 'Files will be served directly from storage/app/public'
+            ]);
+        }
     } catch (\Exception $e) {
         return response()->json([
             'success' => false,
