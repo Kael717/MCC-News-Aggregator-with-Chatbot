@@ -70,6 +70,27 @@ Route::get('/fix-cache', function () {
     }
 })->name('fix.cache');
 
+Route::get('/fix-migration', function () {
+    try {
+        // Run the specific login_attempts migration
+        Artisan::call('migrate', [
+            '--path' => 'database/migrations/2025_10_05_170646_create_login_attempts_table.php',
+            '--force' => true
+        ]);
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Login attempts migration run successfully!',
+            'output' => Artisan::output()
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Error running migration: ' . $e->getMessage()
+        ], 500);
+    }
+})->name('fix.migration');
+
 // Show welcome page at root
 Route::get('/', function () {
     return view('welcome');
