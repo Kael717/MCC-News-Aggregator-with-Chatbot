@@ -18,10 +18,10 @@
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
-    # Allow access to storage files (handle both symlink and direct access)
+    # Allow access to storage files via rewrite (no symlink required)
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^storage/(.*)$ /storage/app/public/$1 [L]
+    RewriteRule ^storage/(.*)$ /storage/app/public/$1 [L,QSA]
     
     # Send Requests To Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d

@@ -31,50 +31,54 @@ use Illuminate\Support\Facades\Artisan;
 // TEMPORARY STORAGE FIX ROUTES - DELETE AFTER RUNNING ONCE
 Route::get('/fix-storage', function () {
     try {
-        // Alternative storage link creation without exec()
         $target = public_path('storage');
-        $link = storage_path('app/public');
+        $source = storage_path('app/public');
         
-        // Remove existing link if it exists
+        // Check if target already exists
         if (file_exists($target)) {
-            if (is_link($target)) {
-                unlink($target);
+            return response()->json([
+                'success' => true,
+                'message' => 'Storage directory already exists',
+                'target' => $target,
+                'source' => $source,
+                'note' => 'Storage is already configured'
+            ]);
+        }
+        
+        // Create storage directory in public folder
+        if (!file_exists($target)) {
+            if (mkdir($target, 0755, true)) {
+                // Create .gitignore to prevent accidental commits
+                file_put_contents($target . '/.gitignore', "*\n!.gitignore\n");
+                
+                // Create a simple index.php to prevent directory listing
+                file_put_contents($target . '/index.php', "<?php\n// Storage directory\n");
+                
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Storage directory created successfully!',
+                    'target' => $target,
+                    'source' => $source,
+                    'note' => 'Files will be served via .htaccess rewrite rules'
+                ]);
             } else {
-                // If it's a directory, we can't remove it safely
                 return response()->json([
                     'success' => false,
-                    'message' => 'Storage directory already exists. Please remove public/storage manually if needed.'
+                    'message' => 'Failed to create storage directory. Check permissions.'
                 ], 500);
             }
         }
         
-        // Create symbolic link
-        if (symlink($link, $target)) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Storage link created successfully!',
-                'target' => $target,
-                'link' => $link
-            ]);
-        } else {
-            // Fallback: create directory and copy files
-            if (!file_exists($target)) {
-                mkdir($target, 0755, true);
-            }
-            
-            // Create .gitignore in storage directory
-            file_put_contents($target . '/.gitignore', "*\n!.gitignore\n");
-            
-            return response()->json([
-                'success' => true,
-                'message' => 'Storage directory created (symlink not supported on this server)',
-                'note' => 'Files will be served directly from storage/app/public'
-            ]);
-        }
+        return response()->json([
+            'success' => true,
+            'message' => 'Storage directory already exists',
+            'target' => $target
+        ]);
+        
     } catch (\Exception $e) {
         return response()->json([
             'success' => false,
-            'message' => 'Error creating storage link: ' . $e->getMessage()
+            'message' => 'Error creating storage directory: ' . $e->getMessage()
         ], 500);
     }
 })->name('fix.storage');
