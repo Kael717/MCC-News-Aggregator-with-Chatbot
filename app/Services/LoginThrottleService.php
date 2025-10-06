@@ -65,7 +65,7 @@ class LoginThrottleService
                 'locked' => true,
                 'attempts' => $loginAttempt->attempts,
                 'remaining_time' => $loginAttempt->getRemainingLockoutTime(),
-                'message' => "Too many failed attempts. Account locked for 3 minutes."
+                'message' => "Too many failed attempts. Account locked for 1 minute."
             ];
         }
 

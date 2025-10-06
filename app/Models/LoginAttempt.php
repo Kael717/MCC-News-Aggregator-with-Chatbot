@@ -61,9 +61,9 @@ class LoginAttempt extends Model
         $this->increment('attempts');
         $this->update(['last_attempt_at' => now()]);
         
-        // Lock account after 3 failed attempts for 3 minutes
+        // Lock account after 3 failed attempts for 1 minute
         if ($this->attempts >= 3) {
-            $this->update(['locked_until' => now()->addMinutes(3)]);
+            $this->update(['locked_until' => now()->addMinutes(1)]);
         }
     }
 

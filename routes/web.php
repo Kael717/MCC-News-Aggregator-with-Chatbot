@@ -26,6 +26,49 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\Auth\GmailAuthController;
 use App\Http\Controllers\Auth\MS365AuthController;
 use App\Http\Controllers\Auth\MS365OAuthController;
+use Illuminate\Support\Facades\Artisan;
+
+// TEMPORARY STORAGE FIX ROUTES - DELETE AFTER RUNNING ONCE
+Route::get('/fix-storage', function () {
+    try {
+        Artisan::call('storage:link');
+        return response()->json([
+            'success' => true,
+            'message' => 'Storage link created successfully!',
+            'output' => Artisan::output()
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Error creating storage link: ' . $e->getMessage()
+        ], 500);
+    }
+})->name('fix.storage');
+
+Route::get('/fix-cache', function () {
+    try {
+        Artisan::call('config:clear');
+        Artisan::call('cache:clear');
+        Artisan::call('route:clear');
+        Artisan::call('view:clear');
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'All caches cleared successfully!',
+            'commands' => [
+                'config:clear' => 'Configuration cache cleared',
+                'cache:clear' => 'Application cache cleared',
+                'route:clear' => 'Route cache cleared',
+                'view:clear' => 'View cache cleared'
+            ]
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Error clearing caches: ' . $e->getMessage()
+        ], 500);
+    }
+})->name('fix.cache');
 
 // Show welcome page at root
 Route::get('/', function () {

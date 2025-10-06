@@ -312,6 +312,8 @@
     top: 0;
     z-index: 100;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
 }
 
 .header-container {
@@ -517,6 +519,55 @@
     gap: 3rem;
     max-width: 1000px;
     margin: 0 auto;
+}
+
+/* Mobile-first improvements */
+@media (hover: none) and (pointer: coarse) {
+    /* Touch device optimizations */
+    .btn {
+        min-height: 44px;
+        touch-action: manipulation;
+    }
+    
+    .nav-link {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        touch-action: manipulation;
+    }
+    
+    .program-card:hover {
+        transform: none;
+    }
+    
+    .program-card:active {
+        transform: scale(0.98);
+    }
+    
+    .feature-item:hover {
+        transform: none;
+    }
+    
+    .portal-card:hover {
+        transform: none;
+    }
+    
+    /* Mobile image optimizations */
+    .program-img {
+        /* Disable hover effects on touch devices */
+        transform: none !important;
+        filter: brightness(1) contrast(1.05) saturate(1.1) !important;
+    }
+    
+    .program-image::after {
+        /* Disable overlay effects on touch devices */
+        opacity: 0 !important;
+    }
+    
+    .program-overlay {
+        /* Hide overlay on touch devices for better performance */
+        display: none;
+    }
 }
 
 .portal-card {
@@ -786,6 +837,8 @@
     margin-left: auto;
     margin-right: auto;
     justify-items: center;
+    /* Ensure consistent grid behavior */
+    grid-auto-rows: 1fr;
 }
 
 .programs-grid .program-card:nth-child(4),
@@ -821,6 +874,9 @@
     height: 500px;
     max-width: 100%;
     box-sizing: border-box;
+    /* Ensure consistent flex behavior */
+    display: flex;
+    flex-direction: column;
 }
 
 /* Ensure all program images have identical dimensions */
@@ -867,6 +923,9 @@
     height: 500px;
     max-width: 100%;
     box-sizing: border-box;
+    /* Ensure consistent alignment */
+    justify-self: stretch;
+    align-self: stretch;
 }
 
 .program-card::before {
@@ -912,6 +971,17 @@
     max-width: 100%;
     min-height: 280px;
     max-height: 280px;
+    /* Ensure proper image container alignment */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Add loading state background */
+    background-image: linear-gradient(45deg, #f8fafc 25%, transparent 25%), 
+                      linear-gradient(-45deg, #f8fafc 25%, transparent 25%), 
+                      linear-gradient(45deg, transparent 75%, #f8fafc 75%), 
+                      linear-gradient(-45deg, transparent 75%, #f8fafc 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
 }
 
 .program-image::after {
@@ -943,6 +1013,18 @@
     transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     filter: brightness(1) contrast(1.05) saturate(1.1);
     display: block;
+    /* Ensure images load properly on all devices */
+    max-width: 100%;
+    vertical-align: middle;
+    /* Prevent image dragging on mobile */
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+    /* Improve image rendering */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
 }
 
 .program-overlay {
@@ -1146,6 +1228,10 @@
     .programs-grid .program-card:nth-child(5) {
         margin-left: 0.5rem;
     }
+    
+    .container {
+        padding: 0 1.5rem;
+    }
 }
 
 @media (max-width: 1024px) {
@@ -1171,50 +1257,141 @@
     .programs-grid .program-card:nth-child(5) {
         grid-column: 2 / 3;
     }
+    
+    .portal-cards {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .hero-text h1 {
+        font-size: 3rem;
+    }
+    
+    .hero-text p {
+        font-size: 1.375rem;
+    }
 }
 
 @media (max-width: 768px) {
+    /* Header improvements */
+    .main-header {
+        padding: 0.75rem 0;
+    }
+    
     .header-container {
-        flex-direction: column;
-        gap: 1rem;
         padding: 0 1rem;
+    }
+    
+    .logo-text {
+        font-size: 1.25rem;
+    }
+    
+    .logo-circle {
+        width: 35px;
+        height: 35px;
+        font-size: 1.125rem;
     }
 
     .main-nav {
-        gap: 1rem;
-        flex-wrap: wrap;
-        justify-content: center;
+        gap: 0.75rem;
+    }
+    
+    .nav-link {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
+    }
+
+    /* Hero section improvements */
+    .hero-section {
+        height: 60vh;
+        min-height: 400px;
+    }
+    
+    .hero-content {
+        padding: 0 1rem;
+        max-width: 100%;
     }
 
     .hero-text h1 {
-        font-size: 2.5rem;
+        font-size: 2.25rem;
+        margin-bottom: 0.75rem;
+        line-height: 1.1;
+        text-align: center;
     }
 
     .hero-text p {
-        font-size: 1.25rem;
+        font-size: 1.125rem;
+        margin-bottom: 0.375rem;
+        text-align: center;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem !important;
+        text-align: center;
+        max-width: 90%;
+        margin-left: auto;
+        margin-right: auto;
     }
 
+    /* Section spacing */
+    .learning-section,
+    .curriculum-section,
+    .portal-section,
+    .features-section {
+        padding: 2.5rem 0;
+    }
+    
+    /* Improve text readability on mobile */
+    .learning-text-left p,
+    .learning-text-right p,
+    .curriculum-description p {
+        line-height: 1.7;
+        margin-bottom: 1rem;
+    }
+    
+    .container {
+        padding: 0 1rem;
+    }
+
+    /* Portal cards */
     .portal-cards {
         grid-template-columns: 1fr;
-        padding: 0 1rem;
+        gap: 2rem;
+    }
+    
+    .portal-card {
+        padding: 2rem 1.5rem;
     }
 
     .portal-actions {
         flex-direction: column;
+        gap: 0.75rem;
     }
 
     .portal-actions .btn {
         width: 100%;
         justify-content: center;
+        padding: 0.875rem 1.5rem;
     }
 
+    /* Features grid */
     .features-grid {
         grid-template-columns: 1fr;
-        padding: 0 1rem;
+        gap: 1.5rem;
+    }
+    
+    .feature-item {
+        padding: 1.75rem;
     }
 
+    /* Typography */
     .section-header h2 {
         font-size: 2rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .section-header p {
+        font-size: 1rem;
     }
     
     .learning-content,
@@ -1226,33 +1403,329 @@
     .learning-text-left h2,
     .curriculum-title h2 {
         font-size: 2rem;
+        margin-bottom: 1.5rem;
     }
     
+    /* Programs grid - Mobile single column */
     .programs-grid {
         grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 0;
+        justify-items: stretch;
+        max-width: 100%;
     }
     
     .programs-grid .program-card:nth-child(4),
     .programs-grid .program-card:nth-child(5) {
         margin: 0;
+        grid-column: 1;
+        justify-self: stretch;
+    }
+    
+    /* Reset all special positioning for mobile */
+    .programs-grid .program-card {
+        grid-column: 1;
+        width: 100%;
+        max-width: 100%;
+        justify-self: stretch;
+    }
+    
+    .program-card {
+        height: auto;
+        min-height: 450px;
+    }
+    
+    .program-image {
+        height: 250px;
+        min-height: 250px;
+        max-height: 250px;
+        /* Maintain aspect ratio on tablets */
+        aspect-ratio: 16/9;
+    }
+    
+    .program-img {
+        /* Better image scaling on tablets */
+        object-fit: cover;
+        object-position: center;
+        width: 100%;
+        height: 100%;
+    }
+    
+    .program-info {
+        height: auto;
+        min-height: 180px;
+        padding: 1.25rem;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    
+    .program-info h3 {
+        font-size: 1.125rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .program-info p {
+        font-size: 0.875rem;
+    }
+
+    /* Footer improvements */
+    .main-footer {
+        padding: 2.5rem 0 1rem;
+    }
+    
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        text-align: center;
+    }
+    
+    .footer-logo {
+        justify-content: center;
     }
 
     .chatbot-container {
         width: 350px;
+        height: 500px;
     }
 }
 
 @media (max-width: 480px) {
+    /* Extra small screens */
+    .main-header {
+        padding: 0.5rem 0;
+    }
+    
+    .header-container {
+        padding: 0 0.75rem;
+        gap: 0.75rem;
+    }
+    
+    .logo-text {
+        font-size: 1.125rem;
+    }
+    
+    .logo-circle {
+        width: 32px;
+        height: 32px;
+        font-size: 1rem;
+    }
+    
+    .main-nav {
+        gap: 0.5rem;
+    }
+    
+    .nav-link {
+        padding: 0.375rem 0.625rem;
+        font-size: 0.8125rem;
+    }
+    
+    /* Hero section */
+    .hero-section {
+        height: 50vh;
+        min-height: 350px;
+    }
+    
+    .hero-content {
+        padding: 0 0.75rem;
+    }
+
     .hero-text h1 {
-        font-size: 2rem;
+        font-size: 1.875rem;
+        margin-bottom: 0.5rem;
     }
 
+    .hero-text p {
+        font-size: 1rem;
+        margin-bottom: 0.25rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.9375rem !important;
+        margin-top: 0.75rem !important;
+    }
+    
+    /* Sections */
+    .learning-section,
+    .curriculum-section,
+    .portal-section,
+    .features-section {
+        padding: 2rem 0;
+    }
+    
+    /* Better mobile text spacing */
+    .section-header {
+        margin-bottom: 2rem;
+    }
+    
+    .curriculum-header,
+    .learning-content {
+        gap: 1.5rem;
+    }
+    
+    .container {
+        padding: 0 1rem;
+    }
+    
+    /* Improve mobile readability */
+    .learning-text-left p,
+    .learning-text-right p,
+    .curriculum-description p {
+        text-align: left;
+        line-height: 1.6;
+    }
+    
+    /* Portal cards */
     .portal-card {
-        padding: 1.5rem;
+        padding: 1.5rem 1rem;
+    }
+    
+    .portal-icon {
+        width: 70px;
+        height: 70px;
+        font-size: 1.75rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .portal-info h3 {
+        font-size: 1.25rem;
+    }
+    
+    .portal-actions .btn {
+        padding: 0.75rem 1.25rem;
+        font-size: 0.8125rem;
     }
 
+    /* Features */
     .feature-item {
-        padding: 1.5rem;
+        padding: 1.5rem 1rem;
+    }
+    
+    .feature-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.25rem;
+        margin-bottom: 1.25rem;
+    }
+    
+    .feature-item h4 {
+        font-size: 1.125rem;
+    }
+    
+    .feature-item p {
+        font-size: 0.875rem;
+    }
+    
+    /* Typography */
+    .section-header h2 {
+        font-size: 1.75rem;
+    }
+    
+    .section-header p {
+        font-size: 0.9375rem;
+    }
+    
+    .learning-text-left h2,
+    .curriculum-title h2 {
+        font-size: 1.75rem;
+        margin-bottom: 1.25rem;
+    }
+    
+    .learning-text-left p,
+    .learning-text-right p,
+    .curriculum-description p {
+        font-size: 0.9375rem;
+        line-height: 1.7;
+    }
+    
+    /* Program cards - Mobile optimization */
+    .program-card {
+        min-height: 380px;
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        box-sizing: border-box;
+    }
+    
+    /* Ensure all cards have consistent layout */
+    .programs-grid .program-card:nth-child(n) {
+        grid-column: 1;
+        width: 100%;
+        max-width: 100%;
+        justify-self: stretch;
+        align-self: stretch;
+    }
+    
+    .program-image {
+        height: 220px;
+        min-height: 220px;
+        max-height: 220px;
+        /* Maintain consistent aspect ratio on mobile */
+        aspect-ratio: 4/3;
+        /* Better alignment on mobile */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .program-img {
+        /* Optimized image display for mobile */
+        object-fit: cover;
+        object-position: center;
+        width: 100%;
+        height: 100%;
+        /* Prevent image selection on mobile */
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+    
+    .program-info {
+        min-height: 160px;
+        padding: 1rem;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    
+    .program-info h3 {
+        font-size: 1rem;
+        margin-bottom: 0.625rem;
+        line-height: 1.25;
+    
+    .program-info p {
+        font-size: 0.8125rem;
+        line-height: 1.6;
+    }
+    
+    .program-department {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.75rem;
+        top: 0.75rem;
+        right: 0.75rem;
+    }
+    
+    /* Footer */
+    .main-footer {
+        padding: 2rem 0 1rem;
+    }
+    
+    .footer-content {
+        gap: 1.5rem;
+    }
+    
+    .footer-section h4 {
+        font-size: 1rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .footer-section p {
+        font-size: 0.875rem;
     }
 
     .chatbot-widget {
@@ -1261,8 +1734,84 @@
     }
     
     .chatbot-container {
-        width: 320px;
+        width: calc(100vw - 2rem);
+        max-width: 320px;
         height: 450px;
+        right: 1rem;
+        bottom: 5rem;
+    }
+}
+
+/* Landscape mobile optimization */
+@media (max-width: 480px) and (orientation: landscape) {
+    .hero-section {
+        height: 70vh;
+        min-height: 300px;
+    }
+    
+    .hero-text h1 {
+        font-size: 1.75rem;
+    }
+    
+    .learning-section,
+    .curriculum-section,
+    .portal-section,
+    .features-section {
+        padding: 1.5rem 0;
+    }
+}
+
+/* Ultra small screens */
+@media (max-width: 360px) {
+    .hero-text h1 {
+        font-size: 1.625rem;
+    }
+    
+    .hero-text p {
+        font-size: 0.9375rem;
+    }
+    
+    .section-header h2 {
+        font-size: 1.5rem;
+    }
+    
+    .portal-card {
+        padding: 1.25rem 0.875rem;
+    }
+    
+    .feature-item {
+        padding: 1.25rem 0.875rem;
+    }
+    
+    .program-info {
+        padding: 0.875rem;
+    }
+    
+    /* Ultra small screen image optimizations */
+    .program-image {
+        height: 200px;
+        min-height: 200px;
+        max-height: 200px;
+        aspect-ratio: 16/10;
+    }
+    
+    .program-img {
+        /* Ensure images don't get distorted on very small screens */
+        object-fit: cover;
+        object-position: center;
+    }
+    
+    .program-department {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.6875rem;
+        top: 0.5rem;
+        right: 0.5rem;
+    }
+    
+    .chatbot-container {
+        width: calc(100vw - 1.5rem);
+        max-width: 300px;
+        right: 0.75rem;
     }
 }
 

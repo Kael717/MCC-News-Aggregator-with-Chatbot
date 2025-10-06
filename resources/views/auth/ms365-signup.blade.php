@@ -348,15 +348,7 @@
 
         <div class="auth-content">
             @if(session('success'))
-                <div class="success-message" id="swal-success" data-message="{{ session('success') }}" style="display:none"></div>
-            @endif
-
-            @if($errors->any())
-                <div class="error-message">
-                    @foreach($errors->all() as $error)
-                        <div>{{ $error }}</div>
-                    @endforeach
-                </div>
+                <div id="swal-success" data-message="{{ session('success') }}" style="display:none;"></div>
             @endif
 
             <form method="POST" action="{{ route('ms365.signup.send') }}">
@@ -421,7 +413,10 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var el = document.getElementById('swal-success');
-            if (el) {
+            if (el && !el.hasAttribute('data-processed')) {
+                // Mark as processed to prevent duplicate alerts
+                el.setAttribute('data-processed', 'true');
+                
                 var msg = el.getAttribute('data-message') || 'Success';
                 Swal.fire({
                     icon: 'success',
