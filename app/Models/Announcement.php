@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
-use App\Helpers\MediaUrlHelper;
 
 class Announcement extends Model
 {
@@ -357,7 +356,7 @@ class Announcement extends Model
         }
         
         if (!empty($imagePaths)) {
-            return MediaUrlHelper::getMediaUrl($imagePaths[0]); // Return first image with production-safe URL
+            return \Storage::disk('public')->url($imagePaths[0]); // Return first image with full URL
         }
         
         // Then check for multiple videos
@@ -393,7 +392,7 @@ class Announcement extends Model
         }
         
         if (!empty($videoPaths)) {
-            return MediaUrlHelper::getMediaUrl($videoPaths[0]); // Return first video with production-safe URL
+            return \Storage::disk('public')->url($videoPaths[0]); // Return first video with full URL
         }
         
         return null;
@@ -524,8 +523,10 @@ class Announcement extends Model
             }
         }
         
-        // Convert file paths to full URLs using MediaUrlHelper for production compatibility
-        return MediaUrlHelper::getMultipleMediaUrls($paths);
+        // Convert file paths to full URLs using Storage facade for production compatibility
+        return array_map(function($path) {
+            return \Storage::disk('public')->url($path);
+        }, $paths);
     }
 
     /**
@@ -564,8 +565,10 @@ class Announcement extends Model
             }
         }
         
-        // Convert file paths to full URLs using MediaUrlHelper for production compatibility
-        return MediaUrlHelper::getMultipleMediaUrls($paths);
+        // Convert file paths to full URLs using Storage facade for production compatibility
+        return array_map(function($path) {
+            return \Storage::disk('public')->url($path);
+        }, $paths);
     }
 
     /**

@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
-use App\Helpers\MediaUrlHelper;
 use Carbon\Carbon;
 
 class Event extends Model
@@ -509,8 +508,10 @@ class Event extends Model
             }
         }
         
-        // Convert file paths to full URLs using MediaUrlHelper for production compatibility
-        return MediaUrlHelper::getMultipleMediaUrls($paths);
+        // Convert file paths to full URLs using Storage facade for production compatibility
+        return array_map(function($path) {
+            return \Storage::disk('public')->url($path);
+        }, $paths);
     }
 
     /**
@@ -549,8 +550,10 @@ class Event extends Model
             }
         }
         
-        // Convert file paths to full URLs using MediaUrlHelper for production compatibility
-        return MediaUrlHelper::getMultipleMediaUrls($paths);
+        // Convert file paths to full URLs using Storage facade for production compatibility
+        return array_map(function($path) {
+            return \Storage::disk('public')->url($path);
+        }, $paths);
     }
 
     /**

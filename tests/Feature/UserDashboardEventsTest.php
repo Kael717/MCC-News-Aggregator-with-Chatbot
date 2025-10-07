@@ -26,7 +26,7 @@ class UserDashboardEventsTest extends TestCase
         // Create test user
         $this->user = User::factory()->create([
             'role' => 'student',
-            'department' => 'Bachelor of Science in Information Technology'
+            'department' => 'BSIT'
         ]);
 
         // Create superadmin
@@ -40,7 +40,7 @@ class UserDashboardEventsTest extends TestCase
         $this->departmentAdmin = Admin::factory()->create([
             'role' => 'department_admin',
             'name' => 'BSIT Admin',
-            'department' => 'Bachelor of Science in Information Technology'
+            'department' => 'BSIT'
         ]);
     }
 
