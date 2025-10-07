@@ -55,83 +55,26 @@ class Announcement extends Model
      */
     private function buildPublicUrl(string $relativePath): string
     {
-        // Return empty string for empty paths
-        if (empty($relativePath)) {
-            return '';
-        }
-
-        // Absolute URL already - return as is
+        // Absolute URL already
         if (preg_match('/^https?:\/\//i', $relativePath)) {
             return $relativePath;
         }
 
-        // Clean the relative path
-        $cleanPath = ltrim($relativePath, '/');
-        
-        try {
-            // Primary: use Storage public disk URL
-            $url = \Storage::disk('public')->url($cleanPath);
+        // Primary: use Storage public disk URL
+        $url = \Storage::disk('public')->url($relativePath);
 
-            // Basic validation - check if it looks like a URL
-            if (filter_var($url, FILTER_VALIDATE_URL)) {
-                // Force https if current app runs on https or in production
-                if (str_starts_with($url, 'http://') && (config('app.env') === 'production' || request()->isSecure())) {
-                    $url = preg_replace('/^http:\/\//i', 'https://', $url);
-                }
-                return $url;
-            }
-        } catch (\Exception $e) {
-            // Log the error but continue with fallbacks
-            \Log::warning('Storage URL generation failed: ' . $e->getMessage(), ['path' => $relativePath]);
+        // Force https if current app runs on https
+        if (str_starts_with($url, 'http://') && (config('app.env') === 'production' || request()->isSecure())) {
+            $url = preg_replace('/^http:\/\//i', 'https://', $url);
         }
 
-        // Fallback 1: Use asset() helper with storage path
-        try {
-            $fallbackUrl = asset('storage/' . $cleanPath);
-            
-            if (filter_var($fallbackUrl, FILTER_VALIDATE_URL)) {
-                // Force https if needed
-                if (str_starts_with($fallbackUrl, 'http://') && (config('app.env') === 'production' || request()->isSecure())) {
-                    $fallbackUrl = preg_replace('/^http:\/\//i', 'https://', $fallbackUrl);
-                }
-                return $fallbackUrl;
-            }
-        } catch (\Exception $e) {
-            \Log::warning('Asset URL generation failed: ' . $e->getMessage(), ['path' => $relativePath]);
+        // Fallback: asset('storage/...') if Storage URL looks wrong
+        if (!preg_match('/^https?:\/\//i', $url)) {
+            $fallback = asset('storage/' . ltrim($relativePath, '/'));
+            return $fallback;
         }
 
-        // Fallback 2: Manual URL construction using current request
-        try {
-            $baseUrl = request()->getSchemeAndHttpHost();
-            $manualUrl = rtrim($baseUrl, '/') . '/storage/' . $cleanPath;
-            
-            // Force https if needed
-            if (str_starts_with($manualUrl, 'http://') && (config('app.env') === 'production' || request()->isSecure())) {
-                $manualUrl = preg_replace('/^http:\/\//i', 'https://', $manualUrl);
-            }
-
-            return $manualUrl;
-        } catch (\Exception $e) {
-            \Log::warning('Manual URL construction failed: ' . $e->getMessage(), ['path' => $relativePath]);
-        }
-
-        // Fallback 3: Use config APP_URL if available
-        try {
-            $appUrl = config('app.url', 'http://localhost');
-            $configUrl = rtrim($appUrl, '/') . '/storage/' . $cleanPath;
-            
-            // Force https if needed
-            if (str_starts_with($configUrl, 'http://') && (config('app.env') === 'production')) {
-                $configUrl = preg_replace('/^http:\/\//i', 'https://', $configUrl);
-            }
-
-            return $configUrl;
-        } catch (\Exception $e) {
-            \Log::error('All URL generation methods failed: ' . $e->getMessage(), ['path' => $relativePath]);
-        }
-
-        // Last resort: return a placeholder or the original path
-        return '/storage/' . $cleanPath;
+        return $url;
     }
     public function admin()
     {
