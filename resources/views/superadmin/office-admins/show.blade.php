@@ -391,21 +391,7 @@
                 </div>
             </div>
 
-            <div class="actions-container">
-                <h3><i class="fas fa-cogs"></i> Actions</h3>
-                <div class="actions-grid">
-                    <a href="{{ route('superadmin.office-admins.edit', $officeAdmin) }}" class="btn btn-warning">
-                        <i class="fas fa-edit"></i> Edit Office Admin
-                    </a>
-                    <form action="{{ route('superadmin.office-admins.destroy', $officeAdmin) }}" method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this office admin? This action cannot be undone.')">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger">
-                            <i class="fas fa-trash"></i> Delete Office Admin
-                        </button>
-                    </form>
-                </div>
-            </div>
+           
         </div>
     </div>
 </body>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Login - MCC News Aggregator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -48,6 +48,12 @@
             align-items: center;
             padding: 20px;
             color: var(--gray-800);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+            touch-action: manipulation;
         }
 
         .auth-container {
@@ -194,6 +200,10 @@
             font-size: 1rem;
             transition: var(--transition);
             background-color: white;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .form-control:focus {
@@ -254,6 +264,12 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
 
         .btn:hover {
@@ -395,18 +411,126 @@
             animation: fadeIn 0.3s ease forwards;
         }
 
-        /* Responsive adjustments */
-        @media (max-width: 576px) {
+        /* Enhanced Responsive Design */
+        
+        /* Extra small devices (phones, 320px and up) */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+                min-height: 100vh;
+            }
+            
+            .auth-container {
+                max-width: 100%;
+                margin: 0;
+                border-radius: var(--radius-sm);
+                box-shadow: var(--shadow);
+            }
+            
+            .logo-container {
+                padding: 1rem 0 0;
+            }
+            
+            .logo {
+                height: 70px;
+            }
+            
+            .auth-header {
+                padding: 0.75rem 1rem 1.5rem;
+            }
+            
+            .auth-header h1 {
+                font-size: 1.75rem;
+                margin-bottom: 0.25rem;
+            }
+            
+            .auth-header h2 {
+                font-size: 1.125rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .auth-header p {
+                font-size: 0.875rem;
+            }
+            
+            .auth-content {
+                padding: 1rem;
+            }
+            
+            .form-group {
+                margin-bottom: 1.25rem;
+            }
+            
+            .form-group label {
+                font-size: 0.8125rem;
+                margin-bottom: 0.375rem;
+            }
+            
+            .form-control,
+            .login-type-select select {
+                padding: 0.75rem 0.875rem;
+                font-size: 0.9375rem;
+                min-height: 44px; /* Touch-friendly minimum */
+            }
+            
+            .login-type-select select {
+                padding-left: 2.75rem;
+                padding-right: 2.75rem;
+            }
+            
+            .btn {
+                padding: 0.875rem 1rem;
+                font-size: 0.9375rem;
+                min-height: 44px; /* Touch-friendly minimum */
+            }
+            
+            .password-toggle {
+                right: 0.625rem;
+                padding: 0.375rem;
+            }
+            
+            .checkbox-label {
+                font-size: 0.8125rem;
+            }
+            
+            .checkbox-label input {
+                width: 18px;
+                height: 18px;
+            }
+            
+            .auth-links a {
+                font-size: 0.8125rem;
+                padding: 0.5rem;
+            }
+            
+            .forgot-password a {
+                font-size: 0.8125rem;
+            }
+            
+            .error-message,
+            .success-message,
+            .warning-message {
+                padding: 0.625rem 0.875rem;
+                font-size: 0.8125rem;
+            }
+        }
+        
+        /* Small devices (phones, 481px to 576px) */
+        @media (min-width: 481px) and (max-width: 576px) {
+            body {
+                padding: 15px;
+            }
+            
             .auth-container {
                 max-width: 100%;
             }
             
-            .auth-header {
-                padding: 1rem 1.5rem 2rem;
+            .logo {
+                height: 80px;
             }
             
-            .auth-content {
-                padding: 1.5rem;
+            .auth-header {
+                padding: 1rem 1.25rem 1.75rem;
             }
             
             .auth-header h1 {
@@ -417,8 +541,116 @@
                 font-size: 1.25rem;
             }
             
+            .auth-content {
+                padding: 1.25rem;
+            }
+            
+            .form-control,
+            .login-type-select select {
+                min-height: 46px;
+            }
+            
+            .btn {
+                min-height: 46px;
+            }
+        }
+        
+        /* Medium devices (tablets, 577px to 768px) */
+        @media (min-width: 577px) and (max-width: 768px) {
+            .auth-container {
+                max-width: 90%;
+            }
+            
+            .auth-header {
+                padding: 1.25rem 1.5rem 2rem;
+            }
+            
+            .auth-content {
+                padding: 1.75rem;
+            }
+        }
+        
+        /* Large devices (desktops, 769px and up) */
+        @media (min-width: 769px) {
+            .auth-container {
+                max-width: 480px;
+            }
+        }
+        
+        /* Landscape orientation adjustments for mobile */
+        @media (max-width: 768px) and (orientation: landscape) {
+            body {
+                padding: 10px 20px;
+            }
+            
+            .auth-header {
+                padding: 0.75rem 1.5rem 1.25rem;
+            }
+            
+            .auth-header h1 {
+                font-size: 1.5rem;
+                margin-bottom: 0.25rem;
+            }
+            
+            .auth-header h2 {
+                font-size: 1.125rem;
+                margin-bottom: 0.25rem;
+            }
+            
+            .auth-header p {
+                font-size: 0.875rem;
+            }
+            
             .logo {
-                height: 80px;
+                height: 60px;
+            }
+            
+            .auth-content {
+                padding: 1rem 1.5rem;
+            }
+            
+            .form-group {
+                margin-bottom: 1rem;
+            }
+        }
+        
+        /* High DPI displays */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .form-control,
+            .login-type-select select,
+            .btn {
+                border-width: 0.5px;
+            }
+        }
+        
+        /* Dark mode support (if user prefers dark mode) */
+        @media (prefers-color-scheme: dark) {
+            .auth-container {
+                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.15);
+            }
+        }
+        
+        /* Reduced motion for accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+        
+        /* Focus improvements for keyboard navigation */
+        @media (max-width: 768px) {
+            .form-control:focus,
+            .login-type-select select:focus,
+            .btn:focus {
+                box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.25);
+                outline: 2px solid transparent;
+            }
+            
+            .password-toggle:focus {
+                outline: 2px solid var(--secondary);
+                outline-offset: 2px;
             }
         }
     </style>
@@ -445,17 +677,6 @@
                 </div>
             @endif
 
-            @if(session('attempt_warning'))
-                <div class="warning-message">
-                    {{ session('attempt_warning') }}
-                </div>
-            @endif
-
-            @if(session('lockout_time'))
-                <div class="error-message" id="lockout-message">
-                    Account temporarily locked. Please try again in <span id="lockout-timer">{{ session('lockout_time') }}</span> seconds.
-                </div>
-            @endif
 
             @if($errors->any())
                 <div class="error-message">
@@ -892,11 +1113,11 @@
                     submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login with MS365';
                     submitBtn.disabled = false;
                     
-                } else if (selectedType === 'superadmin' || selectedType === 'department-admin' || selectedType === 'office-admin') {
+                } else if (selectedType === 'superadmin') {
                     // Clear student fields
                     clearGroup(['ms365-field', 'gmail-field']);
                     
-                    // Show admin fields
+                    // Show admin fields (superadmin uses username)
                     usernameField.style.display = 'block';
                     passwordField.style.display = 'block';
                     rememberField.style.display = 'block';
@@ -906,7 +1127,25 @@
                     setRequired('password', true);
                     
                     // Update button text
-                    submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login as Admin';
+                    submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login as Super Admin';
+                    submitBtn.disabled = false;
+                    
+                } else if (selectedType === 'department-admin' || selectedType === 'office-admin') {
+                    // Clear username fields
+                    clearGroup(['username-field', 'gmail-field']);
+                    
+                    // Show MS365 fields for department and office admins
+                    ms365Field.style.display = 'block';
+                    passwordField.style.display = 'block';
+                    rememberField.style.display = 'block';
+                    
+                    // Set required fields
+                    setRequired('ms365_account', true);
+                    setRequired('password', true);
+                    
+                    // Update button text
+                    const adminType = selectedType === 'department-admin' ? 'Department Admin' : 'Office Admin';
+                    submitBtn.innerHTML = `<i class="fas fa-sign-in-alt"></i> Login as ${adminType}`;
                     submitBtn.disabled = false;
                     
                 } else {
@@ -934,125 +1173,6 @@
             }, 100);
         });
 
-        // Lockout timer functionality
-        @if(session('lockout_time'))
-        let lockoutTime = {{ session('lockout_time') }};
-        const lockoutTimer = document.getElementById('lockout-timer');
-        const lockoutMessage = document.getElementById('lockout-message');
-        const submitButton = document.getElementById('submit-btn');
-        
-        // Disable form during lockout
-        if (lockoutTime > 0) {
-            submitButton.disabled = true;
-            submitButton.innerHTML = '<i class="fas fa-lock"></i> Account Locked';
-        }
-
-        function updateLockoutTimer() {
-            if (lockoutTime <= 0) {
-                // Lockout expired, hide message and enable form
-                if (lockoutMessage) {
-                    lockoutMessage.style.display = 'none';
-                }
-                if (submitButton) {
-                    submitButton.disabled = false;
-                    const loginType = document.getElementById('login_type').value;
-                    if (loginType === 'ms365') {
-                        submitButton.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login with MS365';
-                    } else if (loginType === 'superadmin' || loginType === 'department-admin' || loginType === 'office-admin') {
-                        submitButton.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login as Admin';
-                    } else {
-                        submitButton.innerHTML = '<i class="fas fa-sign-in-alt"></i> Select Login Type';
-                    }
-                }
-                return;
-            }
-
-            // Update timer display
-            const minutes = Math.floor(lockoutTime / 60);
-            const seconds = lockoutTime % 60;
-            const timeString = minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
-            
-            if (lockoutTimer) {
-                lockoutTimer.textContent = timeString;
-            }
-
-            lockoutTime--;
-            setTimeout(updateLockoutTimer, 1000);
-        }
-
-        // Start the countdown
-        updateLockoutTimer();
-        @endif
-
-        // Check lockout status periodically for active sessions
-        function checkLockoutStatus() {
-            const loginType = document.getElementById('login_type').value;
-            const identifier = getIdentifierForLoginType(loginType);
-            
-            if (!identifier) return;
-
-            fetch('{{ route("check.lockout.status") }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({
-                    identifier: identifier,
-                    login_type: loginType
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.locked && data.remaining_time > 0) {
-                    // Show lockout message if not already shown
-                    showLockoutMessage(data.remaining_time);
-                }
-            })
-            .catch(error => console.log('Lockout check failed:', error));
-        }
-
-        function getIdentifierForLoginType(loginType) {
-            switch(loginType) {
-                case 'ms365':
-                    return document.getElementById('ms365_account')?.value || '';
-                case 'user':
-                    return document.getElementById('gmail_account')?.value || '';
-                case 'superadmin':
-                case 'department-admin':
-                case 'office-admin':
-                    return document.getElementById('username')?.value || '';
-                default:
-                    return '';
-            }
-        }
-
-        function showLockoutMessage(remainingTime) {
-            // Create or update lockout message
-            let lockoutMsg = document.getElementById('lockout-message');
-            if (!lockoutMsg) {
-                lockoutMsg = document.createElement('div');
-                lockoutMsg.id = 'lockout-message';
-                lockoutMsg.className = 'error-message';
-                lockoutMsg.innerHTML = 'Account temporarily locked. Please try again in <span id="lockout-timer"></span> seconds.';
-                
-                // Insert after other messages
-                const authContent = document.querySelector('.auth-content');
-                const form = document.querySelector('.unified-login-form');
-                authContent.insertBefore(lockoutMsg, form);
-            }
-            
-            lockoutMsg.style.display = 'flex';
-            lockoutTime = remainingTime;
-            updateLockoutTimer();
-        }
-
-        // Check lockout status when identifier changes
-        document.addEventListener('input', function(e) {
-            if (e.target.matches('#ms365_account, #gmail_account, #username')) {
-                setTimeout(checkLockoutStatus, 500); // Debounce
-            }
-        });
     </script>
 </body>
 </html>

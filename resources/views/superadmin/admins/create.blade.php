@@ -477,13 +477,13 @@
                     @csrf
                     
                     <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" 
+                        <label for="username">MS365 Account</label>
+                        <input type="email" 
                                id="username" 
                                name="username" 
                                class="form-control @error('username') error @enderror" 
                                value="{{ old('username') }}" 
-                               placeholder="Enter username"
+                               placeholder="Enter MS365 email address (e.g., user@domain.com)"
                                required>
                         @error('username')
                             <div class="error-message">
@@ -596,50 +596,13 @@
                         @enderror
                     </div>
 
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <div class="password-field">
-                            <input type="password"
-                                   id="password"
-                                   name="password"
-                                   class="form-control @error('password') error @enderror"
-                                   placeholder="Enter password (min. 6 characters)"
-                                   required>
-                            <i class="fas fa-eye password-toggle" onclick="togglePassword('password')" title="Show/Hide Password"></i>
-                        </div>
-                        @error('password')
-                            <div class="error-message">
-                                <i class="fas fa-exclamation-circle"></i>
-                                {{ $message }}
-                            </div>
-                        @enderror
-                    </div>
-
-                    <div class="form-group">
-                        <label for="password_confirmation">Confirm Password</label>
-                        <div class="password-field">
-                            <input type="password"
-                                   id="password_confirmation"
-                                   name="password_confirmation"
-                                   class="form-control @error('password_confirmation') error @enderror"
-                                   placeholder="Confirm password"
-                                   required>
-                            <i class="fas fa-eye password-toggle" onclick="togglePassword('password_confirmation')" title="Show/Hide Password"></i>
-                        </div>
-                        @error('password_confirmation')
-                            <div class="error-message">
-                                <i class="fas fa-exclamation-circle"></i>
-                                {{ $message }}
-                            </div>
-                        @enderror
-                    </div>
 
                     <div class="form-actions">
                         <a href="{{ route('superadmin.admins.index') }}" class="btn btn-secondary">
                             <i class="fas fa-times"></i> Cancel
                         </a>
                         <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save"></i> Create Department Admin
+                            <i class="fas fa-paper-plane"></i> Send Admin Department
                         </button>
                     </div>
                 </form>
@@ -648,23 +611,6 @@
     </div>
 
     <script>
-        // Password toggle function
-        function togglePassword(fieldId) {
-            const passwordField = document.getElementById(fieldId);
-            const toggleIcon = passwordField.nextElementSibling;
-
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                toggleIcon.classList.remove('fa-eye');
-                toggleIcon.classList.add('fa-eye-slash');
-                toggleIcon.title = 'Hide Password';
-            } else {
-                passwordField.type = 'password';
-                toggleIcon.classList.remove('fa-eye-slash');
-                toggleIcon.classList.add('fa-eye');
-                toggleIcon.title = 'Show Password';
-            }
-        }
 
         // Mobile menu toggle function
         function toggleSidebar() {

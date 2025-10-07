@@ -31,12 +31,12 @@ class DepartmentAdminAuthController extends Controller
         $secureMessages = $this->getSecureValidationMessages();
 
         $request->validate([
-            'username' => array_merge($secureRules['username'], ['required']),
+            'ms365_account' => array_merge($secureRules['ms365_account'], ['required']),
             'password' => array_merge($secureRules['password'], ['required']),
         ], $secureMessages);
 
-        // Attempt to authenticate with admin guard
-        if (Auth::guard('admin')->attempt($request->only('username', 'password'))) {
+        // Attempt to authenticate with admin guard using ms365_account as username
+        if (Auth::guard('admin')->attempt(['username' => $request->ms365_account, 'password' => $request->password])) {
             $admin = Auth::guard('admin')->user();
 
             // Check if the user is specifically a department admin
@@ -45,9 +45,9 @@ class DepartmentAdminAuthController extends Controller
                 
                 // Provide specific error messages based on admin type
                 if ($admin->isSuperAdmin()) {
-                    return back()->withErrors(['username' => 'Super admins should use the super admin login.']);
+                    return back()->withErrors(['ms365_account' => 'Super admins should use the super admin login.']);
                 } else {
-                    return back()->withErrors(['username' => 'You do not have department admin privileges.']);
+                    return back()->withErrors(['ms365_account' => 'You do not have department admin privileges.']);
                 }
             }
 
@@ -59,8 +59,8 @@ class DepartmentAdminAuthController extends Controller
         }
 
         // Authentication failed
-        return back()->withErrors(['username' => 'Invalid credentials. Please check your username and password.'])
-                    ->withInput($request->only('username'));
+        return back()->withErrors(['ms365_account' => 'Invalid credentials. Please check your MS365 account and password.'])
+                    ->withInput($request->only('ms365_account'));
     }
 
     /**

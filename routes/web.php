@@ -108,26 +108,6 @@ Route::get('/fix-cache', function () {
     }
 })->name('fix.cache');
 
-Route::get('/fix-migration', function () {
-    try {
-        // Run the specific login_attempts migration
-        Artisan::call('migrate', [
-            '--path' => 'database/migrations/2025_10_05_170646_create_login_attempts_table.php',
-            '--force' => true
-        ]);
-        
-        return response()->json([
-            'success' => true,
-            'message' => 'Login attempts migration run successfully!',
-            'output' => Artisan::output()
-        ]);
-    } catch (\Exception $e) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Error running migration: ' . $e->getMessage()
-        ], 500);
-    }
-})->name('fix.migration');
 
 // Show welcome page at root
 Route::get('/', function () {
@@ -138,7 +118,6 @@ Route::get('/', function () {
 
 Route::get('/login', [UnifiedAuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [UnifiedAuthController::class, 'login'])->name('unified.login');
-Route::post('/check-lockout-status', [UnifiedAuthController::class, 'checkLockoutStatus'])->name('check.lockout.status');
 
 // Gmail Authentication Routes
 Route::get('/signup', [UnifiedAuthController::class, 'showSignupForm'])->name('gmail.signup');
@@ -186,6 +165,10 @@ Route::prefix('admin')->group(function () {
     Route::post('login', [AdminAuthController::class, 'login']);
     Route::get('register', [AdminAuthController::class, 'showRegisterForm'])->name('admin.register');
     Route::post('register', [AdminAuthController::class, 'register']);
+    
+    // Admin registration from email link (signed routes for security)
+    Route::get('register-form', [SuperAdminController::class, 'showAdminRegistrationForm'])->name('admin.register.form')->middleware('signed');
+    Route::post('register-complete', [SuperAdminController::class, 'completeAdminRegistration'])->name('admin.register.complete');
     
     // Protected routes - Only department admins can access these
     Route::middleware(['auth:admin', \App\Http\Middleware\DepartmentAdminAuth::class])->group(function () {
@@ -307,6 +290,10 @@ Route::prefix('department-admin')->group(function () {
 Route::prefix('office-admin')->name('office-admin.')->group(function () {
     Route::get('login', [OfficeAdminAuthController::class, 'showLoginForm'])->name('login');
     Route::post('login', [OfficeAdminAuthController::class, 'login']);
+
+    // Office admin registration from email link (signed routes for security)
+    Route::get('register-form', [OfficeAdminController::class, 'showOfficeAdminRegistrationForm'])->name('register.form')->middleware('signed');
+    Route::post('register-complete', [OfficeAdminController::class, 'completeOfficeAdminRegistration'])->name('register.complete');
 
     // Protected Office Admin routes
     Route::middleware(['auth:admin', \App\Http\Middleware\OfficeAdminAuth::class])->group(function () {

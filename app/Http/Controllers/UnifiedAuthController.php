@@ -17,18 +17,9 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use App\Models\User;
-use App\Services\LoginThrottleService;
-
 class UnifiedAuthController extends Controller
 {
     use SecurityValidationTrait;
-    
-    protected $throttleService;
-    
-    public function __construct(LoginThrottleService $throttleService)
-    {
-        $this->throttleService = $throttleService;
-    }
     
     /**
      * Show the unified login form
@@ -68,27 +59,6 @@ class UnifiedAuthController extends Controller
         ], $secureMessages);
 
         $loginType = $request->login_type;
-        
-        // Get the identifier based on login type
-        $identifier = $this->getLoginIdentifier($request, $loginType);
-        
-        // Check if login is allowed (throttling check)
-        $throttleCheck = $this->throttleService->isLoginAllowed($identifier, $loginType, $request);
-        
-        if (!$throttleCheck['allowed']) {
-            return back()->withErrors([
-                'throttle' => $throttleCheck['message']
-            ])->with('lockout_time', $throttleCheck['remaining_time']);
-        }
-
-        // Show warning if approaching limit
-        if ($throttleCheck['message'] && $throttleCheck['allowed']) {
-            session()->flash('warning', $throttleCheck['message']);
-        }
-
-        // Store original auth state
-        $originalAuthState = Auth::check();
-        $originalUser = Auth::user();
 
         // Route to appropriate controller based on login type
         $result = null;
@@ -122,54 +92,9 @@ class UnifiedAuthController extends Controller
                 return back()->withErrors(['login_type' => 'Invalid login type selected.']);
         }
 
-        // Check if login was successful by comparing auth state
-        $loginSuccessful = !$originalAuthState && Auth::check() && Auth::user() !== $originalUser;
-        
-        // Alternative check: if result is a redirect and no errors in session
-        if (!$loginSuccessful && $result instanceof \Illuminate\Http\RedirectResponse) {
-            $loginSuccessful = !session()->has('errors') && !$result->getSession()->has('errors');
-        }
-
-        if ($loginSuccessful) {
-            // Record successful login (reset attempts)
-            $this->throttleService->recordSuccessfulLogin($identifier, $loginType, $request);
-        } else {
-            // Record failed attempt
-            $failedAttempt = $this->throttleService->recordFailedAttempt($identifier, $loginType, $request);
-            
-            if ($failedAttempt['locked']) {
-                return back()->withErrors([
-                    'throttle' => $failedAttempt['message']
-                ])->with('lockout_time', $failedAttempt['remaining_time']);
-            } else {
-                // Add attempt warning to existing errors
-                if ($result instanceof \Illuminate\Http\RedirectResponse) {
-                    $result->with('attempt_warning', $failedAttempt['message']);
-                }
-            }
-        }
-
         return $result;
     }
     
-    /**
-     * Get login identifier based on login type
-     */
-    private function getLoginIdentifier(Request $request, string $loginType): string
-    {
-        switch ($loginType) {
-            case 'ms365':
-                return $request->ms365_account ?? '';
-            case 'user':
-                return $request->gmail_account ?? '';
-            case 'superadmin':
-            case 'department-admin':
-            case 'office-admin':
-                return $request->username ?? '';
-            default:
-                return '';
-        }
-    }
 
     public function showSignupForm(Request $request)
     {
@@ -506,23 +431,5 @@ class UnifiedAuthController extends Controller
                         ->with('success', 'Your password has been successfully reset. You can now log in with your new password.');
     }
 
-    /**
-     * Check lockout status for AJAX requests
-     */
-    public function checkLockoutStatus(Request $request)
-    {
-        $request->validate([
-            'identifier' => 'required|string',
-            'login_type' => 'required|in:user,ms365,superadmin,department-admin,office-admin'
-        ]);
-
-        $status = $this->throttleService->getLockoutStatus(
-            $request->identifier,
-            $request->login_type,
-            $request
-        );
-
-        return response()->json($status);
-    }
 
 }

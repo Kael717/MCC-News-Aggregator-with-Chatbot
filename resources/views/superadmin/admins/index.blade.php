@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Department Admin Management - Super Admin Panel</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         * {
             margin: 0;
@@ -442,7 +444,7 @@
                                             <i class="fas fa-edit"></i> Edit
                                         </a>
                                         @if($admin->id !== auth('admin')->id())
-                                            <form action="{{ route('superadmin.admins.destroy', $admin) }}" method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this admin?')">
+                                            <form action="{{ route('superadmin.admins.destroy', $admin) }}" method="POST" style="display: inline;" onsubmit="return handleAdminDelete(event, '{{ $admin->username }}', '{{ $admin->department ?? 'N/A' }}')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger btn-sm">
@@ -494,12 +496,116 @@
                 sidebar.classList.remove('open');
             }
         });
+
+        // Enhanced SweetAlert delete confirmation for Department Admins
+        async function handleAdminDelete(event, adminUsername, adminDepartment) {
+            event.preventDefault();
+            
+            const result = await Swal.fire({
+                title: 'Delete Department Admin?',
+                html: `Are you sure you want to delete department admin <strong>"${adminUsername}"</strong> from <strong>${adminDepartment}</strong> department?<br><br><span style="color: #ef4444; font-weight: 600;">This action cannot be undone.</span>`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Yes, delete admin!',
+                cancelButtonText: 'Cancel',
+                reverseButtons: true,
+                customClass: {
+                    popup: 'swal2-popup-custom',
+                    title: 'swal2-title-custom',
+                    htmlContainer: 'swal2-content-custom',
+                    confirmButton: 'swal2-confirm-custom',
+                    cancelButton: 'swal2-cancel-custom'
+                }
+            });
+            
+            if (result.isConfirmed) {
+                // Show loading state
+                Swal.fire({
+                    title: 'Deleting Department Admin...',
+                    text: 'Please wait while we remove the admin from the system.',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    showConfirmButton: false,
+                    customClass: {
+                        popup: 'swal2-popup-custom'
+                    },
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+                
+                // Submit the form
+                event.target.submit();
+            }
+            
+            return false;
+        }
     </script>
 
 <style>
     .text-muted {
         color: #6b7280 !important;
         font-style: italic;
+    }
+
+    /* Custom SweetAlert2 Styling */
+    .swal2-popup-custom {
+        border-radius: 15px !important;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25) !important;
+        border: none !important;
+    }
+
+    .swal2-title-custom {
+        color: #1f2937 !important;
+        font-weight: 700 !important;
+        font-size: 1.5rem !important;
+    }
+
+    .swal2-content-custom {
+        color: #6b7280 !important;
+        font-size: 1rem !important;
+        line-height: 1.6 !important;
+    }
+
+    .swal2-confirm-custom {
+        background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+        border: none !important;
+        border-radius: 10px !important;
+        font-weight: 600 !important;
+        padding: 0.75rem 1.5rem !important;
+        transition: all 0.3s ease !important;
+    }
+
+    .swal2-confirm-custom:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4) !important;
+    }
+
+    .swal2-cancel-custom {
+        background: #6b7280 !important;
+        border: none !important;
+        border-radius: 10px !important;
+        font-weight: 600 !important;
+        padding: 0.75rem 1.5rem !important;
+        transition: all 0.3s ease !important;
+    }
+
+    .swal2-cancel-custom:hover {
+        background: #4b5563 !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 5px 15px rgba(107, 114, 128, 0.4) !important;
+    }
+
+    .swal2-icon.swal2-warning {
+        border-color: #f59e0b !important;
+        color: #f59e0b !important;
+    }
+
+    .swal2-icon.swal2-warning .swal2-icon-content {
+        color: #f59e0b !important;
+        font-weight: 700 !important;
     }
 </style>
 </body>

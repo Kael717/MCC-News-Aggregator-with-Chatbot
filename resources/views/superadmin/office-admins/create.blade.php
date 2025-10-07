@@ -388,26 +388,6 @@
             cursor: pointer;
         }
 
-        .password-input-container {
-            position: relative;
-        }
-
-        .password-toggle {
-            position: absolute;
-            right: 0.75rem;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #6b7280;
-            padding: 0.25rem;
-            transition: color 0.3s ease;
-        }
-
-        .password-toggle:hover {
-            color: #374151;
-        }
     </style>
 </head>
 <body>
@@ -448,12 +428,7 @@
                     <i class="fas fa-user-graduate"></i> Students
                 </a></li>
                 <li>
-                    <form method="POST" action="{{ route('superadmin.logout') }}" style="display: inline; width: 100%;">
-                        @csrf
-                        <button type="submit" class="logout-btn">
-                            <i class="fas fa-sign-out-alt"></i> Logout
-                        </button>
-                    </form>
+                   
                 </li>
             </ul>
         </div>
@@ -486,18 +461,18 @@
 
                     <div class="form-group">
                         <label for="username" class="form-label">
-                            <i class="fas fa-user"></i> Username
+                            <i class="fas fa-envelope"></i> MS365 Account
                         </label>
                         <div style="position: relative;">
-                            <input type="text"
+                            <input type="email"
                                    id="username"
                                    name="username"
                                    class="form-control @error('username') error @enderror"
                                    value="{{ old('username') }}"
-                                   placeholder="Enter username"
+                                   placeholder="Enter MS365 email address (e.g., user@domain.com)"
                                    style="padding-left: 3rem;"
                                    required>
-                            <i class="fas fa-user" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #6b7280;"></i>
+                            <i class="fas fa-envelope" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #6b7280;"></i>
                         </div>
                         @error('username')
                             <div class="error-message">
@@ -507,51 +482,6 @@
                         @enderror
                     </div>
 
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                        <div class="form-group">
-                            <label for="password" class="form-label">
-                                <i class="fas fa-key"></i> Password
-                            </label>
-                            <div class="password-input-container">
-                                <input type="password"
-                                       id="password"
-                                       name="password"
-                                       class="form-control @error('password') error @enderror"
-                                       placeholder="Enter password"
-                                       style="padding-left: 3rem; padding-right: 3rem;"
-                                       required>
-                                <i class="fas fa-lock" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #6b7280;"></i>
-                                <button type="button" class="password-toggle" onclick="togglePassword('password')">
-                                    <i class="fas fa-eye" id="password-eye"></i>
-                                </button>
-                            </div>
-                            @error('password')
-                                <div class="error-message">
-                                    <i class="fas fa-exclamation-circle"></i>
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                        </div>
-
-                        <div class="form-group">
-                            <label for="password_confirmation" class="form-label">
-                                <i class="fas fa-key"></i> Confirm Password
-                            </label>
-                            <div class="password-input-container">
-                                <input type="password"
-                                       id="password_confirmation"
-                                       name="password_confirmation"
-                                       class="form-control"
-                                       placeholder="Confirm password"
-                                       style="padding-left: 3rem; padding-right: 3rem;"
-                                       required>
-                                <i class="fas fa-lock" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #6b7280;"></i>
-                                <button type="button" class="password-toggle" onclick="togglePassword('password_confirmation')">
-                                    <i class="fas fa-eye" id="password_confirmation-eye"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
 
                     <div class="form-group">
                         <label class="form-label">
@@ -656,7 +586,7 @@
                             <i class="fas fa-times"></i> Cancel
                         </a>
                         <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save"></i> Create Office Admin
+                            <i class="fas fa-paper-plane"></i> Send Office Admin
                         </button>
                     </div>
                 </form>
@@ -715,21 +645,6 @@
             }
         });
 
-        // Password toggle functionality
-        function togglePassword(fieldId) {
-            const field = document.getElementById(fieldId);
-            const icon = document.getElementById(fieldId + '-eye');
-
-            if (field.type === 'password') {
-                field.type = 'text';
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
-            } else {
-                field.type = 'password';
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
-            }
-        }
     </script>
 </body>
 </html>

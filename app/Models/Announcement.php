@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Announcement extends Model
 {
@@ -322,16 +323,76 @@ class Announcement extends Model
      */
     public function getMediaUrlAttribute()
     {
-        // First check for multiple images
-        $allImageUrls = $this->getAllImageUrlsAttribute();
-        if (!empty($allImageUrls)) {
-            return $allImageUrls[0]; // Return first image
+        // First check for multiple images - get raw paths first
+        $imagePaths = [];
+        
+        // Add single image if exists
+        if ($this->image_path) {
+            $imagePaths[] = $this->image_path;
+        }
+        
+        // Add multiple images if exist - handle double JSON encoding
+        $multipleImagePaths = $this->image_paths;
+        
+        // Handle double JSON encoding issue
+        if (is_string($multipleImagePaths)) {
+            // First decode
+            $decoded = json_decode($multipleImagePaths, true);
+            
+            // If it's still a string, decode again (double encoded)
+            if (is_string($decoded)) {
+                $multipleImagePaths = json_decode($decoded, true);
+            } else {
+                $multipleImagePaths = $decoded;
+            }
+        }
+        
+        if (!empty($multipleImagePaths) && is_array($multipleImagePaths)) {
+            foreach ($multipleImagePaths as $path) {
+                if (!empty($path)) {
+                    $imagePaths[] = $path;
+                }
+            }
+        }
+        
+        if (!empty($imagePaths)) {
+            return \Storage::disk('public')->url($imagePaths[0]); // Return first image with full URL
         }
         
         // Then check for multiple videos
-        $allVideoUrls = $this->getAllVideoUrlsAttribute();
-        if (!empty($allVideoUrls)) {
-            return $allVideoUrls[0]; // Return first video
+        $videoPaths = [];
+        
+        // Add single video if exists
+        if ($this->video_path) {
+            $videoPaths[] = $this->video_path;
+        }
+        
+        // Add multiple videos if exist - handle double JSON encoding
+        $multipleVideoPaths = $this->video_paths;
+        
+        // Handle double JSON encoding issue
+        if (is_string($multipleVideoPaths)) {
+            // First decode
+            $decoded = json_decode($multipleVideoPaths, true);
+            
+            // If it's still a string, decode again (double encoded)
+            if (is_string($decoded)) {
+                $multipleVideoPaths = json_decode($decoded, true);
+            } else {
+                $multipleVideoPaths = $decoded;
+            }
+        }
+        
+        if (!empty($multipleVideoPaths) && is_array($multipleVideoPaths)) {
+            foreach ($multipleVideoPaths as $path) {
+                if (!empty($path)) {
+                    $videoPaths[] = $path;
+                }
+            }
+        }
+        
+        if (!empty($videoPaths)) {
+            return \Storage::disk('public')->url($videoPaths[0]); // Return first video with full URL
         }
         
         return null;
@@ -427,7 +488,7 @@ class Announcement extends Model
     }
 
     /**
-     * Get all image paths (single + multiple) - returns file paths only
+     * Get all image URLs (single + multiple) - returns full URLs for display
      */
     public function getAllImageUrlsAttribute()
     {
@@ -462,11 +523,14 @@ class Announcement extends Model
             }
         }
         
-        return $paths;
+        // Convert file paths to full URLs using Storage facade for production compatibility
+        return array_map(function($path) {
+            return \Storage::disk('public')->url($path);
+        }, $paths);
     }
 
     /**
-     * Get all video paths (single + multiple) - returns file paths only
+     * Get all video URLs (single + multiple) - returns full URLs for display
      */
     public function getAllVideoUrlsAttribute()
     {
@@ -501,7 +565,10 @@ class Announcement extends Model
             }
         }
         
-        return $paths;
+        // Convert file paths to full URLs using Storage facade for production compatibility
+        return array_map(function($path) {
+            return \Storage::disk('public')->url($path);
+        }, $paths);
     }
 
     /**

@@ -611,19 +611,19 @@
                                     contentId: {{ $announcement->id }},
                                     date: 'Posted: {{ $announcement->created_at->format('M d, Y') }}',
                                     media: '{{ $announcement->hasMedia }}',
-                                    mediaUrl: '{{ $announcement->mediaUrl ? asset('storage/' . $announcement->mediaUrl) : '' }}',
+                                    mediaUrl: '{{ $announcement->mediaUrl ?? '' }}',
                                     allImageUrls: {{ json_encode($announcement->allImageUrls ?? []) }},
                                     allVideoUrls: {{ json_encode($announcement->allVideoUrls ?? []) }},
-                                    videoUrl: '{{ $announcement->hasMedia === 'both' && $announcement->allVideoUrls ? asset('storage/' . $announcement->allVideoUrls[0]) : ($announcement->hasMedia === 'video' ? asset('storage/' . $announcement->mediaUrl) : '') }}',
+                                    videoUrl: '{{ $announcement->hasMedia === 'both' && $announcement->allVideoUrls ? $announcement->allVideoUrls[0] : ($announcement->hasMedia === 'video' ? $announcement->mediaUrl : '') }}',
                                     publisher: '{{ $announcement->admin->role === 'superadmin' ? 'MCC Administration' : ($announcement->admin->role === 'department_admin' ? $announcement->admin->department_display . ' Department' : ($announcement->admin->role === 'office_admin' ? $announcement->admin->office_display : $announcement->admin->username)) }}'
                                  }">
                                 @if($announcement->hasMedia === 'image' || $announcement->hasMedia === 'both')
-                                    <img src="{{ asset('storage/' . $announcement->mediaUrl) }}" 
+                                    <img src="{{ $announcement->mediaUrl }}" 
                                          alt="{{ $announcement->title }}" class="item-media">
                                 @elseif($announcement->hasMedia === 'video')
                                     <div class="video-container">
                                         <video class="item-media" muted>
-                                            <source src="{{ asset('storage/' . $announcement->mediaUrl) }}" type="video/mp4">
+                                            <source src="{{ $announcement->mediaUrl }}" type="video/mp4">
                                         </video>
                                         <div class="play-button">
                                             <i class="fas fa-play"></i>
@@ -685,19 +685,19 @@
                                     date: 'Date: {{ $event->event_date ? $event->event_date->format('M d, Y') : 'TBD' }}',
                                     location: 'Location: {{ $event->location ?? 'No location specified' }}',
                                     media: '{{ $event->hasMedia }}',
-                                    mediaUrl: '{{ $event->mediaUrl ? asset('storage/' . $event->mediaUrl) : '' }}',
+                                    mediaUrl: '{{ $event->mediaUrl ?? '' }}',
                                     allImageUrls: {{ json_encode($event->allImageUrls ?? []) }},
                                     allVideoUrls: {{ json_encode($event->allVideoUrls ?? []) }},
-                                    videoUrl: '{{ $event->hasMedia === 'both' && $event->allVideoUrls ? asset('storage/' . $event->allVideoUrls[0]) : ($event->hasMedia === 'video' ? asset('storage/' . $event->mediaUrl) : '') }}',
+                                    videoUrl: '{{ $event->hasMedia === 'both' && $event->allVideoUrls ? $event->allVideoUrls[0] : ($event->hasMedia === 'video' ? $event->mediaUrl : '') }}',
                                     publisher: '{{ $event->admin->role === 'superadmin' ? 'MCC Administration' : ($event->admin->role === 'department_admin' ? $event->admin->department_display . ' Department' : ($event->admin->role === 'office_admin' ? $event->admin->office_display : $event->admin->username)) }}'
                                  }">
                                 @if($event->hasMedia === 'image' || $event->hasMedia === 'both')
-                                    <img src="{{ asset('storage/' . $event->mediaUrl) }}" 
+                                    <img src="{{ $event->mediaUrl }}" 
                                          alt="{{ $event->title }}" class="item-media">
                                 @elseif($event->hasMedia === 'video')
                                     <div class="video-container">
                                         <video class="item-media" muted>
-                                            <source src="{{ asset('storage/' . $event->mediaUrl) }}" type="video/mp4">
+                                            <source src="{{ $event->mediaUrl }}" type="video/mp4">
                                         </video>
                                         <div class="play-button">
                                             <i class="fas fa-play"></i>
@@ -764,19 +764,19 @@
                                     contentId: {{ $article->id }},
                                     date: 'Published: {{ $article->created_at->format('M d, Y') }}',
                                     media: '{{ $article->hasMedia }}',
-                                    mediaUrl: '{{ $article->mediaUrl ? asset('storage/' . $article->mediaUrl) : '' }}',
+                                    mediaUrl: '{{ $article->mediaUrl ?? '' }}',
                                     allImageUrls: {{ json_encode($article->allImageUrls ?? []) }},
                                     allVideoUrls: {{ json_encode($article->allVideoUrls ?? []) }},
-                                    videoUrl: '{{ $article->hasMedia === 'both' && $article->allVideoUrls ? asset('storage/' . $article->allVideoUrls[0]) : ($article->hasMedia === 'video' ? asset('storage/' . $article->mediaUrl) : '') }}',
+                                    videoUrl: '{{ $article->hasMedia === 'both' && $article->allVideoUrls ? $article->allVideoUrls[0] : ($article->hasMedia === 'video' ? $article->mediaUrl : '') }}',
                                     publisher: '{{ $article->admin->role === 'superadmin' ? 'MCC Administration' : ($article->admin->role === 'department_admin' ? $article->admin->department_display . ' Department' : ($article->admin->role === 'office_admin' ? $article->admin->office_display : $article->admin->username)) }}'
                                  }">
                                 @if($article->hasMedia === 'image' || $article->hasMedia === 'both')
-                                    <img src="{{ asset('storage/' . $article->mediaUrl) }}" 
+                                    <img src="{{ $article->mediaUrl }}" 
                                          alt="{{ $article->title }}" class="item-media">
                                 @elseif($article->hasMedia === 'video')
                                     <div class="video-container">
                                         <video class="item-media" muted>
-                                            <source src="{{ asset('storage/' . $article->mediaUrl) }}" type="video/mp4">
+                                            <source src="{{ $article->mediaUrl }}" type="video/mp4">
                                         </video>
                                         <div class="play-button">
                                             <i class="fas fa-play"></i>
@@ -864,10 +864,10 @@
                                         <div class="modal-media-container">
                                             <template x-for="(imageUrl, index) in activeModal.allImageUrls.slice(0, 2)" :key="index">
                                                 <div class="modal-media-item">
-                                                    <img :src="'{{ asset('') }}storage/' + imageUrl" 
+                                                    <img :src="imageUrl" 
                                                          :alt="activeModal.title + ' - Image ' + (index + 1)"
                                                          class="cursor-pointer hover:opacity-80 transition-opacity"
-                                                         @click="selectedImage = '{{ asset('') }}storage/' + imageUrl; imageModal = true">
+                                                         @click="selectedImage = imageUrl; imageModal = true">
                                                 </div>
                                             </template>
                                         </div>
@@ -904,20 +904,20 @@
                                     <!-- Images Section - Render single image centered when exactly one, otherwise grid up to 2 -->
                                     <template x-if="activeModal.allImageUrls && activeModal.allImageUrls.length === 1">
                                         <div class="w-full flex justify-center mb-4">
-                                            <img :src="'{{ asset('') }}storage/' + activeModal.allImageUrls[0]" 
+                                            <img :src="activeModal.allImageUrls[0]" 
                                                  :alt="activeModal.title + ' - Image 1'"
                                                  class="modal-single-image cursor-pointer hover:opacity-80 transition-opacity"
-                                                 @click="selectedImage = '{{ asset('') }}storage/' + activeModal.allImageUrls[0]; imageModal = true">
+                                                 @click="selectedImage = activeModal.allImageUrls[0]; imageModal = true">
                                         </div>
                                     </template>
                                     <template x-if="activeModal.allImageUrls && activeModal.allImageUrls.length > 1">
                                         <div class="modal-media-container">
                                             <template x-for="(imageUrl, index) in activeModal.allImageUrls.slice(0, 2)" :key="index">
                                                 <div class="modal-media-item">
-                                                    <img :src="'{{ asset('') }}storage/' + imageUrl" 
+                                                    <img :src="imageUrl" 
                                                          :alt="activeModal.title + ' - Image ' + (index + 1)"
                                                          class="cursor-pointer hover:opacity-80 transition-opacity"
-                                                         @click="selectedImage = '{{ asset('') }}storage/' + imageUrl; imageModal = true">
+                                                         @click="selectedImage = imageUrl; imageModal = true">
                                                 </div>
                                             </template>
                                         </div>
@@ -927,7 +927,7 @@
                                     <div x-show="activeModal.allVideoUrls && activeModal.allVideoUrls.length > 0">
                                         <template x-for="(videoUrl, index) in activeModal.allVideoUrls.slice(0, 1)" :key="index">
                                             <div class="modal-video-container">
-                                                <video :src="'{{ asset('') }}storage/' + videoUrl" 
+                                                <video :src="videoUrl" 
                                                        controls 
                                                        x-ref="modalVideo"
                                                        preload="metadata"

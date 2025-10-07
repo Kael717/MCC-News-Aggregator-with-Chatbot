@@ -145,6 +145,23 @@
         });
     @endif
 
+    // Show registration success message
+    @if(session('success'))
+        Swal.fire({
+            title: 'Registration Complete!',
+            text: '{{ session('success') }}',
+            icon: 'success',
+            confirmButtonText: 'Continue to Login',
+            confirmButtonColor: '#10b981',
+            background: '#fff',
+            color: '#333',
+            iconColor: '#10b981',
+            customClass: {
+                popup: 'animated fadeInDown'
+            }
+        });
+    @endif
+
     // Show error message with SweetAlert
     @if($errors->any())
         Swal.fire({

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class News extends Model
 {
@@ -409,7 +410,7 @@ class News extends Model
     }
 
     /**
-     * Get all image paths (single + multiple) - returns file paths only
+     * Get all image URLs (single + multiple) - returns full URLs for display
      */
     public function getAllImageUrlsAttribute()
     {
@@ -444,11 +445,14 @@ class News extends Model
             }
         }
         
-        return $paths;
+        // Convert file paths to full URLs using Storage facade for production compatibility
+        return array_map(function($path) {
+            return \Storage::disk('public')->url($path);
+        }, $paths);
     }
 
     /**
-     * Get all video paths (single + multiple) - returns file paths only
+     * Get all video URLs (single + multiple) - returns full URLs for display
      */
     public function getAllVideoUrlsAttribute()
     {
@@ -483,7 +487,10 @@ class News extends Model
             }
         }
         
-        return $paths;
+        // Convert file paths to full URLs using Storage facade for production compatibility
+        return array_map(function($path) {
+            return \Storage::disk('public')->url($path);
+        }, $paths);
     }
 
     /**

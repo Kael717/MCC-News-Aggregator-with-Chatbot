@@ -739,11 +739,13 @@
         margin-bottom: 0.25rem;
     }
 
+    /* Mobile Responsive Styles - Enhanced */
     @media (max-width: 768px) {
         .header {
             flex-direction: column;
             gap: 1rem;
             text-align: center;
+            padding: 1.5rem;
         }
 
         .header-actions {
@@ -761,6 +763,130 @@
 
         .announcement-form {
             padding: 1.5rem;
+        }
+
+        .btn {
+            min-width: 100%;
+            padding: 16px 28px;
+            font-size: 0.9rem;
+        }
+
+        .form-input,
+        .form-textarea,
+        .form-select {
+            padding: 1rem;
+            font-size: 16px; /* Prevents zoom on iOS */
+        }
+
+        .file-upload-area {
+            padding: 1.5rem;
+        }
+
+        .creation-info {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+    }
+
+    /* Small screens */
+    @media (max-width: 576px) {
+        .header h1 {
+            font-size: 1.5rem;
+        }
+
+        .announcement-form {
+            padding: 1rem;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+        }
+
+        .form-section h3 {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 0.85rem;
+        }
+
+        .file-upload-area {
+            padding: 1rem;
+        }
+
+        .file-upload-content i {
+            font-size: 1.5rem;
+        }
+    }
+
+    /* Extra small screens */
+    @media (max-width: 480px) {
+        .dashboard {
+            padding: 0.5rem;
+        }
+
+        .header {
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .header h1 {
+            font-size: 1.25rem;
+        }
+
+        .announcement-form {
+            padding: 0.75rem;
+        }
+
+        .form-section h3 {
+            font-size: 0.95rem;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            font-size: 0.8rem;
+            min-width: 100%;
+        }
+
+        .mobile-menu-btn {
+            display: block !important;
+        }
+    }
+
+    /* Touch-friendly enhancements */
+    @media (hover: none) and (pointer: coarse) {
+        .btn {
+            min-height: 44px;
+            padding: 12px 24px;
+        }
+
+        .form-input,
+        .form-textarea,
+        .form-select {
+            min-height: 44px;
+            padding: 12px 16px;
+        }
+
+        .checkbox-custom {
+            width: 24px;
+            height: 24px;
+        }
+
+        .file-upload-area {
+            min-height: 120px;
+        }
+    }
+
+    /* High DPI displays */
+    @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+        .form-input,
+        .form-textarea,
+        .form-select {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
     }
 </style>
