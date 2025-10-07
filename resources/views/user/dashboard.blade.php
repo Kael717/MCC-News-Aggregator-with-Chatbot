@@ -486,6 +486,257 @@
             font-weight: 600;
             padding: 10px 20px;
         }
+        
+        /* Enhanced Profile Action Buttons */
+        .profile-action-btn {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .profile-action-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s ease, height 0.3s ease;
+        }
+        
+        .profile-action-btn:hover::before {
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Mobile responsive adjustments for profile buttons */
+        @media (max-width: 768px) {
+            .profile-action-btn {
+                width: 52px !important;
+                height: 52px !important;
+                min-height: 52px;
+                min-width: 52px;
+                touch-action: manipulation;
+                -webkit-tap-highlight-color: transparent;
+            }
+            
+            .profile-action-btn i {
+                font-size: 1.25rem !important;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .profile-action-btn {
+                width: 48px !important;
+                height: 48px !important;
+                min-height: 48px;
+                min-width: 48px;
+            }
+            
+            .profile-action-btn i {
+                font-size: 1.125rem !important;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            .profile-action-btn {
+                width: 44px !important;
+                height: 44px !important;
+                min-height: 44px;
+                min-width: 44px;
+            }
+            
+            .profile-action-btn i {
+                font-size: 1rem !important;
+            }
+        }
+        
+        /* Tooltip enhancement */
+        .profile-action-btn[title]:hover::after {
+            content: attr(title);
+            position: absolute;
+            bottom: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            z-index: 1000;
+            opacity: 0;
+            animation: tooltipFadeIn 0.3s ease forwards;
+        }
+        
+        @keyframes tooltipFadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-5px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+        
+        /* Enhanced Profile Modal Buttons */
+        .profile-modal-btn {
+            position: relative;
+            overflow: hidden;
+            min-height: 48px;
+            font-weight: 600;
+            letter-spacing: 0.025em;
+            border: none;
+            cursor: pointer;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        
+        .profile-modal-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .profile-modal-btn:hover::before {
+            left: 100%;
+        }
+        
+        .profile-modal-btn:active {
+            transform: scale(0.98);
+        }
+        
+        /* Button-specific styles */
+        .logout-btn:hover {
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+        }
+        
+        .edit-btn:hover {
+            box-shadow: 0 8px 25px rgba(147, 51, 234, 0.4);
+        }
+        
+        .close-btn:hover {
+            box-shadow: 0 8px 25px rgba(107, 114, 128, 0.4);
+        }
+        
+        /* Mobile responsive adjustments for profile modal buttons */
+        @media (max-width: 640px) {
+            .profile-modal-btn {
+                min-height: 52px;
+                font-size: 0.9375rem;
+                padding: 0.875rem 1.5rem !important;
+            }
+            
+            .profile-modal-btn i {
+                font-size: 1.125rem;
+            }
+            
+            .profile-modal-btn span {
+                font-weight: 600;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .profile-modal-btn {
+                min-height: 48px;
+                font-size: 0.875rem;
+                padding: 0.75rem 1.25rem !important;
+            }
+            
+            .profile-modal-btn i {
+                font-size: 1rem;
+            }
+        }
+        
+        /* Enhanced modal footer */
+        .modal-footer-gradient {
+            background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        /* Pulse animation for active states */
+        @keyframes buttonPulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+            }
+        }
+        
+        .profile-modal-btn:focus {
+            outline: none;
+            animation: buttonPulse 1.5s infinite;
+        }
+        
+        /* Profile Edit Icon Styles */
+        .profile-edit-icon {
+            position: relative;
+            overflow: hidden;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        
+        .profile-edit-icon::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(147, 51, 234, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s ease, height 0.3s ease;
+        }
+        
+        .profile-edit-icon:hover::before {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .profile-edit-icon:active {
+            transform: scale(0.95);
+        }
+        
+        /* Mobile responsive adjustments for profile edit icon */
+        @media (max-width: 768px) {
+            .profile-edit-icon {
+                width: 36px !important;
+                height: 36px !important;
+                min-height: 36px;
+                min-width: 36px;
+            }
+            
+            .profile-edit-icon i {
+                font-size: 0.875rem !important;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .profile-edit-icon {
+                width: 32px !important;
+                height: 32px !important;
+                min-height: 32px;
+                min-width: 32px;
+            }
+            
+            .profile-edit-icon i {
+                font-size: 0.75rem !important;
+            }
+        }
     </style>
 </head>
 <body class="py-8 px-4" x-data="dashboardData()">
@@ -581,10 +832,17 @@
                         <i class="fas fa-camera text-white text-xs"></i>
                     </div>
                 </div>
-                <div>
-                    <h3 class="font-semibold text-xl text-gray-800">{{ auth()->user()->first_name }} {{ auth()->user()->surname }}</h3>
+                <div class="flex-1">
+                    <div class="flex items-center gap-3">
+                        <h3 class="font-semibold text-xl text-gray-800">{{ auth()->user()->first_name }} {{ auth()->user()->surname }}</h3>
+                        <button @click.stop="profileModal = true; editMode = true; initializeProfileForm()" 
+                                title="Edit Profile"
+                                class="profile-edit-icon w-8 h-8 rounded-full bg-purple-100 hover:bg-purple-200 text-purple-600 hover:text-purple-700 transition-all duration-200 flex items-center justify-center hover:scale-110 group border border-purple-200 hover:border-purple-300 shadow-sm hover:shadow-md">
+                            <i class="fas fa-edit text-sm group-hover:rotate-12 transition-transform duration-200"></i>
+                        </button>
+                    </div>
                     <p class="text-gray-600">{{ auth()->user()->department }} - {{ auth()->user()->year_level }}</p>
-                    <p class="text-sm text-purple-600 mt-1">Click to edit profile</p>
+                    <p class="text-sm text-purple-600 mt-1">Click to view profile</p>
                 </div>
             </div>
             <div class="text-purple-500 transform transition-transform group-hover:translate-x-1">
@@ -1193,17 +1451,17 @@
                         </div>
                         
                         <!-- Profile Picture Actions -->
-                        <div class="flex space-x-2 mt-4">
+                        <div class="flex space-x-3 mt-4 justify-center">
                             <button @click="$refs.profilePictureInput.click()" 
-                                    class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm flex items-center">
-                                <i class="fas fa-upload mr-2"></i>
-                                Upload Photo
+                                    class="profile-action-btn w-12 h-12 bg-green-500 text-white rounded-full hover:bg-green-600 transition-all duration-300 flex items-center justify-center shadow-lg hover:shadow-xl transform hover:scale-110 group"
+                                    title="Upload Photo">
+                                <i class="fas fa-camera text-lg group-hover:scale-110 transition-transform duration-200"></i>
                             </button>
                             @if(auth()->user()->hasProfilePicture)
                                 <button @click="removeProfilePicture()" 
-                                        class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm flex items-center">
-                                    <i class="fas fa-trash mr-2"></i>
-                                    Remove
+                                        class="profile-action-btn w-12 h-12 bg-red-500 text-white rounded-full hover:bg-red-600 transition-all duration-300 flex items-center justify-center shadow-lg hover:shadow-xl transform hover:scale-110 group"
+                                        title="Remove Photo">
+                                    <i class="fas fa-trash text-lg group-hover:scale-110 transition-transform duration-200"></i>
                                 </button>
                             @endif
                         </div>
@@ -1343,23 +1601,13 @@
                 </div>
                 
                 <!-- Footer -->
-                <div class="p-6 border-t bg-gray-50 flex justify-between items-center">
-                    <button @click="logout()" 
-                            class="px-5 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors flex items-center">
-                        <i class="fas fa-sign-out-alt mr-2"></i>
-                        Logout
-                    </button>
-                    
-                    <div class="flex space-x-3">
-                        <button x-show="!editMode" 
-                                @click="editMode = true; initializeProfileForm()" 
-                                class="px-5 py-2 rounded-lg bg-purple-600 text-white hover:bg-purple-700 transition-colors flex items-center">
-                            <i class="fas fa-edit mr-2"></i>
-                            Edit Profile
-                        </button>
-                        <button class="px-5 py-2 rounded-lg bg-gray-600 text-white hover:bg-gray-700 transition-colors" 
-                                @click="profileModal = false; editMode = false; resetProfileForm()">
-                            Close
+                <div class="p-6 border-t bg-gradient-to-r from-gray-50 to-gray-100">
+                    <div class="flex justify-center items-center">
+                        <!-- Logout Button (Icon Only) -->
+                        <button @click="logout()" 
+                                title="Logout"
+                                class="profile-action-btn w-12 h-12 rounded-full bg-gradient-to-r from-red-500 to-red-600 text-white hover:from-red-600 hover:to-red-700 transition-all duration-300 flex items-center justify-center shadow-lg hover:shadow-xl transform hover:scale-110 group">
+                            <i class="fas fa-sign-out-alt text-lg group-hover:rotate-12 transition-transform duration-200"></i>
                         </button>
                     </div>
                 </div>

@@ -207,7 +207,13 @@
                                 <td>
                                     <div class="user-info">
                                         <div class="user-avatar">
-                                            {{ strtoupper(substr($student->first_name, 0, 1) . substr($student->surname, 0, 1)) }}
+                                            @if($student->hasProfilePicture)
+                                                <img src="{{ $student->profilePictureUrl }}" 
+                                                     alt="{{ $student->first_name }} {{ $student->surname }}" 
+                                                     class="profile-image">
+                                            @else
+                                                <span class="initials">{{ strtoupper(substr($student->first_name, 0, 1) . substr($student->surname, 0, 1)) }}</span>
+                                            @endif
                                         </div>
                                         <div class="user-details">
                                             <div class="user-name">{{ $student->first_name }} {{ $student->middle_name }} {{ $student->surname }}</div>
@@ -286,7 +292,13 @@
                     <div class="student-card" data-department="{{ $student->department }}">
                         <div class="card-header">
                             <div class="user-avatar-large">
-                                {{ strtoupper(substr($student->first_name, 0, 1) . substr($student->surname, 0, 1)) }}
+                                @if($student->hasProfilePicture)
+                                    <img src="{{ $student->profilePictureUrl }}" 
+                                         alt="{{ $student->first_name }} {{ $student->surname }}" 
+                                         class="profile-image-large">
+                                @else
+                                    <span class="initials-large">{{ strtoupper(substr($student->first_name, 0, 1) . substr($student->surname, 0, 1)) }}</span>
+                                @endif
                             </div>
                             <div class="card-title">
                                 <h3>{{ $student->first_name }} {{ $student->surname }}</h3>
@@ -849,6 +861,23 @@ function toggleSidebar() {
     color: white;
     font-weight: 600;
     font-size: 0.875rem;
+    overflow: hidden;
+    position: relative;
+}
+
+.profile-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.initials {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
 }
 
 .user-name {
@@ -962,6 +991,23 @@ function toggleSidebar() {
     color: white;
     font-weight: 600;
     font-size: 1rem;
+    overflow: hidden;
+    position: relative;
+}
+
+.profile-image-large {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.initials-large {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
 }
 
 .card-title h3 {
