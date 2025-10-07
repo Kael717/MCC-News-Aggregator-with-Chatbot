@@ -737,6 +737,369 @@
                 font-size: 0.75rem !important;
             }
         }
+        
+        /* Glassmorphism Modal Styles */
+        .glass-modal-backdrop {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.1), 
+                rgba(255, 255, 255, 0.05)
+            );
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            animation: backdropFadeIn 0.5s ease-out;
+        }
+        
+        @keyframes backdropFadeIn {
+            from {
+                backdrop-filter: blur(0px);
+                -webkit-backdrop-filter: blur(0px);
+            }
+            to {
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+            }
+        }
+        
+        .glass-modal-container {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.25), 
+                rgba(255, 255, 255, 0.15)
+            );
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 24px;
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.15),
+                0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+                0 1px 0 rgba(255, 255, 255, 0.2) inset;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .glass-modal-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.4), 
+                transparent
+            );
+        }
+        
+        .glass-header {
+            background: linear-gradient(135deg, 
+                rgba(147, 51, 234, 0.8), 
+                rgba(79, 70, 229, 0.8)
+            );
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+        }
+        
+        .glass-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.1), 
+                rgba(255, 255, 255, 0.05)
+            );
+            pointer-events: none;
+        }
+        
+        .glass-close-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .glass-close-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .glass-close-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .glass-close-btn:hover::before {
+            opacity: 1;
+        }
+        
+        .glass-close-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .glass-content {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.1), 
+                rgba(255, 255, 255, 0.05)
+            );
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 2rem;
+            overflow-y: auto;
+            max-height: calc(95vh - 200px);
+            position: relative;
+        }
+        
+        .glass-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.05), 
+                rgba(255, 255, 255, 0.02)
+            );
+            pointer-events: none;
+        }
+        
+        .glass-profile-picture {
+            width: 128px;
+            height: 128px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, 
+                rgba(147, 51, 234, 0.3), 
+                rgba(79, 70, 229, 0.3)
+            );
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 
+                0 15px 35px rgba(0, 0, 0, 0.1),
+                0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+            overflow: hidden;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .glass-profile-picture::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.2), 
+                rgba(255, 255, 255, 0.05)
+            );
+            pointer-events: none;
+        }
+        
+        .glass-profile-picture:hover {
+            transform: scale(1.02);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.15),
+                0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+        }
+        
+        .glass-footer {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.15), 
+                rgba(255, 255, 255, 0.08)
+            );
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+        }
+        
+        .glass-footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.05), 
+                rgba(255, 255, 255, 0.02)
+            );
+            pointer-events: none;
+        }
+        
+        /* Enhanced Glass Form Elements */
+        .glass-content input,
+        .glass-content select,
+        .glass-content textarea {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: #1f2937;
+            transition: all 0.3s ease;
+        }
+        
+        .glass-content input:focus,
+        .glass-content select:focus,
+        .glass-content textarea:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(147, 51, 234, 0.5);
+            box-shadow: 
+                0 0 0 3px rgba(147, 51, 234, 0.1),
+                0 8px 25px rgba(0, 0, 0, 0.1);
+            outline: none;
+        }
+        
+        .glass-content label {
+            color: #374151;
+            font-weight: 600;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+        }
+        
+        /* Glass Buttons */
+        .glass-content button {
+            background: linear-gradient(135deg, 
+                rgba(147, 51, 234, 0.8), 
+                rgba(79, 70, 229, 0.8)
+            );
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            font-weight: 600;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .glass-content button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.2), 
+                transparent
+            );
+            transition: left 0.5s ease;
+        }
+        
+        .glass-content button:hover::before {
+            left: 100%;
+        }
+        
+        .glass-content button:hover {
+            background: linear-gradient(135deg, 
+                rgba(147, 51, 234, 0.9), 
+                rgba(79, 70, 229, 0.9)
+            );
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(147, 51, 234, 0.3);
+        }
+        
+        /* Mobile Responsive Glassmorphism */
+        @media (max-width: 768px) {
+            .glass-modal-container {
+                margin: 1rem;
+                border-radius: 20px;
+            }
+            
+            .glass-header {
+                padding: 1.5rem;
+            }
+            
+            .glass-content {
+                padding: 1.5rem;
+                max-height: calc(95vh - 160px);
+            }
+            
+            .glass-profile-picture {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .glass-close-btn {
+                width: 40px;
+                height: 40px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .glass-modal-container {
+                margin: 0.5rem;
+                border-radius: 16px;
+            }
+            
+            .glass-header {
+                padding: 1rem;
+            }
+            
+            .glass-content {
+                padding: 1rem;
+                max-height: calc(95vh - 140px);
+            }
+            
+            .glass-profile-picture {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .glass-close-btn {
+                width: 36px;
+                height: 36px;
+            }
+        }
+        
+        /* Glass Animation Effects */
+        @keyframes glassShimmer {
+            0% {
+                background-position: -200% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
+        }
+        
+        .glass-modal-container:hover::before {
+            animation: glassShimmer 2s ease-in-out infinite;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.3), 
+                transparent
+            );
+            background-size: 200% 100%;
+        }
     </style>
 </head>
 <body class="py-8 px-4" x-data="dashboardData()">
@@ -1381,46 +1744,46 @@
             </div>
         </div>
 
-        <!-- Enhanced Profile Modal -->
+        <!-- Glassmorphism Profile Modal -->
         <div x-show="profileModal" 
-             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter="transition ease-out duration-500"
              x-transition:enter-start="opacity-0"
              x-transition:enter-end="opacity-100"
-             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave="transition ease-in duration-300"
              x-transition:leave-start="opacity-100"
              x-transition:leave-end="opacity-0"
-             class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4" 
+             class="fixed inset-0 glass-modal-backdrop flex items-center justify-center z-50 p-4" 
              @keydown.escape="profileModal = false; editMode = false; resetProfileForm()">
-            <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[95vh] overflow-hidden"
-                 x-transition:enter="transition ease-out duration-300"
-                 x-transition:enter-start="opacity-0 transform scale-95"
-                 x-transition:enter-end="opacity-100 transform scale-100"
-                 x-transition:leave="transition ease-in duration-200"
-                 x-transition:leave-start="opacity-100 transform scale-100"
-                 x-transition:leave-end="opacity-0 transform scale-95"
+            <div class="glass-modal-container max-w-lg w-full max-h-[95vh] overflow-hidden"
+                 x-transition:enter="transition ease-out duration-500"
+                 x-transition:enter-start="opacity-0 transform scale-90 translate-y-8"
+                 x-transition:enter-end="opacity-100 transform scale-100 translate-y-0"
+                 x-transition:leave="transition ease-in duration-300"
+                 x-transition:leave-start="opacity-100 transform scale-100 translate-y-0"
+                 x-transition:leave-end="opacity-0 transform scale-90 translate-y-8"
                  @click.stop
-                 x-init="$watch('editMode', () => { $nextTick(() => { if ($refs.modalContent) $refs.modalContent.scrollTop = 0; }); })">
+                 x-init="$watch('editMode', () => { $nextTick(() => { if ($refs.modalContent) $refs.modalContent.scrollTop = 0; }); })"
                 
-                <!-- Header -->
-                <div class="relative p-6 bg-gradient-to-r from-purple-600 to-blue-600 text-white">
+                <!-- Glassmorphism Header -->
+                <div class="glass-header">
                     <div class="flex items-center justify-between">
                         <div>
-                            <h3 class="text-2xl font-bold">My Profile</h3>
-                            <p class="text-purple-100 text-sm">Manage your account information</p>
+                            <h3 class="text-2xl font-bold text-white drop-shadow-lg">My Profile</h3>
+                            <p class="text-white text-opacity-90 text-sm drop-shadow-sm">Manage your account information</p>
                         </div>
                         <button @click="profileModal = false; editMode = false; resetProfileForm()" 
-                                class="w-10 h-10 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 transition-all duration-200 flex items-center justify-center">
+                                class="glass-close-btn">
                             <i class="fas fa-times text-white"></i>
                         </button>
                     </div>
                 </div>
 
-                <!-- Content -->
-                <div class="p-6 overflow-y-auto max-h-[calc(95vh-200px)]" x-ref="modalContent">
+                <!-- Glassmorphism Content -->
+                <div class="glass-content" x-ref="modalContent">
                     <!-- Profile Picture Section -->
                     <div class="flex flex-col items-center mb-8">
                         <div class="relative group">
-                            <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-purple-200 shadow-lg bg-gradient-to-br from-purple-400 to-purple-600">
+                            <div class="glass-profile-picture">
                                 @if(auth()->user()->hasProfilePicture)
                                     <img x-ref="profileImage" 
                                          src="{{ auth()->user()->profilePictureUrl }}" 
@@ -1600,8 +1963,8 @@
                     </div>
                 </div>
                 
-                <!-- Footer -->
-                <div class="p-6 border-t bg-gradient-to-r from-gray-50 to-gray-100">
+                <!-- Glassmorphism Footer -->
+                <div class="glass-footer">
                     <div class="flex justify-center items-center">
                         <!-- Logout Button (Icon Only) -->
                         <button @click="logout()" 
