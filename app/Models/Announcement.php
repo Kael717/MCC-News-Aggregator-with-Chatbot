@@ -49,6 +49,33 @@ class Announcement extends Model
         'allVideoPaths'
     ];
 
+    /**
+     * Build a publicly accessible URL for a file stored on the public disk.
+     * Ensures HTTPS and provides a resilient fallback if APP_URL is misconfigured.
+     */
+    private function buildPublicUrl(string $relativePath): string
+    {
+        // Absolute URL already
+        if (preg_match('/^https?:\/\//i', $relativePath)) {
+            return $relativePath;
+        }
+
+        // Primary: use Storage public disk URL
+        $url = \Storage::disk('public')->url($relativePath);
+
+        // Force https if current app runs on https
+        if (str_starts_with($url, 'http://') && (config('app.env') === 'production' || request()->isSecure())) {
+            $url = preg_replace('/^http:\/\//i', 'https://', $url);
+        }
+
+        // Fallback: asset('storage/...') if Storage URL looks wrong
+        if (!preg_match('/^https?:\/\//i', $url)) {
+            $fallback = asset('storage/' . ltrim($relativePath, '/'));
+            return $fallback;
+        }
+
+        return $url;
+    }
     public function admin()
     {
         return $this->belongsTo(Admin::class);
@@ -356,7 +383,7 @@ class Announcement extends Model
         }
         
         if (!empty($imagePaths)) {
-            return \Storage::disk('public')->url($imagePaths[0]); // Return first image with full URL
+            return $this->buildPublicUrl($imagePaths[0]);
         }
         
         // Then check for multiple videos
@@ -392,7 +419,7 @@ class Announcement extends Model
         }
         
         if (!empty($videoPaths)) {
-            return \Storage::disk('public')->url($videoPaths[0]); // Return first video with full URL
+            return $this->buildPublicUrl($videoPaths[0]);
         }
         
         return null;
@@ -525,7 +552,7 @@ class Announcement extends Model
         
         // Convert file paths to full URLs using Storage facade for production compatibility
         return array_map(function($path) {
-            return \Storage::disk('public')->url($path);
+            return $this->buildPublicUrl($path);
         }, $paths);
     }
 
@@ -567,7 +594,7 @@ class Announcement extends Model
         
         // Convert file paths to full URLs using Storage facade for production compatibility
         return array_map(function($path) {
-            return \Storage::disk('public')->url($path);
+            return $this->buildPublicUrl($path);
         }, $paths);
     }
 
