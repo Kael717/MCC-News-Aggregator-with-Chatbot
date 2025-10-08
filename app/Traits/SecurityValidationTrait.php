@@ -15,7 +15,8 @@ trait SecurityValidationTrait
 
         // Check all input fields for dangerous patterns
         foreach ($request->all() as $key => $value) {
-            if ($key !== '_token' && is_string($value) && !empty($value)) {
+            // Skip CSRF token and reCAPTCHA payload from generic pattern/length checks
+            if ($key !== '_token' && $key !== 'g-recaptcha-response' && is_string($value) && !empty($value)) {
                 foreach ($dangerousPatterns as $pattern) {
                     if (preg_match($pattern, $value)) {
                         \Log::warning('Dangerous pattern detected in authentication form', [

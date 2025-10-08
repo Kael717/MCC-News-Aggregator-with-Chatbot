@@ -80,6 +80,7 @@ class UnifiedAuthController extends Controller
             'ms365_account' => $secureRules['ms365_account'],
             'username' => $secureRules['username'],
             'password' => $secureRules['password'],
+            // reCAPTCHA token can exceed 255 chars; do not impose max length
             'g-recaptcha-response' => 'required',
         ], array_merge($secureMessages, [
             'g-recaptcha-response.required' => 'Please complete the reCAPTCHA verification.',
