@@ -852,7 +852,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script @nonce>
+    <script>
         document.addEventListener('DOMContentLoaded', function () {
             var el = document.getElementById('swal-success');
             if (el) {
@@ -892,7 +892,7 @@
             }
         }
     </script>
-    <script @nonce>
+    <script>
         // Security validation patterns
         const DANGEROUS_PATTERNS = [
             // TypeScript/JavaScript patterns
@@ -1216,7 +1216,7 @@
 
     <!-- reCAPTCHA v3 JavaScript -->
     <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.sitekey') }}" async defer></script>
-    <script @nonce>
+    <script>
         // Execute reCAPTCHA v3 on form submission with action 'login'
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('unified-form');
