@@ -1072,7 +1072,8 @@
 
                 // Validate all form inputs
                 for (let [key, value] of formData.entries()) {
-                    if (key !== '_token' && value) {
+                    // Skip CSRF token and Google reCAPTCHA payload from client-side checks
+                    if (key !== '_token' && key !== 'g-recaptcha-response' && value) {
                         const validation = validateInput(value, key);
                         if (!validation.valid) {
                             e.preventDefault();
