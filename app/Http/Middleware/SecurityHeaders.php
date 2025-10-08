@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Helpers\CSPHelper;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,16 +31,8 @@ class SecurityHeaders
             'fullscreen=(self), sync-xhr=()'
         );
 
-        // Content Security Policy (CSP)
-        $response->headers->set('Content-Security-Policy', 
-            "default-src 'self'; " .
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://fonts.googleapis.com; " .
-            "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; " .
-            "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; " .
-            "img-src 'self' data: https:; " .
-            "connect-src 'self'; " .
-            "frame-ancestors 'none';"
-        );
+        // Secure Content Security Policy (CSP) with nonces
+        $response->headers->set('Content-Security-Policy', CSPHelper::generateCSP());
 
         // Additional Security Headers
         $response->headers->set('X-Content-Type-Options', 'nosniff');
