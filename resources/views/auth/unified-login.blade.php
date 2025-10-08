@@ -830,8 +830,28 @@
                         </label>
                     </div>
 
-                    <!-- reCAPTCHA v3 token (hidden) -->
-                    <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
+                    <!-- reCAPTCHA -->
+                    <div class="form-group" id="recaptcha-field" style="display: none;">
+                        <label for="recaptcha">
+                            <i class="fas fa-shield-alt"></i>
+                            Security Verification
+                        </label>
+                        <div class="recaptcha-container">
+                            <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.sitekey') }}"></div>
+                        </div>
+                        @error('g-recaptcha-response')
+                            <div class="error-message">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                {{ $message }}
+                            </div>
+                        @enderror
+                        @error('captcha')
+                            <div class="error-message">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
 
                     <!-- Submit Button -->
                     <button type="submit" class="btn" id="submit-btn" disabled>
@@ -1214,30 +1234,7 @@
 
     </script>
 
-    <!-- reCAPTCHA v3 JavaScript -->
-    <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.sitekey') }}" async defer></script>
-    <script>
-        // Execute reCAPTCHA v3 on form submission with action 'login'
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('unified-form');
-            if (!form) return;
-            form.addEventListener('submit', function(e) {
-                // If token already present, allow submit
-                const tokenInput = document.getElementById('g-recaptcha-response');
-                if (tokenInput && tokenInput.value) return;
-                e.preventDefault();
-                grecaptcha.ready(function() {
-                    grecaptcha.execute('{{ config('services.recaptcha.sitekey') }}', {action: 'login'})
-                        .then(function(token) {
-                            const input = document.getElementById('g-recaptcha-response');
-                            if (input) {
-                                input.value = token;
-                            }
-                            form.submit();
-                        });
-                });
-            });
-        });
-    </script>
+    <!-- reCAPTCHA JavaScript -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </body>
 </html>

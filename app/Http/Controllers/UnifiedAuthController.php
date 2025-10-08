@@ -40,24 +40,8 @@ class UnifiedAuthController extends Controller
         ]);
 
         $result = $response->json();
-
-        if (!isset($result['success']) || $result['success'] !== true) {
-            return false;
-        }
-
-        // reCAPTCHA v3: verify action and score when available
-        $expectedAction = 'login';
-        $minScore = (float) config('services.recaptcha.min_score', 0.5);
-
-        if (isset($result['action']) && $result['action'] !== $expectedAction) {
-            return false;
-        }
-
-        if (isset($result['score']) && $result['score'] < $minScore) {
-            return false;
-        }
-
-        return true;
+        
+        return isset($result['success']) && $result['success'] === true;
     }
     
     /**
@@ -96,7 +80,6 @@ class UnifiedAuthController extends Controller
             'ms365_account' => $secureRules['ms365_account'],
             'username' => $secureRules['username'],
             'password' => $secureRules['password'],
-            // For v3, token is still posted as g-recaptcha-response
             'g-recaptcha-response' => 'required',
         ], array_merge($secureMessages, [
             'g-recaptcha-response.required' => 'Please complete the reCAPTCHA verification.',
