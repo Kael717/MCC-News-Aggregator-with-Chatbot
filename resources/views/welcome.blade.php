@@ -20,14 +20,7 @@
                 <span class="logo-text">MCC-NAC</span>
             </div>
             
-            <!-- Mobile menu button -->
-            <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle mobile menu">
-                <span class="hamburger-line"></span>
-                <span class="hamburger-line"></span>
-                <span class="hamburger-line"></span>
-            </button>
-            
-            <nav class="main-nav" id="main-nav">
+            <nav class="main-nav">
                 <a href="{{ route('login') }}" class="nav-link">Login</a>
                 <a href="{{ route('ms365.signup') }}" class="nav-link signup-btn">Signup</a>
             </nav>
@@ -526,41 +519,6 @@
     gap: 3rem;
     max-width: 1000px;
     margin: 0 auto;
-}
-
-/* Mobile Menu Button */
-.mobile-menu-btn {
-    display: none;
-    flex-direction: column;
-    justify-content: space-around;
-    width: 30px;
-    height: 30px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    z-index: 1001;
-}
-
-.hamburger-line {
-    width: 25px;
-    height: 3px;
-    background: white;
-    border-radius: 2px;
-    transition: all 0.3s ease;
-    transform-origin: center;
-}
-
-.mobile-menu-btn.active .hamburger-line:nth-child(1) {
-    transform: rotate(45deg) translate(6px, 6px);
-}
-
-.mobile-menu-btn.active .hamburger-line:nth-child(2) {
-    opacity: 0;
-}
-
-.mobile-menu-btn.active .hamburger-line:nth-child(3) {
-    transform: rotate(-45deg) translate(6px, -6px);
 }
 
 /* Mobile-first improvements */
@@ -1277,57 +1235,6 @@
 }
 
 @media (max-width: 1024px) {
-    /* Show mobile menu button */
-    .mobile-menu-btn {
-        display: flex;
-    }
-    
-    /* Hide desktop navigation */
-    .main-nav {
-        position: fixed;
-        top: 0;
-        right: -100%;
-        width: 280px;
-        height: 100vh;
-        background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 2rem;
-        transition: right 0.3s ease;
-        z-index: 1000;
-        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
-    }
-    
-    .main-nav.active {
-        right: 0;
-    }
-    
-    .main-nav .nav-link {
-        color: white;
-        font-size: 1.125rem;
-        padding: 1rem 2rem;
-        border-radius: 0.5rem;
-        transition: all 0.3s ease;
-        width: 200px;
-        text-align: center;
-    }
-    
-    .main-nav .nav-link:hover {
-        background: rgba(255, 255, 255, 0.1);
-        transform: translateX(5px);
-    }
-    
-    .main-nav .signup-btn {
-        background: #10b981;
-        color: white !important;
-    }
-    
-    .main-nav .signup-btn:hover {
-        background: #059669;
-        transform: translateX(5px);
-    }
-    
     .programs-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 1.5rem;
@@ -1373,7 +1280,6 @@
     
     .header-container {
         padding: 0 1rem;
-        position: relative;
     }
     
     .logo-text {
@@ -1386,44 +1292,13 @@
         font-size: 1.125rem;
     }
 
-    /* Mobile navigation improvements */
     .main-nav {
-        width: 100vw;
-        right: -100vw;
-        background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-        backdrop-filter: blur(10px);
+        gap: 0.75rem;
     }
     
-    .main-nav.active {
-        right: 0;
-    }
-    
-    .main-nav .nav-link {
-        font-size: 1.25rem;
-        padding: 1.25rem 2rem;
-        width: 250px;
-        min-height: 50px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    /* Add overlay for mobile menu */
-    .main-nav::before {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: -1;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-    }
-    
-    .main-nav.active::before {
-        opacity: 1;
+    .nav-link {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
     }
 
     /* Hero section improvements */
@@ -1886,31 +1761,6 @@
     }
 }
 
-/* Touch device specific optimizations */
-.touch-device .program-card {
-    /* Enhanced touch feedback */
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.touch-device .program-card:active {
-    transform: scale(0.98);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-}
-
-.touch-device .btn {
-    /* Better touch targets */
-    min-height: 48px;
-    min-width: 48px;
-    touch-action: manipulation;
-}
-
-.touch-device .nav-link {
-    /* Enhanced touch targets for navigation */
-    min-height: 48px;
-    min-width: 48px;
-    touch-action: manipulation;
-}
-
 /* Ultra small screens */
 @media (max-width: 360px) {
     .hero-text h1 {
@@ -1963,19 +1813,6 @@
         max-width: 300px;
         right: 0.75rem;
     }
-    
-    /* Enhanced mobile menu for ultra small screens */
-    .main-nav {
-        width: 100vw;
-        padding: 2rem 1rem;
-    }
-    
-    .main-nav .nav-link {
-        font-size: 1.125rem;
-        padding: 1rem 1.5rem;
-        width: 100%;
-        max-width: 280px;
-    }
 }
 
 /* Modal Styles */
@@ -2023,60 +1860,9 @@
     lastQuestion: null
 };
 
-// Mobile menu toggle function
-function toggleMobileMenu() {
-    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-    const mainNav = document.querySelector('#main-nav');
-    
-    mobileMenuBtn.classList.toggle('active');
-    mainNav.classList.toggle('active');
-    
-    // Prevent body scroll when menu is open
-    if (mainNav.classList.contains('active')) {
-        document.body.style.overflow = 'hidden';
-    } else {
-        document.body.style.overflow = '';
-    }
-}
-
-// Close mobile menu when clicking outside
-document.addEventListener('click', function(event) {
-    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-    const mainNav = document.querySelector('#main-nav');
-    
-    if (!mobileMenuBtn.contains(event.target) && !mainNav.contains(event.target)) {
-        mobileMenuBtn.classList.remove('active');
-        mainNav.classList.remove('active');
-        document.body.style.overflow = '';
-    }
-});
-
-// Close mobile menu when clicking on nav links
-document.querySelectorAll('.main-nav .nav-link').forEach(link => {
-    link.addEventListener('click', function() {
-        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-        const mainNav = document.querySelector('#main-nav');
-        
-        mobileMenuBtn.classList.remove('active');
-        mainNav.classList.remove('active');
-        document.body.style.overflow = '';
-    });
-});
-
-// Handle window resize
-window.addEventListener('resize', function() {
-    if (window.innerWidth > 1024) {
-        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-        const mainNav = document.querySelector('#main-nav');
-        
-        mobileMenuBtn.classList.remove('active');
-        mainNav.classList.remove('active');
-        document.body.style.overflow = '';
-    }
-});
-
 // Initialize all functionality when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
+
     // Smooth scrolling for navigation links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
@@ -2090,17 +1876,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-    
-    // Add touch optimizations for mobile
-    if ('ontouchstart' in window) {
-        // Add touch class to body for CSS optimizations
-        document.body.classList.add('touch-device');
-        
-        // Optimize images for touch devices
-        document.querySelectorAll('.program-img').forEach(img => {
-            img.style.touchAction = 'manipulation';
-        });
-    }
 });
 </script>
 </body>
