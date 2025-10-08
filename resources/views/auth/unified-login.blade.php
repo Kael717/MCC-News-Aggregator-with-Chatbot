@@ -830,28 +830,7 @@
                         </label>
                     </div>
 
-                    <!-- reCAPTCHA -->
-                    <div class="form-group" id="recaptcha-field" style="display: none;">
-                        <label for="recaptcha">
-                            <i class="fas fa-shield-alt"></i>
-                            Security Verification
-                        </label>
-                        <div class="recaptcha-container">
-                            <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.sitekey') }}"></div>
-                        </div>
-                        @error('g-recaptcha-response')
-                            <div class="error-message">
-                                <i class="fas fa-exclamation-triangle"></i>
-                                {{ $message }}
-                            </div>
-                        @enderror
-                        @error('captcha')
-                            <div class="error-message">
-                                <i class="fas fa-exclamation-triangle"></i>
-                                {{ $message }}
-                            </div>
-                        @enderror
-                    </div>
+                    <!-- reCAPTCHA removed -->
 
                     <!-- Submit Button -->
                     <button type="submit" class="btn" id="submit-btn" disabled>

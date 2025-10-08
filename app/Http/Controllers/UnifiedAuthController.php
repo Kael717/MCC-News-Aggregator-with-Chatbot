@@ -80,15 +80,7 @@ class UnifiedAuthController extends Controller
             'ms365_account' => $secureRules['ms365_account'],
             'username' => $secureRules['username'],
             'password' => $secureRules['password'],
-            'g-recaptcha-response' => 'required',
-        ], array_merge($secureMessages, [
-            'g-recaptcha-response.required' => 'Please complete the reCAPTCHA verification.',
-        ]));
-
-        // Validate reCAPTCHA
-        if (!$this->validateRecaptcha($request)) {
-            return back()->withErrors(['captcha' => 'reCAPTCHA validation failed. Please try again.'])->withInput();
-        }
+        ], $secureMessages);
 
         $loginType = $request->login_type;
 
