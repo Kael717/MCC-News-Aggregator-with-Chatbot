@@ -48,9 +48,12 @@ return [
         'secret'  => env('NOCAPTCHA_SECRET'),
     ],
 
+    // reCAPTCHA keys used across the app (unified login view and server validation)
+    // Prefer explicit RECAPTCHA_* vars; fall back to NoCaptcha envs if present
     'recaptcha' => [
-        'sitekey' => env('NOCAPTCHA_SITEKEY'),
-        'secret'  => env('NOCAPTCHA_SECRET'),
+        'sitekey' => env('RECAPTCHA_SITE_KEY', env('NOCAPTCHA_SITEKEY')),
+        'secret'  => env('RECAPTCHA_SECRET_KEY', env('NOCAPTCHA_SECRET')),
+        'min_score' => (float) env('RECAPTCHA_MIN_SCORE', 0.5),
     ],
 
 
