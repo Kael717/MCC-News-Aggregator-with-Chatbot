@@ -40,10 +40,10 @@ class SecurityHeaders
         $response->headers->set('X-XSS-Protection', '1; mode=block');
         $response->headers->set('X-Permitted-Cross-Domain-Policies', 'none');
         
-        // Cross-Origin Policies
-        $response->headers->set('Cross-Origin-Embedder-Policy', 'require-corp');
+        // Cross-Origin Policies (relaxed to allow external styles/fonts/CDNs on dashboard)
+        $response->headers->set('Cross-Origin-Embedder-Policy', 'unsafe-none');
         $response->headers->set('Cross-Origin-Opener-Policy', 'same-origin');
-        $response->headers->set('Cross-Origin-Resource-Policy', 'same-origin');
+        $response->headers->set('Cross-Origin-Resource-Policy', 'cross-origin');
 
         // Remove server information
         $response->headers->remove('X-Powered-By');
