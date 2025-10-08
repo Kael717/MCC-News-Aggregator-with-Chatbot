@@ -50,9 +50,10 @@
     
     # Additional Security Headers
     Header always set X-Permitted-Cross-Domain-Policies "none"
-    Header always set Cross-Origin-Embedder-Policy "require-corp"
+    # Align with Laravel middleware which relaxes COEP/CORP for dashboards using external CDNs
+    Header always set Cross-Origin-Embedder-Policy "unsafe-none"
     Header always set Cross-Origin-Opener-Policy "same-origin"
-    Header always set Cross-Origin-Resource-Policy "same-origin"
+    Header always set Cross-Origin-Resource-Policy "cross-origin"
     
     # Remove Server Information
     Header unset Server
