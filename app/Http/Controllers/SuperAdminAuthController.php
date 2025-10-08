@@ -57,15 +57,7 @@ class SuperAdminAuthController extends Controller
         $request->validate([
             'username' => array_merge($secureRules['username'], ['required']),
             'password' => array_merge($secureRules['password'], ['required']),
-            'g-recaptcha-response' => 'required',
-        ], array_merge($secureMessages, [
-            'g-recaptcha-response.required' => 'Please complete the reCAPTCHA verification.',
-        ]));
-
-        // Validate reCAPTCHA
-        if (!$this->validateRecaptcha($request)) {
-            return back()->withErrors(['captcha' => 'reCAPTCHA validation failed. Please try again.'])->withInput();
-        }
+        ], $secureMessages);
 
         // Attempt to authenticate with admin guard
         if (Auth::guard('admin')->attempt($request->only('username', 'password'))) {
