@@ -179,6 +179,7 @@ class MS365OAuthController extends Controller
                 'email',
                 'regex:/^[a-zA-Z0-9._%+-]+@.*\.edu\.ph$/'
             ],
+            'g-recaptcha-response' => 'required|captcha',
             'first_name' => [
                 'required',
                 'string',

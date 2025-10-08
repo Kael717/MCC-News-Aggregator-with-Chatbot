@@ -812,6 +812,23 @@
                         </label>
                     </div>
 
+                    <!-- reCAPTCHA -->
+                    <div class="form-group" id="recaptcha-field" style="display: none;">
+                        <label for="recaptcha">
+                            <i class="fas fa-shield-alt"></i>
+                            Security Verification
+                        </label>
+                        <div class="recaptcha-container">
+                            {!! NoCaptcha::display() !!}
+                        </div>
+                        @error('g-recaptcha-response')
+                            <div class="error-message">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
+
                     <!-- Submit Button -->
                     <button type="submit" class="btn" id="submit-btn" disabled>
                         <i class="fas fa-sign-in-alt"></i>
@@ -1103,6 +1120,12 @@
                     authLinks.style.display = 'block';
                     forgotPassword.style.display = 'block';
                     
+                    // Show reCAPTCHA
+                    const recaptchaField = document.getElementById('recaptcha-field');
+                    if (recaptchaField) {
+                        recaptchaField.style.display = 'block';
+                    }
+                    
                     console.log('Forgot password should now be visible'); // Debug log
                     
                     // Set required fields
@@ -1122,6 +1145,12 @@
                     passwordField.style.display = 'block';
                     rememberField.style.display = 'block';
                     
+                    // Show reCAPTCHA
+                    const recaptchaField = document.getElementById('recaptcha-field');
+                    if (recaptchaField) {
+                        recaptchaField.style.display = 'block';
+                    }
+                    
                     // Set required fields
                     setRequired('username', true);
                     setRequired('password', true);
@@ -1138,6 +1167,12 @@
                     ms365Field.style.display = 'block';
                     passwordField.style.display = 'block';
                     rememberField.style.display = 'block';
+                    
+                    // Show reCAPTCHA
+                    const recaptchaField = document.getElementById('recaptcha-field');
+                    if (recaptchaField) {
+                        recaptchaField.style.display = 'block';
+                    }
                     
                     // Set required fields
                     setRequired('ms365_account', true);
@@ -1174,5 +1209,8 @@
         });
 
     </script>
+
+    <!-- reCAPTCHA JavaScript -->
+    {!! NoCaptcha::renderJs() !!}
 </body>
 </html>

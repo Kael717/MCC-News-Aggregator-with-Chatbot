@@ -42,5 +42,11 @@ return [
         'redirect' => env('MS_REDIRECT_URI'),
         'sender_upn' => env('MS_GRAPH_SENDER_UPN'),
     ],
+    
+    'nocaptcha' => [
+    'sitekey' => env('NOCAPTCHA_SITEKEY'),
+    'secret'  => env('NOCAPTCHA_SECRET'),
+],
+
 
 ];

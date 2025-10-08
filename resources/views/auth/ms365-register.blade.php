@@ -217,6 +217,23 @@
             @enderror
         </div>
 
+        <!-- reCAPTCHA -->
+        <div class="form-group">
+            <label for="recaptcha">
+                <i class="fas fa-shield-alt"></i>
+                Security Verification
+            </label>
+            <div class="recaptcha-container">
+                {!! NoCaptcha::display() !!}
+            </div>
+            @error('g-recaptcha-response')
+                <div class="error-message">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    {{ $message }}
+                </div>
+            @enderror
+        </div>
+
         <button type="submit" class="btn btn-primary">
             <i class="fab fa-microsoft"></i>
             Complete MS365 Registration
@@ -1065,5 +1082,8 @@
     }
 
 </style>
+
+<!-- reCAPTCHA JavaScript -->
+{!! NoCaptcha::renderJs() !!}
 
 @endsection

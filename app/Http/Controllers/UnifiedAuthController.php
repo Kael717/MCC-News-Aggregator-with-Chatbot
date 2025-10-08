@@ -56,6 +56,7 @@ class UnifiedAuthController extends Controller
             'ms365_account' => $secureRules['ms365_account'],
             'username' => $secureRules['username'],
             'password' => $secureRules['password'],
+            'g-recaptcha-response' => 'required|captcha',
         ], $secureMessages);
 
         $loginType = $request->login_type;
