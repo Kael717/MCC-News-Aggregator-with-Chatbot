@@ -297,7 +297,7 @@
 @include('components.chatbot-widget')
 </div>
 
-<style>
+<style @nonce>
 /* Welcome Page Styles */
 .welcome-page {
     min-height: 100vh;
@@ -1853,7 +1853,7 @@
 }
 </style>
 
-<script>
+<script @nonce>
     let conversationContext = {
     currentTopic: null,
     followUp: false,
