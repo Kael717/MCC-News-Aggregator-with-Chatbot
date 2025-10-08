@@ -280,7 +280,6 @@
         .btn:active {
             transform: translateY(1px);
         }
-
         .btn i {
             margin-right: 0.5rem;
         }
@@ -292,6 +291,17 @@
         }
 
         .btn:disabled:hover {
+            transform: none;
+        }
+
+        .btn.locked {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            color: white;
+            cursor: not-allowed;
+        }
+
+        .btn.locked:hover {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
             transform: none;
         }
 
@@ -336,6 +346,173 @@
             content: '\f06a';
             font-family: 'Font Awesome 6 Free';
             font-weight: 900;
+            margin-right: 0.5rem;
+        }
+
+        .lockout-message {
+            background: rgba(220, 38, 38, 0.1);
+            border-color: rgba(220, 38, 38, 0.3);
+            color: #dc2626;
+        }
+
+        .lockout-message::before {
+            content: none;
+        }
+
+        .lockout-message i {
+            margin-right: 0.5rem;
+            color: #dc2626;
+        }
+
+        .attempts-warning {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: rgba(245, 158, 11, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        .attempts-warning::before {
+            content: none;
+        }
+
+        .attempts-warning i {
+            margin-right: 0.5rem;
+            color: var(--warning);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Authenticated Accounts Section */
+        .authenticated-accounts-section {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .accounts-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gray-800);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .accounts-title i {
+            margin-right: 0.5rem;
+            color: var(--secondary);
+        }
+
+        .accounts-list {
+            space-y: 0.75rem;
+        }
+
+        .account-item {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            transition: var(--transition);
+        }
+
+        .account-item:hover {
+            border-color: var(--secondary-light);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .account-info {
+            flex: 1;
+        }
+
+        .account-type {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .account-type i {
+            margin-right: 0.5rem;
+            width: 16px;
+        }
+
+        .account-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .account-name {
+            font-weight: 500;
+            color: var(--gray-800);
+            font-size: 0.9375rem;
+        }
+
+        .account-email {
+            font-size: 0.8125rem;
+            color: var(--gray-600);
+        }
+
+        .account-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-switch, .btn-remove {
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            font-size: 0.875rem;
+        }
+
+        .btn-switch {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-switch:hover {
+            background: var(--secondary-light);
+            transform: translateY(-1px);
+        }
+
+        .btn-remove {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-remove:hover {
+            background: #dc2626;
+            transform: translateY(-1px);
+        }
+
+        .add-account-note {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: rgba(59, 130, 246, 0.05);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: var(--radius-sm);
+            font-size: 0.875rem;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+        }
+
+        .add-account-note i {
             margin-right: 0.5rem;
         }
 
@@ -526,6 +703,44 @@
                 font-size: 0.8125rem;
             }
             
+            /* Mobile responsive for authenticated accounts */
+            .authenticated-accounts-section {
+                padding: 1rem;
+                margin-bottom: 1rem;
+            }
+            
+            .accounts-title {
+                font-size: 0.9375rem;
+                margin-bottom: 0.75rem;
+            }
+            
+            .account-item {
+                padding: 0.75rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.75rem;
+            }
+            
+            .account-info {
+                width: 100%;
+            }
+            
+            .account-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+            
+            .btn-switch, .btn-remove {
+                width: 40px;
+                height: 40px;
+                min-height: 44px;
+            }
+            
+            .add-account-note {
+                padding: 0.625rem;
+                font-size: 0.8125rem;
+            }
+            
             /* Mobile reCAPTCHA scaling */
             .recaptcha-container .g-recaptcha {
                 transform: scale(0.85);
@@ -696,11 +911,69 @@
             @endif
 
 
-            @if($errors->any())
+            @if($errors->has('account_lockout'))
+                <div class="error-message lockout-message">
+                    <i class="fas fa-lock"></i>
+                    {{ $errors->first('account_lockout') }}
+                </div>
+            @elseif($errors->any() && !$errors->has('ms365_account') && !$errors->has('gmail_account') && !$errors->has('username') && !$errors->has('password') && !$errors->has('account_lockout'))
                 <div class="error-message">
                     @foreach($errors->all() as $error)
                         <div>{{ $error }}</div>
                     @endforeach
+                </div>
+            @endif
+
+            @if((session('attempts_left') && session('attempts_left') > 0 && session('attempts_left') < 3) || (isset($attemptsLeft) && $attemptsLeft > 0 && $attemptsLeft < 3))
+                <div class="warning-message attempts-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Warning: {{ session('attempts_left') ?? $attemptsLeft }} login attempt(s) remaining before temporary lockout.
+                </div>
+            @endif
+
+            @if(isset($authenticatedAccounts) && !empty($authenticatedAccounts))
+                <div class="authenticated-accounts-section">
+                    <h3 class="accounts-title">
+                        <i class="fas fa-users"></i>
+                        Currently Logged In Accounts
+                    </h3>
+                    <div class="accounts-list">
+                        @foreach($authenticatedAccounts as $account)
+                            <div class="account-item">
+                                <div class="account-info">
+                                    <div class="account-type">
+                                        <i class="fas fa-{{ $account['type'] === 'ms365' ? 'microsoft' : ($account['type'] === 'user' ? 'google' : 'user-shield') }}"></i>
+                                        {{ ucfirst(str_replace('-', ' ', $account['type'])) }}
+                                    </div>
+                                    <div class="account-details">
+                                        <span class="account-name">{{ $account['name'] }}</span>
+                                        <span class="account-email">{{ $account['email'] }}</span>
+                                    </div>
+                                </div>
+                                <div class="account-actions">
+                                    <form method="POST" action="{{ route('switch.account') }}" style="display: inline;">
+                                        @csrf
+                                        <input type="hidden" name="account_type" value="{{ $account['type'] }}">
+                                        <input type="hidden" name="user_id" value="{{ $account['user_id'] }}">
+                                        <button type="submit" class="btn-switch" title="Switch to this account">
+                                            <i class="fas fa-exchange-alt"></i>
+                                        </button>
+                                    </form>
+                                    <form method="POST" action="{{ route('remove.account') }}" style="display: inline;">
+                                        @csrf
+                                        <input type="hidden" name="account_type" value="{{ $account['type'] }}">
+                                        <button type="submit" class="btn-remove" title="Remove this account" onclick="return confirm('Are you sure you want to remove this account?')">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="add-account-note">
+                        <i class="fas fa-info-circle"></i>
+                        You can add another account by logging in below
+                    </div>
                 </div>
             @endif
 
@@ -1016,6 +1289,14 @@
             const submitBtn = document.getElementById('submit-btn');
             const authLinks = document.getElementById('auth-links');
             const forgotPassword = document.getElementById('forgot-password');
+            
+            // Check if there's an account lockout message
+            const hasAccountLockout = document.querySelector('.lockout-message') !== null;
+            
+            // Initialize lockout countdown if there's an account lockout
+            if (hasAccountLockout) {
+                initializeLockoutCountdown();
+            }
 
             // Add real-time validation to security-checked inputs
             document.querySelectorAll('[data-security-check="true"]').forEach(input => {
@@ -1199,6 +1480,38 @@
             // Add event listener for changes
             loginTypeSelect.addEventListener('change', toggleFields);
             
+            // Add real-time account lockout checking
+            function checkAccountLockout() {
+                const loginType = loginTypeSelect.value;
+                let accountValue = '';
+                
+                switch(loginType) {
+                    case 'ms365':
+                        accountValue = document.getElementById('ms365_account')?.value || '';
+                        break;
+                    case 'user':
+                        accountValue = document.getElementById('gmail_account')?.value || '';
+                        break;
+                    case 'superadmin':
+                    case 'department-admin':
+                    case 'office-admin':
+                        accountValue = document.getElementById('username')?.value || '';
+                        break;
+                }
+                
+                if (accountValue) {
+                    // You can add AJAX call here to check if this specific account is locked
+                    // For now, we'll rely on server-side validation
+                }
+            }
+            
+            // Add event listeners to account fields
+            document.addEventListener('input', function(e) {
+                if (['ms365_account', 'gmail_account', 'username'].includes(e.target.name)) {
+                    checkAccountLockout();
+                }
+            });
+            
             // Force show forgot password link for MS365 (fallback)
             setTimeout(function() {
                 if (loginTypeSelect.value === 'ms365') {
@@ -1210,6 +1523,59 @@
                 }
             }, 100);
         });
+
+        // Lockout countdown functionality
+        function initializeLockoutCountdown() {
+            const lockoutMessage = document.querySelector('.lockout-message');
+            if (!lockoutMessage) return;
+            
+            const messageText = lockoutMessage.textContent;
+            const minutesMatch = messageText.match(/(\d+)\s+minutes?/);
+            
+            if (minutesMatch) {
+                let remainingSeconds = parseInt(minutesMatch[1]) * 60; // Convert to seconds
+                
+                const countdown = setInterval(() => {
+                    remainingSeconds--;
+                    
+                    if (remainingSeconds <= 0) {
+                        clearInterval(countdown);
+                        // Hide the lockout message
+                        lockoutMessage.style.display = 'none';
+                        
+                        // Show success message that account is unlocked
+                        const successDiv = document.createElement('div');
+                        successDiv.className = 'success-message';
+                        successDiv.innerHTML = '<i class="fas fa-check-circle"></i> Account unlocked! You can now try logging in again.';
+                        lockoutMessage.parentNode.insertBefore(successDiv, lockoutMessage);
+                        
+                        // Remove success message after 5 seconds
+                        setTimeout(() => {
+                            if (successDiv.parentNode) {
+                                successDiv.remove();
+                            }
+                        }, 5000);
+                    } else {
+                        // Update the message with new time
+                        const minutes = Math.floor(remainingSeconds / 60);
+                        const seconds = remainingSeconds % 60;
+                        
+                        let timeText;
+                        if (minutes > 0) {
+                            timeText = minutes + ' minute' + (minutes !== 1 ? 's' : '');
+                            if (seconds > 0) {
+                                timeText += ' and ' + seconds + ' second' + (seconds !== 1 ? 's' : '');
+                            }
+                        } else {
+                            timeText = seconds + ' second' + (seconds !== 1 ? 's' : '');
+                        }
+                        
+                        const newMessage = messageText.replace(/\d+\s+minutes?/, timeText);
+                        lockoutMessage.innerHTML = '<i class="fas fa-lock"></i> ' + newMessage;
+                    }
+                }, 1000); // Update every second
+            }
+        }
 
     </script>
 

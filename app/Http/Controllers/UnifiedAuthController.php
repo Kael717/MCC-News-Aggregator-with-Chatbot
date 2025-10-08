@@ -57,9 +57,15 @@ class UnifiedAuthController extends Controller
             $loginType = 'ms365';
         }
         
+        // Get locked accounts information
+        $lockedAccounts = $this->getLockedAccounts();
+        $authenticatedAccounts = $this->getCurrentAuthenticatedAccounts();
+        
         return view('auth.unified-login', [
             'title' => 'Login - MCC News Aggregator',
-            'preselectedType' => $loginType
+            'preselectedType' => $loginType,
+            'lockedAccounts' => $lockedAccounts,
+            'authenticatedAccounts' => $authenticatedAccounts
         ]);
     }
 
@@ -68,6 +74,16 @@ class UnifiedAuthController extends Controller
      */
     public function login(Request $request)
     {
+        // Check if specific account is locked out
+        if ($this->isLockedOut($request)) {
+            $lockoutTime = $this->getLockoutTimeRemaining($request);
+            $accountIdentifier = $this->getAccountIdentifier($request);
+            return back()->withErrors([
+                'account_lockout' => "This account is temporarily locked due to too many failed login attempts. Please try again in {$lockoutTime} minute" . ($lockoutTime != 1 ? 's' : '') . "."
+            ])->with('lockout_time', $lockoutTime)
+              ->with('locked_account', $accountIdentifier);
+        }
+
         // Enhanced security validation
         $this->validateSecureInput($request);
 
@@ -84,6 +100,9 @@ class UnifiedAuthController extends Controller
 
         $loginType = $request->login_type;
 
+        // Store current auth status before login attempt
+        $wasAuthenticated = auth()->check();
+        
         // Route to appropriate controller based on login type
         $result = null;
         switch ($loginType) {
@@ -114,6 +133,24 @@ class UnifiedAuthController extends Controller
 
             default:
                 return back()->withErrors(['login_type' => 'Invalid login type selected.']);
+        }
+
+        // Handle login attempt tracking and account switching
+        $currentlyAuthenticated = $this->getCurrentAuthenticatedAccounts();
+        
+        if (auth()->check() && !$wasAuthenticated) {
+            // Login successful, clear attempts and store account info
+            $this->clearLoginAttempts($request);
+            $this->storeAccountSession($request, $loginType);
+        } elseif (!auth()->check() && empty($currentlyAuthenticated)) {
+            // Login failed and no other accounts logged in, increment attempt counter
+            $this->incrementLoginAttempts($request);
+            
+            // Add remaining attempts info to the error response
+            $attemptsLeft = $this->getRemainingAttempts($request);
+            if ($attemptsLeft > 0 && $result instanceof \Illuminate\Http\RedirectResponse) {
+                $result->with('attempts_left', $attemptsLeft);
+            }
         }
 
         return $result;
@@ -455,5 +492,367 @@ class UnifiedAuthController extends Controller
                         ->with('success', 'Your password has been successfully reset. You can now log in with your new password.');
     }
 
+    /**
+     * Get the login attempts session key for specific account
+     */
+    private function getLoginAttemptsKey(Request $request)
+    {
+        $identifier = $this->getAccountIdentifier($request);
+        return 'login_attempts_' . md5($identifier);
+    }
+
+    /**
+     * Get the lockout session key for specific account
+     */
+    private function getLockoutKey(Request $request)
+    {
+        $identifier = $this->getAccountIdentifier($request);
+        return 'lockout_time_' . md5($identifier);
+    }
+
+    /**
+     * Get unique account identifier based on login type
+     */
+    private function getAccountIdentifier(Request $request)
+    {
+        $loginType = $request->login_type;
+        
+        switch ($loginType) {
+            case 'ms365':
+                return $loginType . '_' . ($request->ms365_account ?? 'unknown');
+            case 'user':
+                return $loginType . '_' . ($request->gmail_account ?? 'unknown');
+            case 'superadmin':
+            case 'department-admin':
+            case 'office-admin':
+                return $loginType . '_' . ($request->username ?? 'unknown');
+            default:
+                return 'unknown_' . $request->ip();
+        }
+    }
+
+    /**
+     * Increment login attempts
+     */
+    private function incrementLoginAttempts(Request $request)
+    {
+        $key = $this->getLoginAttemptsKey($request);
+        $attempts = session($key, 0) + 1;
+        session([$key => $attempts]);
+
+        // If max attempts reached, set lockout time
+        if ($attempts >= 3) {
+            $lockoutKey = $this->getLockoutKey($request);
+            session([$lockoutKey => now()->addMinutes(1)]);
+        }
+    }
+
+    /**
+     * Clear login attempts
+     */
+    private function clearLoginAttempts(Request $request)
+    {
+        $attemptsKey = $this->getLoginAttemptsKey($request);
+        $lockoutKey = $this->getLockoutKey($request);
+        
+        session()->forget([$attemptsKey, $lockoutKey]);
+    }
+
+    /**
+     * Check if user is locked out
+     */
+    private function isLockedOut(Request $request)
+    {
+        $lockoutKey = $this->getLockoutKey($request);
+        $lockoutTime = session($lockoutKey);
+        
+        if (!$lockoutTime) {
+            return false;
+        }
+        
+        try {
+            // Ensure we have a valid Carbon instance
+            $lockoutTime = is_string($lockoutTime) ? \Carbon\Carbon::parse($lockoutTime) : $lockoutTime;
+            
+            // Skip if not a valid Carbon instance
+            if (!$lockoutTime instanceof \Carbon\Carbon) {
+                return false;
+            }
+            
+            // Check if lockout time has passed
+            if (now()->greaterThan($lockoutTime)) {
+                // Lockout expired, clear it
+                $this->clearLoginAttempts($request);
+                return false;
+            }
+            
+            return true;
+        } catch (\Exception $e) {
+            // If there's an error parsing the date, assume not locked
+            return false;
+        }
+    }
+
+    /**
+     * Get remaining lockout time in minutes
+     */
+    private function getLockoutTimeRemaining(Request $request)
+    {
+        $lockoutKey = $this->getLockoutKey($request);
+        $lockoutTime = session($lockoutKey);
+        
+        if (!$lockoutTime) {
+            return 0;
+        }
+        
+        try {
+            // Ensure we have a valid Carbon instance
+            $lockoutTime = is_string($lockoutTime) ? \Carbon\Carbon::parse($lockoutTime) : $lockoutTime;
+            
+            // Skip if not a valid Carbon instance
+            if (!$lockoutTime instanceof \Carbon\Carbon) {
+                return 0;
+            }
+            
+            $remaining = now()->diffInMinutes($lockoutTime, false);
+            return max(0, $remaining);
+        } catch (\Exception $e) {
+            // If there's an error parsing the date, return 0
+            return 0;
+        }
+    }
+
+    /**
+     * Get remaining login attempts
+     */
+    private function getRemainingAttempts(Request $request)
+    {
+        $key = $this->getLoginAttemptsKey($request);
+        $attempts = session($key, 0);
+        return max(0, 3 - $attempts);
+    }
+
+    /**
+     * Store account session information
+     */
+    private function storeAccountSession(Request $request, $loginType)
+    {
+        $accounts = session('authenticated_accounts', []);
+        
+        $accountInfo = [
+            'type' => $loginType,
+            'user_id' => auth()->id(),
+            'name' => auth()->user()->name ?? auth()->user()->username ?? 'Unknown',
+            'email' => $this->getUserEmail(auth()->user(), $loginType),
+            'logged_in_at' => now()->toDateTimeString(),
+        ];
+        
+        // Remove existing account of same type to prevent duplicates
+        $accounts = array_filter($accounts, function($account) use ($loginType) {
+            return $account['type'] !== $loginType;
+        });
+        
+        $accounts[] = $accountInfo;
+        session(['authenticated_accounts' => $accounts]);
+    }
+
+    /**
+     * Get current authenticated accounts
+     */
+    private function getCurrentAuthenticatedAccounts()
+    {
+        return session('authenticated_accounts', []);
+    }
+
+    /**
+     * Get user email based on account type
+     */
+    private function getUserEmail($user, $loginType)
+    {
+        if (!$user) return 'Unknown';
+        
+        switch ($loginType) {
+            case 'ms365':
+                return $user->ms365_account ?? $user->email ?? 'Unknown';
+            case 'user':
+                return $user->gmail_account ?? $user->email ?? 'Unknown';
+            case 'superadmin':
+            case 'department-admin':
+            case 'office-admin':
+                return $user->username ?? 'Unknown';
+            default:
+                return $user->email ?? $user->username ?? 'Unknown';
+        }
+    }
+
+    /**
+     * Switch to a different account
+     */
+    public function switchAccount(Request $request)
+    {
+        $request->validate([
+            'account_type' => 'required|string',
+            'user_id' => 'required|integer',
+        ]);
+
+        $accounts = $this->getCurrentAuthenticatedAccounts();
+        $targetAccount = collect($accounts)->firstWhere('type', $request->account_type);
+
+        if (!$targetAccount) {
+            return back()->withErrors(['account' => 'Account not found or session expired.']);
+        }
+
+        // Switch authentication context based on account type
+        switch ($request->account_type) {
+            case 'ms365':
+            case 'user':
+                $user = User::find($request->user_id);
+                if ($user) {
+                    auth()->login($user);
+                    return redirect()->route('user.dashboard');
+                }
+                break;
+            
+            case 'superadmin':
+            case 'department-admin':
+            case 'office-admin':
+                $admin = Admin::find($request->user_id);
+                if ($admin) {
+                    auth('admin')->login($admin);
+                    return redirect()->route($request->account_type . '.dashboard');
+                }
+                break;
+        }
+
+        return back()->withErrors(['account' => 'Unable to switch to the selected account.']);
+    }
+
+    /**
+     * Remove an account from the session
+     */
+    public function removeAccount(Request $request)
+    {
+        $request->validate([
+            'account_type' => 'required|string',
+        ]);
+
+        $accounts = $this->getCurrentAuthenticatedAccounts();
+        $accounts = array_filter($accounts, function($account) use ($request) {
+            return $account['type'] !== $request->account_type;
+        });
+
+        session(['authenticated_accounts' => array_values($accounts)]);
+
+        // If removing current account, logout
+        if (auth()->check()) {
+            $currentType = $this->getCurrentAccountType();
+            if ($currentType === $request->account_type) {
+                auth()->logout();
+                
+                // If there are other accounts, switch to the first one
+                if (!empty($accounts)) {
+                    $firstAccount = reset($accounts);
+                    return $this->switchAccount(new Request([
+                        'account_type' => $firstAccount['type'],
+                        'user_id' => $firstAccount['user_id']
+                    ]));
+                }
+            }
+        }
+
+        return back()->with('success', 'Account removed successfully.');
+    }
+
+    /**
+     * Get current account type
+     */
+    private function getCurrentAccountType()
+    {
+        if (auth('admin')->check()) {
+            $admin = auth('admin')->user();
+            return $admin->role === 'superadmin' ? 'superadmin' : 
+                   ($admin->role === 'department_admin' ? 'department-admin' : 'office-admin');
+        } elseif (auth()->check()) {
+            $user = auth()->user();
+            return $user->ms365_account ? 'ms365' : 'user';
+        }
+        return null;
+    }
+
+    /**
+     * Get all locked accounts with their lockout information
+     */
+    private function getLockedAccounts()
+    {
+        $lockedAccounts = [];
+        $sessionData = session()->all();
+        
+        foreach ($sessionData as $key => $value) {
+            if (strpos($key, 'lockout_time_') === 0) {
+                try {
+                    // Ensure we have a valid Carbon instance
+                    $lockoutTime = is_string($value) ? \Carbon\Carbon::parse($value) : $value;
+                    
+                    // Skip if not a valid Carbon instance
+                    if (!$lockoutTime instanceof \Carbon\Carbon) {
+                        continue;
+                    }
+                    
+                    if (now()->lessThan($lockoutTime)) {
+                        // Find corresponding attempts key
+                        $attemptsKey = str_replace('lockout_time_', 'login_attempts_', $key);
+                        $attempts = session($attemptsKey, 0);
+                        
+                        $lockedAccounts[] = [
+                            'key' => $key,
+                            'lockout_time' => $lockoutTime,
+                            'attempts' => $attempts,
+                            'remaining_minutes' => now()->diffInMinutes($lockoutTime, false)
+                        ];
+                    }
+                } catch (\Exception $e) {
+                    // Skip invalid lockout entries
+                    continue;
+                }
+            }
+        }
+        
+        return $lockedAccounts;
+    }
+
+    /**
+     * Check if specific account identifier is locked
+     */
+    public function isAccountLocked($accountIdentifier)
+    {
+        $key = 'lockout_time_' . md5($accountIdentifier);
+        $lockoutTime = session($key);
+        
+        if (!$lockoutTime) {
+            return false;
+        }
+        
+        try {
+            // Ensure we have a valid Carbon instance
+            $lockoutTime = is_string($lockoutTime) ? \Carbon\Carbon::parse($lockoutTime) : $lockoutTime;
+            
+            // Skip if not a valid Carbon instance
+            if (!$lockoutTime instanceof \Carbon\Carbon) {
+                return false;
+            }
+            
+            if (now()->greaterThan($lockoutTime)) {
+                // Lockout expired, clear it
+                $attemptsKey = 'login_attempts_' . md5($accountIdentifier);
+                session()->forget([$key, $attemptsKey]);
+                return false;
+            }
+            
+            return true;
+        } catch (\Exception $e) {
+            // If there's an error parsing the date, assume not locked
+            return false;
+        }
+    }
 
 }

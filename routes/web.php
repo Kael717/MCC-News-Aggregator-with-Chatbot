@@ -119,6 +119,10 @@ Route::get('/', function () {
 Route::get('/login', [UnifiedAuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [UnifiedAuthController::class, 'login'])->name('unified.login');
 
+// Account switching routes
+Route::post('/switch-account', [UnifiedAuthController::class, 'switchAccount'])->name('switch.account');
+Route::post('/remove-account', [UnifiedAuthController::class, 'removeAccount'])->name('remove.account');
+
 // Gmail Authentication Routes
 Route::get('/signup', [UnifiedAuthController::class, 'showSignupForm'])->name('gmail.signup');
 Route::post('/signup', [UnifiedAuthController::class, 'sendRegistrationLink'])->name('gmail.signup.send');
