@@ -401,6 +401,18 @@
             color: var(--secondary);
         }
 
+        /* reCAPTCHA Styling */
+        .recaptcha-container {
+            display: flex;
+            justify-content: center;
+            margin: 0.5rem 0;
+        }
+
+        .recaptcha-container .g-recaptcha {
+            transform: scale(1);
+            transform-origin: 0 0;
+        }
+
         /* Animation for form fields */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -512,6 +524,12 @@
             .warning-message {
                 padding: 0.625rem 0.875rem;
                 font-size: 0.8125rem;
+            }
+            
+            /* Mobile reCAPTCHA scaling */
+            .recaptcha-container .g-recaptcha {
+                transform: scale(0.85);
+                transform-origin: 0 0;
             }
         }
         
@@ -819,9 +837,15 @@
                             Security Verification
                         </label>
                         <div class="recaptcha-container">
-                            {!! NoCaptcha::display() !!}
+                            <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.sitekey') }}"></div>
                         </div>
                         @error('g-recaptcha-response')
+                            <div class="error-message">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                {{ $message }}
+                            </div>
+                        @enderror
+                        @error('captcha')
                             <div class="error-message">
                                 <i class="fas fa-exclamation-triangle"></i>
                                 {{ $message }}
@@ -1211,6 +1235,6 @@
     </script>
 
     <!-- reCAPTCHA JavaScript -->
-    {!! NoCaptcha::renderJs() !!}
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </body>
 </html>

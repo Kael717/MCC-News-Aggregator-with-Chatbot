@@ -16,10 +16,33 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Http;
 use App\Models\User;
 class UnifiedAuthController extends Controller
 {
     use SecurityValidationTrait;
+
+    /**
+     * Validate reCAPTCHA response
+     */
+    private function validateRecaptcha(Request $request)
+    {
+        $recaptchaResponse = $request->input('g-recaptcha-response');
+        
+        if (!$recaptchaResponse) {
+            return false;
+        }
+
+        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+            'secret' => config('services.recaptcha.secret'),
+            'response' => $recaptchaResponse,
+            'remoteip' => $request->ip(),
+        ]);
+
+        $result = $response->json();
+        
+        return isset($result['success']) && $result['success'] === true;
+    }
     
     /**
      * Show the unified login form
@@ -51,13 +74,21 @@ class UnifiedAuthController extends Controller
         $secureRules = $this->getSecureValidationRules();
         $secureMessages = $this->getSecureValidationMessages();
 
+        // Validate basic fields first
         $request->validate([
             'login_type' => 'required|in:user,ms365,superadmin,department-admin,office-admin',
             'ms365_account' => $secureRules['ms365_account'],
             'username' => $secureRules['username'],
             'password' => $secureRules['password'],
-            'g-recaptcha-response' => 'required|captcha',
-        ], $secureMessages);
+            'g-recaptcha-response' => 'required',
+        ], array_merge($secureMessages, [
+            'g-recaptcha-response.required' => 'Please complete the reCAPTCHA verification.',
+        ]));
+
+        // Validate reCAPTCHA
+        if (!$this->validateRecaptcha($request)) {
+            return back()->withErrors(['captcha' => 'reCAPTCHA validation failed. Please try again.'])->withInput();
+        }
 
         $loginType = $request->login_type;
 

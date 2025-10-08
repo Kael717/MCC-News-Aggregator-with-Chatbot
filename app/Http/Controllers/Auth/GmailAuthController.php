@@ -12,9 +12,31 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Http;
 
 class GmailAuthController extends Controller
 {
+    /**
+     * Validate reCAPTCHA response
+     */
+    private function validateRecaptcha(Request $request)
+    {
+        $recaptchaResponse = $request->input('g-recaptcha-response');
+        
+        if (!$recaptchaResponse) {
+            return false;
+        }
+
+        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+            'secret' => config('services.recaptcha.secret'),
+            'response' => $recaptchaResponse,
+            'remoteip' => $request->ip(),
+        ]);
+
+        $result = $response->json();
+        
+        return isset($result['success']) && $result['success'] === true;
+    }
     /**
      * Show the signup form
      */
@@ -202,12 +224,19 @@ class GmailAuthController extends Controller
                 'regex:/^[a-zA-Z0-9._%+-]+@gmail\.com$/'
             ],
             'password' => 'required',
+            'g-recaptcha-response' => 'required',
         ], [
             'gmail_account.regex' => 'Please enter a valid Gmail address (@gmail.com)',
+            'g-recaptcha-response.required' => 'Please complete the reCAPTCHA verification.',
         ]);
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
+        }
+
+        // Validate reCAPTCHA
+        if (!$this->validateRecaptcha($request)) {
+            return back()->withErrors(['captcha' => 'reCAPTCHA validation failed. Please try again.'])->withInput();
         }
 
         $credentials = [

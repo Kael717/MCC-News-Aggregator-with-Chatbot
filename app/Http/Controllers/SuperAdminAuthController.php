@@ -7,10 +7,34 @@ use App\Traits\SecurityValidationTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 
 class SuperAdminAuthController extends Controller
 {
     use SecurityValidationTrait;
+    
+    /**
+     * Validate reCAPTCHA response
+     */
+    private function validateRecaptcha(Request $request)
+    {
+        $recaptchaResponse = $request->input('g-recaptcha-response');
+        
+        if (!$recaptchaResponse) {
+            return false;
+        }
+
+        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+            'secret' => config('services.recaptcha.secret'),
+            'response' => $recaptchaResponse,
+            'remoteip' => $request->ip(),
+        ]);
+
+        $result = $response->json();
+        
+        return isset($result['success']) && $result['success'] === true;
+    }
+    
     /**
      * Show the super admin login form
      */
@@ -33,7 +57,15 @@ class SuperAdminAuthController extends Controller
         $request->validate([
             'username' => array_merge($secureRules['username'], ['required']),
             'password' => array_merge($secureRules['password'], ['required']),
-        ], $secureMessages);
+            'g-recaptcha-response' => 'required',
+        ], array_merge($secureMessages, [
+            'g-recaptcha-response.required' => 'Please complete the reCAPTCHA verification.',
+        ]));
+
+        // Validate reCAPTCHA
+        if (!$this->validateRecaptcha($request)) {
+            return back()->withErrors(['captcha' => 'reCAPTCHA validation failed. Please try again.'])->withInput();
+        }
 
         // Attempt to authenticate with admin guard
         if (Auth::guard('admin')->attempt($request->only('username', 'password'))) {
