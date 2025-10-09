@@ -5,65 +5,70 @@
 
     RewriteEngine On
 
-    # Force HTTPS - Redirect all HTTP requests to HTTPS
+    # ---------------------------------------------
+    # 🔒 Force HTTPS (redirect all HTTP → HTTPS)
+    # ---------------------------------------------
     RewriteCond %{HTTPS} off
     RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-
-    # Handle Authorization Header
+    
+     # Preserve Authorization headers
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}] 
+    
+    # ---------------------------------------------
+    # 🧩 Handle Authorization and CSRF/XSRF Headers
+    # ---------------------------------------------
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
-    # Handle X-XSRF-Token Header
     RewriteCond %{HTTP:x-xsrf-token} .
-    RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
+    RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:x-xsrf-token}]
 
-    # Redirect Trailing Slashes If Not A Folder...
+    # ---------------------------------------------
+    # 📁 Allow access to /storage files (images/videos)
+    # ---------------------------------------------
+    RewriteCond %{REQUEST_URI} ^/storage/
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^storage/(.*)$ storage/$1 [L,NC]
+
+    # ---------------------------------------------
+    # 🚫 Redirect trailing slashes (except folders)
+    # ---------------------------------------------
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
-    # Send Requests To Front Controller...
+    # ---------------------------------------------
+    # ⚙️ Send other requests to Laravel front controller
+    # ---------------------------------------------
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
 
-# Security Headers (optional - only if mod_headers is available)
+# ---------------------------------------------
+# 🧱 Security Headers
+# ---------------------------------------------
 <IfModule mod_headers.c>
-    # Basic Security Headers
-    Header always set X-Content-Type-Options nosniff
-    Header always set X-Frame-Options DENY
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "DENY"
     Header always set X-XSS-Protection "1; mode=block"
-    
-    # HTTP Strict Transport Security (HSTS)
     Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
-    
-    # Referrer Policy
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
-    
-    # Permissions Policy (formerly Feature Policy)
     Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), speaker=(), vibrate=(), fullscreen=(self), sync-xhr=()"
-    
-    # Content Security Policy (CSP)
-    # Managed by Laravel middleware (App\Http\Middleware\SecurityHeaders) with nonces
-    # Removing duplicate header here to avoid conflicts
-    
-    # Additional Security Headers
     Header always set X-Permitted-Cross-Domain-Policies "none"
-    # Align with Laravel middleware which relaxes COEP/CORP for dashboards using external CDNs
     Header always set Cross-Origin-Embedder-Policy "unsafe-none"
     Header always set Cross-Origin-Opener-Policy "same-origin"
     Header always set Cross-Origin-Resource-Policy "cross-origin"
-    
-    # Remove Server Information
     Header unset Server
     Header unset X-Powered-By
 </IfModule>
 
-# Disable directory browsing
+# ---------------------------------------------
+# 🚫 Security and access rules
+# ---------------------------------------------
 Options -Indexes
 
-# Protect sensitive files - Using consistent Apache 2.4 syntax
 <Files ".env">
     Require all denied
 </Files>
@@ -76,7 +81,7 @@ Options -Indexes
     Require all denied
 </Files>
 
-# Allow access to common file types
-<FilesMatch "\.(css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot|mp4|webm|mov|avi|pdf)$">
+# Allow access to safe file types (images, media, fonts, etc.)
+<FilesMatch "\.(css|js|png|jpg|jpeg|gif|ico|svg|webp|woff|woff2|ttf|eot|mp4|webm|mov|avi|pdf)$">
     Require all granted
 </FilesMatch>

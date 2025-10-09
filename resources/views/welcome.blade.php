@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, viewport-fit=cover">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>MCC-NAC Portal System</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -298,10 +298,37 @@
 </div>
 
 <style @nonce>
-/* Welcome Page Styles */
+/* Enhanced Welcome Page Styles with Mobile Optimization */
 .welcome-page {
     min-height: 100vh;
     background: #f8fafc;
+    /* Enhanced font rendering for mobile */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    /* Prevent horizontal scrolling on mobile */
+    overflow-x: hidden;
+    width: 100%;
+}
+
+/* Reduced motion support for accessibility */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* High DPI display optimizations */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .logo-circle,
+    .feature-icon,
+    .portal-icon {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
 }
 
 /* Header Styles */
@@ -363,6 +390,14 @@
     padding: 0.5rem 1rem;
     border-radius: 0.375rem;
     transition: all 0.3s ease;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 .nav-link:hover {
@@ -374,11 +409,19 @@
     background: #10b981;
     color: white !important;
     font-weight: 600;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+    min-width: 80px;
 }
 
 .signup-btn:hover {
     background: #059669;
     transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+.signup-btn:active {
+    transform: scale(0.96);
+    box-shadow: 0 2px 6px rgba(16, 185, 129, 0.3);
 }
 
 /* Hero Section */
@@ -463,6 +506,25 @@
     border: none;
     cursor: pointer;
     font-size: 0.875rem;
+    /* Enhanced touch interaction */
+    min-height: 44px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    /* Better focus for accessibility */
+    outline: none;
+    position: relative;
+}
+
+.btn:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+.btn:active {
+    transform: scale(0.96);
 }
 
 .btn-primary {
@@ -521,12 +583,16 @@
     margin: 0 auto;
 }
 
-/* Mobile-first improvements */
+/* Enhanced Mobile-first improvements */
 @media (hover: none) and (pointer: coarse) {
     /* Touch device optimizations */
     .btn {
         min-height: 44px;
         touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        user-select: none;
     }
     
     .nav-link {
@@ -534,6 +600,9 @@
         display: flex;
         align-items: center;
         touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+        flex-shrink: 0;
+        white-space: nowrap;
     }
     
     .program-card:hover {
@@ -550,6 +619,10 @@
     
     .portal-card:hover {
         transform: none;
+    }
+    
+    .btn:active {
+        transform: scale(0.96);
     }
     
     /* Mobile image optimizations */
@@ -1273,13 +1346,18 @@
 }
 
 @media (max-width: 768px) {
-    /* Header improvements */
+    /* Enhanced Header improvements */
     .main-header {
         padding: 0.75rem 0;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
     }
     
     .header-container {
         padding: 0 1rem;
+        flex-wrap: nowrap;
+        gap: 1rem;
     }
     
     .logo-text {
@@ -1290,15 +1368,29 @@
         width: 35px;
         height: 35px;
         font-size: 1.125rem;
+        flex-shrink: 0;
     }
 
     .main-nav {
         gap: 0.75rem;
+        flex-shrink: 0;
+        align-items: center;
     }
     
     .nav-link {
-        padding: 0.5rem 0.75rem;
+        padding: 0.625rem 0.875rem;
         font-size: 0.875rem;
+        min-height: 44px;
+        border-radius: 0.5rem;
+        flex-shrink: 0;
+        min-width: 70px;
+        text-align: center;
+    }
+    
+    .signup-btn {
+        min-width: 85px;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
     }
 
     /* Hero section improvements */
@@ -1353,14 +1445,18 @@
         padding: 0 1rem;
     }
 
-    /* Portal cards */
+    /* Enhanced Portal cards for mobile */
     .portal-cards {
         grid-template-columns: 1fr;
         gap: 2rem;
+        padding: 0 0.5rem;
     }
     
     .portal-card {
         padding: 2rem 1.5rem;
+        /* Enhanced touch interaction */
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
     }
 
     .portal-actions {
@@ -1372,16 +1468,35 @@
         width: 100%;
         justify-content: center;
         padding: 0.875rem 1.5rem;
+        min-height: 48px;
+        font-size: 0.9375rem;
+        /* Enhanced mobile button styling */
+        border-radius: 0.75rem;
+        touch-action: manipulation;
+    }
+    
+    .portal-actions .btn:active {
+        transform: scale(0.98);
     }
 
-    /* Features grid */
+    /* Enhanced Features grid for mobile */
     .features-grid {
         grid-template-columns: 1fr;
         gap: 1.5rem;
+        padding: 0 0.5rem;
     }
     
     .feature-item {
         padding: 1.75rem;
+        /* Enhanced touch interaction */
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+        /* Better mobile spacing */
+        margin-bottom: 0.5rem;
+    }
+    
+    .feature-item:active {
+        transform: scale(0.98);
     }
 
     /* Typography */
@@ -1406,13 +1521,15 @@
         margin-bottom: 1.5rem;
     }
     
-    /* Programs grid - Mobile single column */
+    /* Enhanced Program cards - Mobile single column */
     .programs-grid {
         grid-template-columns: 1fr;
         gap: 1.5rem;
-        padding: 0;
+        padding: 0 0.5rem;
         justify-items: stretch;
         max-width: 100%;
+        /* Better mobile alignment */
+        margin: 0 auto;
     }
     
     .programs-grid .program-card:nth-child(4),
@@ -1433,6 +1550,15 @@
     .program-card {
         height: auto;
         min-height: 450px;
+        /* Enhanced mobile interaction */
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+        /* Better mobile spacing */
+        margin-bottom: 0.5rem;
+    }
+    
+    .program-card:active {
+        transform: scale(0.98);
     }
     
     .program-image {
@@ -1486,20 +1612,47 @@
     }
 
     .chatbot-container {
-        width: 350px;
-        height: 500px;
+        width: min(350px, calc(100vw - 2rem));
+        height: min(500px, calc(100vh - 8rem));
+        max-width: 90vw;
+        /* Enhanced mobile positioning */
+        right: 1rem;
+        bottom: 5rem;
+    }
+}
+
+/* Enhanced breakpoint for medium mobile devices */
+@media (max-width: 576px) and (min-width: 481px) {
+    .header-container {
+        padding: 0 0.875rem;
+    }
+    
+    .nav-link {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.8125rem;
+        min-width: 65px;
+    }
+    
+    .signup-btn {
+        min-width: 80px;
     }
 }
 
 @media (max-width: 480px) {
-    /* Extra small screens */
+    /* Enhanced Extra small screens */
     .main-header {
         padding: 0.5rem 0;
     }
     
     .header-container {
         padding: 0 0.75rem;
-        gap: 0.75rem;
+        gap: 0.5rem;
+        justify-content: space-between;
+    }
+    
+    .logo-section {
+        gap: 0.5rem;
+        flex-shrink: 0;
     }
     
     .logo-text {
@@ -1510,15 +1663,25 @@
         width: 32px;
         height: 32px;
         font-size: 1rem;
+        flex-shrink: 0;
     }
     
     .main-nav {
         gap: 0.5rem;
+        flex-shrink: 0;
     }
     
     .nav-link {
-        padding: 0.375rem 0.625rem;
+        padding: 0.5rem 0.625rem;
         font-size: 0.8125rem;
+        min-height: 44px;
+        min-width: 60px;
+        border-radius: 0.375rem;
+    }
+    
+    .signup-btn {
+        min-width: 75px;
+        padding: 0.5rem 0.75rem;
     }
     
     /* Hero section */
@@ -1576,9 +1739,18 @@
         line-height: 1.6;
     }
     
-    /* Portal cards */
+    /* Enhanced Portal cards for small screens */
     .portal-card {
         padding: 1.5rem 1rem;
+        /* Better mobile spacing */
+        margin-bottom: 0.5rem;
+        /* Enhanced touch feedback */
+        transition: all 0.2s ease;
+    }
+    
+    .portal-card:active {
+        transform: scale(0.98);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
     
     .portal-icon {
@@ -1593,13 +1765,28 @@
     }
     
     .portal-actions .btn {
-        padding: 0.75rem 1.25rem;
-        font-size: 0.8125rem;
+        padding: 0.875rem 1.25rem;
+        font-size: 0.875rem;
+        min-height: 48px;
+        /* Enhanced mobile button styling */
+        border-radius: 0.625rem;
+        font-weight: 600;
+    }
+    
+    .portal-actions .btn:active {
+        transform: scale(0.96);
     }
 
-    /* Features */
+    /* Enhanced Features for small screens */
     .feature-item {
         padding: 1.5rem 1rem;
+        /* Better mobile interaction */
+        transition: all 0.2s ease;
+    }
+    
+    .feature-item:active {
+        transform: scale(0.98);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     }
     
     .feature-icon {
@@ -1736,13 +1923,15 @@
     .chatbot-container {
         width: calc(100vw - 2rem);
         max-width: 320px;
-        height: 450px;
+        height: min(450px, calc(100vh - 6rem));
         right: 1rem;
         bottom: 5rem;
+        /* Enhanced mobile positioning */
+        max-height: 70vh;
     }
 }
 
-/* Landscape mobile optimization */
+/* Enhanced Landscape mobile optimization */
 @media (max-width: 480px) and (orientation: landscape) {
     .hero-section {
         height: 70vh;
@@ -1751,6 +1940,11 @@
     
     .hero-text h1 {
         font-size: 1.75rem;
+        line-height: 1.1;
+    }
+    
+    .hero-text p {
+        font-size: 0.9375rem;
     }
     
     .learning-section,
@@ -1759,10 +1953,66 @@
     .features-section {
         padding: 1.5rem 0;
     }
+    
+    /* Optimize navigation for landscape */
+    .main-header {
+        padding: 0.375rem 0;
+    }
+    
+    .nav-link {
+        padding: 0.375rem 0.625rem;
+        font-size: 0.8125rem;
+    }
+    
+    /* Better content spacing in landscape */
+    .container {
+        padding: 0 1.5rem;
+    }
+    
+    .portal-card {
+        padding: 1.25rem 1rem;
+    }
+    
+    .feature-item {
+        padding: 1.25rem 1rem;
+    }
 }
 
 /* Ultra small screens */
 @media (max-width: 360px) {
+    .header-container {
+        padding: 0 0.5rem;
+        gap: 0.375rem;
+    }
+    
+    .logo-text {
+        font-size: 1rem;
+    }
+    
+    .logo-circle {
+        width: 28px;
+        height: 28px;
+        font-size: 0.875rem;
+    }
+    
+    .main-nav {
+        gap: 0.375rem;
+    }
+    
+    .nav-link {
+        padding: 0.375rem 0.5rem;
+        font-size: 0.75rem;
+        min-height: 44px;
+        min-width: 55px;
+        border-radius: 0.25rem;
+    }
+    
+    .signup-btn {
+        min-width: 65px;
+        padding: 0.375rem 0.625rem;
+        font-size: 0.75rem;
+    }
+    
     .hero-text h1 {
         font-size: 1.625rem;
     }
@@ -1812,10 +2062,78 @@
         width: calc(100vw - 1.5rem);
         max-width: 300px;
         right: 0.75rem;
+        /* Enhanced ultra-small screen positioning */
+        height: min(400px, calc(100vh - 5rem));
+        max-height: 65vh;
     }
 }
 
-/* Modal Styles */
+/* Dark mode support for accessibility */
+@media (prefers-color-scheme: dark) {
+    .welcome-page {
+        background: #0f172a;
+        color: #f1f5f9;
+    }
+    
+    .portal-card,
+    .feature-item,
+    .program-card {
+        background: #1e293b;
+        border-color: #334155;
+    }
+    
+    .section-header h2,
+    .learning-text-left h2,
+    .curriculum-title h2 {
+        color: #f1f5f9;
+    }
+    
+    .section-header p,
+    .learning-text-left p,
+    .learning-text-right p,
+    .curriculum-description p {
+        color: #cbd5e1;
+    }
+}
+
+/* Additional mobile performance optimizations */
+@media (max-width: 768px) {
+    /* Optimize animations for mobile performance */
+    .program-card,
+    .portal-card,
+    .feature-item {
+        will-change: transform;
+    }
+    
+    /* Reduce complexity for better performance */
+    .program-overlay {
+        display: none;
+    }
+    
+    /* Optimize images for mobile */
+    .program-img,
+    .hero-image {
+        image-rendering: optimizeSpeed;
+        image-rendering: -webkit-optimize-contrast;
+    }
+    
+    /* Better scroll behavior */
+    .welcome-page {
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Optimize touch targets */
+    .portal-features li,
+    .footer-section ul li a {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        touch-action: manipulation;
+    }
+}
+
+/* Enhanced Modal Styles for Mobile */
 .modal {
     display: none;
     position: fixed;

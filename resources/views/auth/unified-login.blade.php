@@ -931,51 +931,7 @@
                 </div>
             @endif
 
-            @if(isset($authenticatedAccounts) && !empty($authenticatedAccounts))
-                <div class="authenticated-accounts-section">
-                    <h3 class="accounts-title">
-                        <i class="fas fa-users"></i>
-                        Currently Logged In Accounts
-                    </h3>
-                    <div class="accounts-list">
-                        @foreach($authenticatedAccounts as $account)
-                            <div class="account-item">
-                                <div class="account-info">
-                                    <div class="account-type">
-                                        <i class="fas fa-{{ $account['type'] === 'ms365' ? 'microsoft' : ($account['type'] === 'user' ? 'google' : 'user-shield') }}"></i>
-                                        {{ ucfirst(str_replace('-', ' ', $account['type'])) }}
-                                    </div>
-                                    <div class="account-details">
-                                        <span class="account-name">{{ $account['name'] }}</span>
-                                        <span class="account-email">{{ $account['email'] }}</span>
-                                    </div>
-                                </div>
-                                <div class="account-actions">
-                                    <form method="POST" action="{{ route('switch.account') }}" style="display: inline;">
-                                        @csrf
-                                        <input type="hidden" name="account_type" value="{{ $account['type'] }}">
-                                        <input type="hidden" name="user_id" value="{{ $account['user_id'] }}">
-                                        <button type="submit" class="btn-switch" title="Switch to this account">
-                                            <i class="fas fa-exchange-alt"></i>
-                                        </button>
-                                    </form>
-                                    <form method="POST" action="{{ route('remove.account') }}" style="display: inline;">
-                                        @csrf
-                                        <input type="hidden" name="account_type" value="{{ $account['type'] }}">
-                                        <button type="submit" class="btn-remove" title="Remove this account" onclick="return confirm('Are you sure you want to remove this account?')">
-                                            <i class="fas fa-times"></i>
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                    <div class="add-account-note">
-                        <i class="fas fa-info-circle"></i>
-                        You can add another account by logging in below
-                    </div>
-                </div>
-            @endif
+            
 
             <!-- Unified Login Form -->
             <div class="unified-login-form">
