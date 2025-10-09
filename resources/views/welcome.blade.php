@@ -14,8 +14,8 @@
     <header class="main-header">
         <div class="header-container">
             <div class="logo-section">
-                <div class="logo-circle">
-                    <i class="fas fa-graduation-cap"></i>
+                <div class="logo-container">
+                    <img src="{{ asset('images/mcc_logo.png') }}" alt="MCC Logo" class="mcc-logo">
                 </div>
                 <span class="logo-text">MCC-NAC</span>
             </div>
@@ -265,8 +265,8 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <div class="footer-logo">
-                        <div class="logo-circle">
-                            <i class="fas fa-graduation-cap"></i>
+                        <div class="logo-container">
+                            <img src="{{ asset('images/mcc_logo.png') }}" alt="MCC Logo" class="mcc-logo">
                         </div>
                         <span class="logo-text">MCC-NAC</span>
                     </div>
@@ -290,6 +290,7 @@
             
             <div class="footer-bottom">
                 <p>&copy; {{ date('Y') }} Madridejos Community College. All rights reserved.</p>
+                <p class="developer-credits">Developed by: Jev Bautro || Angelo Derder || Julinette Batirzal || Jessamae Escaran.</p>
             </div>
         </div>
     </footer>
@@ -323,7 +324,7 @@
 
 /* High DPI display optimizations */
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-    .logo-circle,
+    .mcc-logo,
     .feature-icon,
     .portal-icon {
         image-rendering: -webkit-optimize-contrast;
@@ -358,16 +359,50 @@
     gap: 0.75rem;
 }
 
-.logo-circle {
-    width: 40px;
-    height: 40px;
-    background: white;
-    border-radius: 50%;
+.logo-container {
+    width: 50px;
+    height: 42px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #1e40af;
-    font-size: 1.25rem;
+    flex-shrink: 0;
+    /* Triangle shape using clip-path - more generous for logo fit */
+    background: rgba(255, 255, 255, 0.1);
+    clip-path: polygon(50% 8%, 15% 85%, 85% 85%);
+    padding: 1px;
+    position: relative;
+    /* Enhanced triangle styling */
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.logo-container:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.mcc-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    /* Enhanced image rendering */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    /* Prevent image dragging */
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+    /* Better mobile display */
+    max-width: 100%;
+    vertical-align: middle;
+    /* Position logo properly within triangle */
+    margin-top: -1px;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
 }
 
 .logo-text {
@@ -583,115 +618,6 @@
     margin: 0 auto;
 }
 
-/* Enhanced Mobile Portal Section Responsive Design */
-@media (max-width: 1024px) {
-    .portal-cards {
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-        gap: 2.5rem;
-        max-width: 900px;
-    }
-}
-
-@media (max-width: 768px) {
-    .portal-section {
-        padding: 3rem 0;
-    }
-    
-    .section-header {
-        margin-bottom: 3rem;
-        padding: 0 1rem;
-    }
-    
-    .section-header h2 {
-        font-size: 2rem;
-        margin-bottom: 0.75rem;
-    }
-    
-    .section-header p {
-        font-size: 1rem;
-        max-width: 100%;
-        line-height: 1.6;
-    }
-    
-    .portal-cards {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-        padding: 0 1rem;
-        max-width: 100%;
-    }
-}
-
-@media (max-width: 576px) {
-    .portal-section {
-        padding: 2.5rem 0;
-    }
-    
-    .section-header {
-        margin-bottom: 2.5rem;
-        padding: 0 0.75rem;
-    }
-    
-    .section-header h2 {
-        font-size: 1.75rem;
-        line-height: 1.2;
-    }
-    
-    .section-header p {
-        font-size: 0.9375rem;
-        padding: 0 0.5rem;
-    }
-    
-    .portal-cards {
-        gap: 1.5rem;
-        padding: 0 0.75rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .portal-section {
-        padding: 2rem 0;
-    }
-    
-    .section-header {
-        margin-bottom: 2rem;
-        padding: 0 0.5rem;
-    }
-    
-    .section-header h2 {
-        font-size: 1.625rem;
-        margin-bottom: 0.625rem;
-    }
-    
-    .section-header p {
-        font-size: 0.875rem;
-        line-height: 1.5;
-    }
-    
-    .portal-cards {
-        gap: 1.25rem;
-        padding: 0 0.5rem;
-    }
-}
-
-@media (max-width: 360px) {
-    .portal-section {
-        padding: 1.75rem 0;
-    }
-    
-    .section-header h2 {
-        font-size: 1.5rem;
-    }
-    
-    .section-header p {
-        font-size: 0.8125rem;
-    }
-    
-    .portal-cards {
-        gap: 1rem;
-        padding: 0 0.375rem;
-    }
-}
-
 /* Enhanced Mobile-first improvements */
 @media (hover: none) and (pointer: coarse) {
     /* Touch device optimizations */
@@ -703,6 +629,7 @@
         -webkit-user-select: none;
         user-select: none;
     }
+    
     
     .nav-link {
         min-height: 44px;
@@ -838,21 +765,11 @@
 .features-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-    max-width: 1000px;
-    margin: 0 auto;
-}
-
-.feature-item {
-    text-align: center;
-    padding: 2rem;
-    background: white;
-    border-radius: 1rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     transition: all 0.3s ease;
 }
 
-.feature-item:hover {
+.portal-card:hover {
     transform: translateY(-3px);
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
@@ -949,6 +866,13 @@
 .footer-bottom p {
     color: #9ca3af;
     margin: 0;
+}
+
+.developer-credits {
+    margin-top: 0.5rem;
+    font-size: 0.8125rem;
+    color: #6b7280;
+    font-style: italic;
 }
 
 /* Learning Begins Section */
@@ -1473,11 +1397,24 @@
         font-size: 1.25rem;
     }
     
-    .logo-circle {
-        width: 35px;
-        height: 35px;
-        font-size: 1.125rem;
+    .logo-container {
+        width: 42px;
+        height: 37px;
         flex-shrink: 0;
+        /* Maintain triangle shape on mobile */
+        clip-path: polygon(50% 8%, 15% 85%, 85% 85%);
+        padding: 1px;
+    }
+    
+    .logo-container:hover {
+        transform: scale(1.03);
+    }
+    
+    .mcc-logo {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        margin-top: -1px;
     }
 
     .main-nav {
@@ -1554,68 +1491,11 @@
         padding: 0 1rem;
     }
 
-    /* Enhanced Portal cards for mobile */
     .portal-cards {
         grid-template-columns: 1fr;
         gap: 2rem;
-        padding: 0 0.5rem;
     }
     
-    .portal-card {
-        padding: 2rem 1.5rem;
-        /* Enhanced touch interaction */
-        touch-action: manipulation;
-        -webkit-tap-highlight-color: transparent;
-        /* Better mobile spacing and layout */
-        border-radius: 1rem;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-        transition: all 0.3s ease;
-        /* Ensure proper mobile display */
-        width: 100%;
-        max-width: 100%;
-        box-sizing: border-box;
-    }
-    
-    .portal-card:active {
-        transform: scale(0.98);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-    }
-    
-    .portal-icon {
-        width: 70px;
-        height: 70px;
-        font-size: 1.75rem;
-        margin-bottom: 1.5rem;
-        /* Enhanced mobile icon styling */
-        border-radius: 1rem;
-        box-shadow: 0 4px 12px rgba(30, 64, 175, 0.2);
-    }
-    
-    .portal-info h3 {
-        font-size: 1.375rem;
-        margin-bottom: 0.875rem;
-        line-height: 1.3;
-    }
-    
-    .portal-info p {
-        font-size: 1rem;
-        line-height: 1.6;
-        margin-bottom: 1.25rem;
-    }
-    
-    .portal-features {
-        margin-bottom: 1.75rem;
-    }
-    
-    .portal-features li {
-        margin-bottom: 0.625rem;
-        font-size: 0.9375rem;
-        /* Enhanced touch targets */
-        min-height: 32px;
-        display: flex;
-        align-items: center;
-    }
-
     .portal-actions {
         flex-direction: column;
         gap: 0.75rem;
@@ -1630,22 +1510,10 @@
         /* Enhanced mobile button styling */
         border-radius: 0.75rem;
         touch-action: manipulation;
-        font-weight: 600;
-        /* Better visual feedback */
-        transition: all 0.2s ease;
     }
     
     .portal-actions .btn:active {
         transform: scale(0.98);
-    }
-    
-    .portal-actions .btn-primary {
-        box-shadow: 0 4px 12px rgba(30, 64, 175, 0.25);
-    }
-    
-    .portal-actions .btn-outline {
-        border-width: 2px;
-        font-weight: 600;
     }
 
     /* Enhanced Features grid for mobile */
@@ -1828,11 +1696,24 @@
         font-size: 1.125rem;
     }
     
-    .logo-circle {
-        width: 32px;
-        height: 32px;
-        font-size: 1rem;
+    .logo-container {
+        width: 38px;
+        height: 34px;
         flex-shrink: 0;
+        /* Maintain triangle shape on small mobile */
+        clip-path: polygon(50% 8%, 15% 85%, 85% 85%);
+        padding: 1px;
+    }
+    
+    .logo-container:hover {
+        transform: scale(1.02);
+    }
+    
+    .mcc-logo {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        margin-top: -1px;
     }
     
     .main-nav {
@@ -1908,19 +1789,12 @@
         line-height: 1.6;
     }
     
-    /* Enhanced Portal cards for small screens */
     .portal-card {
         padding: 1.5rem 1rem;
         /* Better mobile spacing */
         margin-bottom: 0.5rem;
         /* Enhanced touch feedback */
         transition: all 0.2s ease;
-        border-radius: 0.875rem;
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
-        /* Ensure proper small screen display */
-        width: 100%;
-        max-width: 100%;
-        box-sizing: border-box;
     }
     
     .portal-card:active {
@@ -1929,38 +1803,14 @@
     }
     
     .portal-icon {
-        width: 65px;
-        height: 65px;
-        font-size: 1.625rem;
-        margin-bottom: 1.25rem;
-        border-radius: 0.875rem;
-        box-shadow: 0 3px 10px rgba(30, 64, 175, 0.15);
-    }
-    
-    .portal-info h3 {
-        font-size: 1.1875rem;
-        margin-bottom: 0.75rem;
-        line-height: 1.25;
-    }
-    
-    .portal-info p {
-        font-size: 0.9375rem;
-        line-height: 1.5;
-        margin-bottom: 1rem;
-    }
-    
-    .portal-features {
+        width: 70px;
+        height: 70px;
+        font-size: 1.75rem;
         margin-bottom: 1.5rem;
     }
     
-    .portal-features li {
-        font-size: 0.875rem;
-        margin-bottom: 0.5rem;
-        min-height: 28px;
-    }
-    
-    .portal-actions {
-        gap: 0.625rem;
+    .portal-info h3 {
+        font-size: 1.25rem;
     }
     
     .portal-actions .btn {
@@ -1970,16 +1820,10 @@
         /* Enhanced mobile button styling */
         border-radius: 0.625rem;
         font-weight: 600;
-        /* Better touch feedback */
-        transition: all 0.15s ease;
     }
     
     .portal-actions .btn:active {
         transform: scale(0.96);
-    }
-    
-    .portal-actions .btn-primary {
-        box-shadow: 0 3px 10px rgba(30, 64, 175, 0.2);
     }
 
     /* Enhanced Features for small screens */
@@ -2194,10 +2038,24 @@
         font-size: 1rem;
     }
     
-    .logo-circle {
-        width: 28px;
-        height: 28px;
-        font-size: 0.875rem;
+    .logo-container {
+        width: 34px;
+        height: 30px;
+        flex-shrink: 0;
+        /* Maintain triangle shape on ultra-small screens */
+        clip-path: polygon(50% 8%, 15% 85%, 85% 85%);
+        padding: 1px;
+    }
+    
+    .logo-container:hover {
+        transform: scale(1.02);
+    }
+    
+    .mcc-logo {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        margin-top: -1px;
     }
     
     .main-nav {
@@ -2232,64 +2090,6 @@
     
     .portal-card {
         padding: 1.25rem 0.875rem;
-        border-radius: 0.75rem;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        /* Ultra-small screen optimizations */
-        width: 100%;
-        max-width: 100%;
-        box-sizing: border-box;
-    }
-    
-    .portal-card:active {
-        transform: scale(0.97);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    }
-    
-    .portal-icon {
-        width: 55px;
-        height: 55px;
-        font-size: 1.375rem;
-        margin-bottom: 1rem;
-        border-radius: 0.75rem;
-        box-shadow: 0 2px 8px rgba(30, 64, 175, 0.12);
-    }
-    
-    .portal-info h3 {
-        font-size: 1.0625rem;
-        margin-bottom: 0.625rem;
-        line-height: 1.2;
-    }
-    
-    .portal-info p {
-        font-size: 0.8125rem;
-        line-height: 1.4;
-        margin-bottom: 0.875rem;
-    }
-    
-    .portal-features {
-        margin-bottom: 1.25rem;
-    }
-    
-    .portal-features li {
-        font-size: 0.8125rem;
-        margin-bottom: 0.375rem;
-        min-height: 24px;
-    }
-    
-    .portal-actions {
-        gap: 0.5rem;
-    }
-    
-    .portal-actions .btn {
-        padding: 0.75rem 1rem;
-        font-size: 0.8125rem;
-        min-height: 44px;
-        border-radius: 0.5rem;
-        font-weight: 600;
-    }
-    
-    .portal-actions .btn:active {
-        transform: scale(0.95);
     }
     
     .feature-item {
