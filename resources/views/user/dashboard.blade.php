@@ -1232,19 +1232,19 @@
                                     contentId: {{ $announcement->id }},
                                     date: 'Posted: {{ $announcement->created_at->format('M d, Y') }}',
                                     media: '{{ $announcement->hasMedia }}',
-                                    mediaUrl: '{{ $announcement->mediaUrl ?? '' }}',
-                                    allImageUrls: {{ json_encode($announcement->allImageUrls ?? []) }},
-                                    allVideoUrls: {{ json_encode($announcement->allVideoUrls ?? []) }},
+                                    mediaUrl: '{{ \Illuminate\Support\Str::startsWith($announcement->mediaUrl ?? '', ['http://','https://','/storage/']) ? ($announcement->mediaUrl ?? '') : (($announcement->mediaUrl ?? '') !== '' ? asset('storage/'.($announcement->mediaUrl ?? '')) : '') }}',
+                                    allImageUrls: {!! collect($announcement->allImageUrls ?? [])->map(fn($u) => \Illuminate\Support\Str::startsWith($u, ['http://','https://','/storage/']) ? $u : asset('storage/'.$u))->values()->toJson() !!},
+                                    allVideoUrls: {!! collect($announcement->allVideoUrls ?? [])->map(fn($u) => \Illuminate\Support\Str::startsWith($u, ['http://','https://','/storage/']) ? $u : asset('storage/'.$u))->values()->toJson() !!},
                                     videoUrl: '{{ $announcement->hasMedia === 'both' && $announcement->allVideoUrls ? $announcement->allVideoUrls[0] : ($announcement->hasMedia === 'video' ? $announcement->mediaUrl : '') }}',
                                     publisher: '{{ $announcement->admin->role === 'superadmin' ? 'MCC Administration' : ($announcement->admin->role === 'department_admin' ? $announcement->admin->department_display . ' Department' : ($announcement->admin->role === 'office_admin' ? $announcement->admin->office_display : $announcement->admin->username)) }}'
                                  }">
                                 @if($announcement->hasMedia === 'image' || $announcement->hasMedia === 'both')
-                                    <img src="{{ $announcement->mediaUrl }}" 
+                                    <img src="{{ \Illuminate\Support\Str::startsWith($announcement->mediaUrl, ['http://','https://','/storage/']) ? $announcement->mediaUrl : asset($announcement->mediaUrl ? 'storage/'.$announcement->mediaUrl : '') }}" 
                                          alt="{{ $announcement->title }}" class="item-media">
                                 @elseif($announcement->hasMedia === 'video')
                                     <div class="video-container">
                                         <video class="item-media" muted>
-                                            <source src="{{ $announcement->mediaUrl }}" type="video/mp4">
+                                            <source src="{{ \Illuminate\Support\Str::startsWith($announcement->mediaUrl, ['http://','https://','/storage/']) ? $announcement->mediaUrl : asset($announcement->mediaUrl ? 'storage/'.$announcement->mediaUrl : '') }}" type="video/mp4">
                                         </video>
                                         <div class="play-button">
                                             <i class="fas fa-play"></i>
@@ -1306,19 +1306,19 @@
                                     date: 'Date: {{ $event->event_date ? $event->event_date->format('M d, Y') : 'TBD' }}',
                                     location: 'Location: {{ $event->location ?? 'No location specified' }}',
                                     media: '{{ $event->hasMedia }}',
-                                    mediaUrl: '{{ $event->mediaUrl ?? '' }}',
-                                    allImageUrls: {{ json_encode($event->allImageUrls ?? []) }},
-                                    allVideoUrls: {{ json_encode($event->allVideoUrls ?? []) }},
+                                    mediaUrl: '{{ \Illuminate\Support\Str::startsWith($event->mediaUrl ?? '', ['http://','https://','/storage/']) ? ($event->mediaUrl ?? '') : (($event->mediaUrl ?? '') !== '' ? asset('storage/'.($event->mediaUrl ?? '')) : '') }}',
+                                    allImageUrls: {!! collect($event->allImageUrls ?? [])->map(fn($u) => \Illuminate\Support\Str::startsWith($u, ['http://','https://','/storage/']) ? $u : asset('storage/'.$u))->values()->toJson() !!},
+                                    allVideoUrls: {!! collect($event->allVideoUrls ?? [])->map(fn($u) => \Illuminate\Support\Str::startsWith($u, ['http://','https://','/storage/']) ? $u : asset('storage/'.$u))->values()->toJson() !!},
                                     videoUrl: '{{ $event->hasMedia === 'both' && $event->allVideoUrls ? $event->allVideoUrls[0] : ($event->hasMedia === 'video' ? $event->mediaUrl : '') }}',
                                     publisher: '{{ $event->admin->role === 'superadmin' ? 'MCC Administration' : ($event->admin->role === 'department_admin' ? $event->admin->department_display . ' Department' : ($event->admin->role === 'office_admin' ? $event->admin->office_display : $event->admin->username)) }}'
                                  }">
                                 @if($event->hasMedia === 'image' || $event->hasMedia === 'both')
-                                    <img src="{{ $event->mediaUrl }}" 
+                                    <img src="{{ \Illuminate\Support\Str::startsWith($event->mediaUrl, ['http://','https://','/storage/']) ? $event->mediaUrl : asset($event->mediaUrl ? 'storage/'.$event->mediaUrl : '') }}" 
                                          alt="{{ $event->title }}" class="item-media">
                                 @elseif($event->hasMedia === 'video')
                                     <div class="video-container">
                                         <video class="item-media" muted>
-                                            <source src="{{ $event->mediaUrl }}" type="video/mp4">
+                                            <source src="{{ \Illuminate\Support\Str::startsWith($event->mediaUrl, ['http://','https://','/storage/']) ? $event->mediaUrl : asset($event->mediaUrl ? 'storage/'.$event->mediaUrl : '') }}" type="video/mp4">
                                         </video>
                                         <div class="play-button">
                                             <i class="fas fa-play"></i>
@@ -1385,19 +1385,19 @@
                                     contentId: {{ $article->id }},
                                     date: 'Published: {{ $article->created_at->format('M d, Y') }}',
                                     media: '{{ $article->hasMedia }}',
-                                    mediaUrl: '{{ $article->mediaUrl ?? '' }}',
-                                    allImageUrls: {{ json_encode($article->allImageUrls ?? []) }},
-                                    allVideoUrls: {{ json_encode($article->allVideoUrls ?? []) }},
+                                    mediaUrl: '{{ \Illuminate\Support\Str::startsWith($article->mediaUrl ?? '', ['http://','https://','/storage/']) ? ($article->mediaUrl ?? '') : (($article->mediaUrl ?? '') !== '' ? asset('storage/'.($article->mediaUrl ?? '')) : '') }}',
+                                    allImageUrls: {!! collect($article->allImageUrls ?? [])->map(fn($u) => \Illuminate\Support\Str::startsWith($u, ['http://','https://','/storage/']) ? $u : asset('storage/'.$u))->values()->toJson() !!},
+                                    allVideoUrls: {!! collect($article->allVideoUrls ?? [])->map(fn($u) => \Illuminate\Support\Str::startsWith($u, ['http://','https://','/storage/']) ? $u : asset('storage/'.$u))->values()->toJson() !!},
                                     videoUrl: '{{ $article->hasMedia === 'both' && $article->allVideoUrls ? $article->allVideoUrls[0] : ($article->hasMedia === 'video' ? $article->mediaUrl : '') }}',
                                     publisher: '{{ $article->admin->role === 'superadmin' ? 'MCC Administration' : ($article->admin->role === 'department_admin' ? $article->admin->department_display . ' Department' : ($article->admin->role === 'office_admin' ? $article->admin->office_display : $article->admin->username)) }}'
                                  }">
                                 @if($article->hasMedia === 'image' || $article->hasMedia === 'both')
-                                    <img src="{{ $article->mediaUrl }}" 
+                                    <img src="{{ \Illuminate\Support\Str::startsWith($article->mediaUrl, ['http://','https://','/storage/']) ? $article->mediaUrl : asset($article->mediaUrl ? 'storage/'.$article->mediaUrl : '') }}" 
                                          alt="{{ $article->title }}" class="item-media">
                                 @elseif($article->hasMedia === 'video')
                                     <div class="video-container">
                                         <video class="item-media" muted>
-                                            <source src="{{ $article->mediaUrl }}" type="video/mp4">
+                                            <source src="{{ \Illuminate\Support\Str::startsWith($article->mediaUrl, ['http://','https://','/storage/']) ? $article->mediaUrl : asset($article->mediaUrl ? 'storage/'.$article->mediaUrl : '') }}" type="video/mp4">
                                         </video>
                                         <div class="play-button">
                                             <i class="fas fa-play"></i>
