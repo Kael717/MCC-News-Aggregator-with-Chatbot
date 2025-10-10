@@ -765,11 +765,21 @@
 .features-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.feature-item {
+    text-align: center;
+    padding: 2rem;
+    background: white;
+    border-radius: 1rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     transition: all 0.3s ease;
 }
 
-.portal-card:hover {
+.feature-item:hover {
     transform: translateY(-3px);
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
@@ -1516,24 +1526,9 @@
         transform: scale(0.98);
     }
 
-    /* Enhanced Features grid for mobile */
     .features-grid {
         grid-template-columns: 1fr;
         gap: 1.5rem;
-        padding: 0 0.5rem;
-    }
-    
-    .feature-item {
-        padding: 1.75rem;
-        /* Enhanced touch interaction */
-        touch-action: manipulation;
-        -webkit-tap-highlight-color: transparent;
-        /* Better mobile spacing */
-        margin-bottom: 0.5rem;
-    }
-    
-    .feature-item:active {
-        transform: scale(0.98);
     }
 
     /* Typography */
@@ -1825,37 +1820,10 @@
     .portal-actions .btn:active {
         transform: scale(0.96);
     }
-
-    /* Enhanced Features for small screens */
-    .feature-item {
-        padding: 1.5rem 1rem;
-        /* Better mobile interaction */
-        transition: all 0.2s ease;
-    }
-    
-    .feature-item:active {
-        transform: scale(0.98);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    }
-    
-    .feature-icon {
-        width: 50px;
-        height: 50px;
-        font-size: 1.25rem;
-        margin-bottom: 1.25rem;
-    }
-    
-    .feature-item h4 {
-        font-size: 1.125rem;
-    }
-    
-    .feature-item p {
-        font-size: 0.875rem;
-    }
     
     /* Typography */
     .section-header h2 {
-        font-size: 1.75rem;
+        font-size: 1.5rem;
     }
     
     .section-header p {
@@ -2022,9 +1990,6 @@
         padding: 1.25rem 1rem;
     }
     
-    .feature-item {
-        padding: 1.25rem 1rem;
-    }
 }
 
 /* Ultra small screens */
@@ -2092,9 +2057,6 @@
         padding: 1.25rem 0.875rem;
     }
     
-    .feature-item {
-        padding: 1.25rem 0.875rem;
-    }
     
     .program-info {
         padding: 0.875rem;
@@ -2139,7 +2101,6 @@
     }
     
     .portal-card,
-    .feature-item,
     .program-card {
         background: #1e293b;
         border-color: #334155;
@@ -2163,8 +2124,7 @@
 @media (max-width: 768px) {
     /* Optimize animations for mobile performance */
     .program-card,
-    .portal-card,
-    .feature-item {
+    .portal-card {
         will-change: transform;
     }
     
