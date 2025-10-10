@@ -298,6 +298,15 @@ class SecurityService
         if (preg_match('/[0-9]/', $password)) $strength++;
         if (preg_match('/[^a-zA-Z0-9]/', $password)) $strength++;
         
+        // Check against common weak passwords
+        $weakPasswords = [
+            'password', '123456', '123456789', 'qwerty', 'abc123',
+            'password123', 'admin', 'letmein', 'welcome', 'monkey'
+        ];
+        
+        if (in_array(strtolower($password), $weakPasswords)) {
+            return ['strength' => 0, 'message' => 'Password is too common'];
+        }
         
         $messages = [
             0 => 'Very weak',

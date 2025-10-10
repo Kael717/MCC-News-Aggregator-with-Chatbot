@@ -191,6 +191,10 @@ trait SecurityValidationTrait
                     if ($value && $this->containsDangerousPatterns($value)) {
                         $fail('Invalid characters detected in password.');
                     }
+                    // Check for common weak passwords
+                    if ($value && $this->isWeakPassword($value)) {
+                        $fail('Password is too weak. Please use a stronger password.');
+                    }
                 },
             ],
         ];
@@ -235,6 +239,18 @@ trait SecurityValidationTrait
         return false;
     }
 
+    /**
+     * Check if password is weak
+     */
+    protected function isWeakPassword($password)
+    {
+        $weakPasswords = [
+            'password', '123456', '123456789', 'qwerty', 'abc123',
+            'password123', 'admin', 'letmein', 'welcome', 'monkey'
+        ];
+        
+        return in_array(strtolower($password), $weakPasswords);
+    }
 
     /**
      * Sanitize input data
