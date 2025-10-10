@@ -951,16 +951,16 @@
                         </label>
                         <div class="login-type-select">
                             <select name="login_type" id="login_type" class="form-control" required>
-                                <option value="ms365" {{ ($preselectedType ?? session('login_type', 'ms365')) === 'ms365' ? 'selected' : '' }}>
+                                <option value="ms365" selected>
                                     Student/Faculty (MS365)
                                 </option>
-                                <option value="superadmin" {{ ($preselectedType ?? session('login_type')) === 'superadmin' ? 'selected' : '' }}>
+                                <option value="superadmin">
                                     Super Admin
                                 </option>
-                                <option value="department-admin" {{ ($preselectedType ?? session('login_type')) === 'department-admin' ? 'selected' : '' }}>
+                                <option value="department-admin">
                                     Department Admin
                                 </option>
-                                <option value="office-admin" {{ ($preselectedType ?? session('login_type')) === 'office-admin' ? 'selected' : '' }}>
+                                <option value="office-admin">
                                     Office Admin
                                 </option>
                             </select>
