@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
     <title>Login - MCC News Aggregator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -991,12 +996,15 @@
                                id="ms365_account"
                                name="ms365_account"
                                class="form-control @error('ms365_account') error @enderror"
-                               value="{{ old('ms365_account') }}"
+                               value="{{ old('ms365_account') ? e(old('ms365_account')) : '' }}"
                                placeholder="example@mcc-nac.edu.ph"
                                pattern="[a-zA-Z0-9._%+-]+@.*\.edu\.ph"
                                title="Please enter a valid .edu.ph email address"
                                maxlength="100"
-                               data-security-check="true">
+                               minlength="10"
+                               data-security-check="true"
+                               autocomplete="email"
+                               spellcheck="false">
                         @error('ms365_account')
                             <div class="error-message">{{ $message }}</div>
                         @enderror
@@ -1012,12 +1020,15 @@
                                id="username"
                                name="username"
                                class="form-control @error('username') error @enderror"
-                               value="{{ old('username') }}"
+                               value="{{ old('username') ? e(old('username')) : '' }}"
                                placeholder="Enter your username"
                                maxlength="50"
+                               minlength="3"
                                pattern="[a-zA-Z0-9_-]+"
                                title="Username can only contain letters, numbers, underscores, and hyphens"
-                               data-security-check="true">
+                               data-security-check="true"
+                               autocomplete="username"
+                               spellcheck="false">
                         @error('username')
                             <div class="error-message">{{ $message }}</div>
                         @enderror
@@ -1036,7 +1047,10 @@
                                    class="form-control @error('password') error @enderror"
                                    placeholder="Enter your password"
                                    maxlength="255"
-                                   data-security-check="true">
+                                   minlength="8"
+                                   data-security-check="true"
+                                   autocomplete="current-password"
+                                   spellcheck="false">
                             <button type="button" class="password-toggle" onclick="togglePassword('password')">
                                 <i class="fas fa-eye" id="password-eye"></i>
                             </button>

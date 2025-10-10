@@ -138,10 +138,15 @@ trait SecurityValidationTrait
                 'nullable',
                 'string',
                 'max:50',
+                'min:3',
                 'regex:/^[a-zA-Z0-9_-]+$/',
                 function ($attribute, $value, $fail) {
                     if ($value && $this->containsDangerousPatterns($value)) {
                         $fail('Invalid characters detected in username.');
+                    }
+                    // Additional security checks
+                    if ($value && $this->isSuspiciousInput($value)) {
+                        $fail('Suspicious input pattern detected.');
                     }
                 },
             ],
@@ -149,10 +154,15 @@ trait SecurityValidationTrait
                 'nullable',
                 'email',
                 'max:100',
+                'min:10',
                 'regex:/^[a-zA-Z0-9._%+-]+@.*\.edu\.ph$/',
                 function ($attribute, $value, $fail) {
                     if ($value && $this->containsDangerousPatterns($value)) {
                         $fail('Invalid characters detected in email address.');
+                    }
+                    // Validate email format more strictly
+                    if ($value && !filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                        $fail('Invalid email format.');
                     }
                 },
             ],
@@ -160,10 +170,15 @@ trait SecurityValidationTrait
                 'nullable',
                 'email',
                 'max:100',
+                'min:10',
                 'regex:/^[a-zA-Z0-9._%+-]+@gmail\.com$/',
                 function ($attribute, $value, $fail) {
                     if ($value && $this->containsDangerousPatterns($value)) {
                         $fail('Invalid characters detected in email address.');
+                    }
+                    // Validate email format more strictly
+                    if ($value && !filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                        $fail('Invalid email format.');
                     }
                 },
             ],
@@ -171,9 +186,14 @@ trait SecurityValidationTrait
                 'nullable',
                 'string',
                 'max:255',
+                'min:8',
                 function ($attribute, $value, $fail) {
                     if ($value && $this->containsDangerousPatterns($value)) {
                         $fail('Invalid characters detected in password.');
+                    }
+                    // Check for common weak passwords
+                    if ($value && $this->isWeakPassword($value)) {
+                        $fail('Password is too weak. Please use a stronger password.');
                     }
                 },
             ],
@@ -187,8 +207,125 @@ trait SecurityValidationTrait
     {
         return [
             'username.regex' => 'Username can only contain letters, numbers, underscores, and hyphens',
+            'username.min' => 'Username must be at least 3 characters long',
             'ms365_account.regex' => 'Please enter a valid .edu.ph email address',
+            'ms365_account.min' => 'Email address is too short',
             'gmail_account.regex' => 'Please enter a valid Gmail address',
+            'gmail_account.min' => 'Email address is too short',
+            'password.min' => 'Password must be at least 8 characters long',
+        ];
+    }
+
+    /**
+     * Check if input contains suspicious patterns
+     */
+    protected function isSuspiciousInput($value)
+    {
+        // Check for repeated characters (potential DoS)
+        if (preg_match('/(.)\1{10,}/', $value)) {
+            return true;
+        }
+        
+        // Check for excessive length variations
+        if (strlen($value) > 1000) {
+            return true;
+        }
+        
+        // Check for null bytes
+        if (strpos($value, '\0') !== false) {
+            return true;
+        }
+        
+        return false;
+    }
+
+    /**
+     * Check if password is weak
+     */
+    protected function isWeakPassword($password)
+    {
+        $weakPasswords = [
+            'password', '123456', '123456789', 'qwerty', 'abc123',
+            'password123', 'admin', 'letmein', 'welcome', 'monkey'
+        ];
+        
+        return in_array(strtolower($password), $weakPasswords);
+    }
+
+    /**
+     * Sanitize input data
+     */
+    protected function sanitizeInput($value)
+    {
+        if (!is_string($value)) {
+            return $value;
+        }
+        
+        // Remove null bytes
+        $value = str_replace('\0', '', $value);
+        
+        // Trim whitespace
+        $value = trim($value);
+        
+        // Limit length to prevent DoS
+        $value = substr($value, 0, 1000);
+        
+        return $value;
+    }
+
+    /**
+     * Escape output for HTML context
+     */
+    protected function escapeHtml($value)
+    {
+        return htmlspecialchars($value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    }
+
+    /**
+     * Escape output for JavaScript context
+     */
+    protected function escapeJavaScript($value)
+    {
+        return json_encode($value, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
+    }
+
+    /**
+     * Validate and sanitize file upload
+     */
+    protected function validateFileUpload($file, $allowedTypes = ['jpg', 'jpeg', 'png', 'gif', 'pdf'])
+    {
+        if (!$file || !$file->isValid()) {
+            return ['valid' => false, 'error' => 'Invalid file upload.'];
+        }
+        
+        // Check file size (max 5MB)
+        if ($file->getSize() > 5 * 1024 * 1024) {
+            return ['valid' => false, 'error' => 'File size too large. Maximum 5MB allowed.'];
+        }
+        
+        // Check file extension
+        $extension = strtolower($file->getClientOriginalExtension());
+        if (!in_array($extension, $allowedTypes)) {
+            return ['valid' => false, 'error' => 'File type not allowed.'];
+        }
+        
+        // Check MIME type
+        $mimeType = $file->getMimeType();
+        $allowedMimes = [
+            'image/jpeg', 'image/png', 'image/gif', 'application/pdf'
+        ];
+        
+        if (!in_array($mimeType, $allowedMimes)) {
+            return ['valid' => false, 'error' => 'Invalid file type.'];
+        }
+        
+        // Generate safe filename
+        $filename = uniqid() . '.' . $extension;
+        
+        return [
+            'valid' => true, 
+            'filename' => $filename,
+            'path' => 'uploads/' . $filename
         ];
     }
 }

@@ -10,6 +10,7 @@ use App\Http\Controllers\SuperAdminAuthController;
 use App\Http\Controllers\DepartmentAdminAuthController;
 use App\Http\Controllers\OfficeAdminAuthController;
 use App\Traits\SecurityValidationTrait;
+use App\Services\SecurityService;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Hash;
@@ -21,6 +22,13 @@ use App\Models\User;
 class UnifiedAuthController extends Controller
 {
     use SecurityValidationTrait;
+    
+    protected $securityService;
+    
+    public function __construct(SecurityService $securityService)
+    {
+        $this->securityService = $securityService;
+    }
 
     /**
      * Validate reCAPTCHA response
@@ -74,6 +82,18 @@ class UnifiedAuthController extends Controller
      */
     public function login(Request $request)
     {
+        // Check rate limiting
+        $rateLimitCheck = $this->securityService->checkRateLimit($request, 'login');
+        if (!$rateLimitCheck['allowed']) {
+            $this->securityService->logSecurityEvent('rate_limit_exceeded', [
+                'ip' => $request->ip(),
+                'endpoint' => 'login'
+            ]);
+            return back()->withErrors([
+                'rate_limit' => 'Too many login attempts. Please try again in ' . ceil($rateLimitCheck['retry_after'] / 60) . ' minutes.'
+            ]);
+        }
+
         // Check if specific account is locked out
         if ($this->isLockedOut($request)) {
             $lockoutTime = $this->getLockoutTimeRemaining($request);
@@ -86,6 +106,12 @@ class UnifiedAuthController extends Controller
 
         // Enhanced security validation
         $this->validateSecureInput($request);
+        
+        // Additional security service validation
+        $this->validateWithSecurityService($request);
+        
+        // Sanitize input data
+        $this->sanitizeInputData($request);
 
         $secureRules = $this->getSecureValidationRules();
         $secureMessages = $this->getSecureValidationMessages();
@@ -156,6 +182,46 @@ class UnifiedAuthController extends Controller
         return $result;
     }
     
+    /**
+     * Validate request with security service
+     */
+    private function validateWithSecurityService(Request $request)
+    {
+        $allInput = $request->all();
+        
+        foreach ($allInput as $key => $value) {
+            if (is_string($value) && !empty($value)) {
+                $validation = $this->securityService->validateInput($value, $key);
+                if (!$validation['valid']) {
+                    $this->securityService->logSecurityEvent('invalid_input_detected', [
+                        'field' => $key,
+                        'value_length' => strlen($value),
+                        'error' => $validation['error']
+                    ]);
+                    abort(422, $validation['error']);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Sanitize all input data
+     */
+    private function sanitizeInputData(Request $request)
+    {
+        $allInput = $request->all();
+        $sanitized = [];
+        
+        foreach ($allInput as $key => $value) {
+            if (is_string($value)) {
+                $sanitized[$key] = $this->securityService->sanitizeInput($value);
+            } else {
+                $sanitized[$key] = $value;
+            }
+        }
+        
+        $request->merge($sanitized);
+    }
 
     public function showSignupForm(Request $request)
     {
