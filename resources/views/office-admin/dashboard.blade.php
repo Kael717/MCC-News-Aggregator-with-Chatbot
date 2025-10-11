@@ -89,216 +89,86 @@
             min-height: 100vh;
         }
 
-        /* Enhanced Sidebar Styles */
         .sidebar {
             width: 280px;
-            background: linear-gradient(145deg, #1e293b 0%, #0f172a 50%, #020617 100%);
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
             color: white;
             position: fixed;
             height: 100vh;
             left: 0;
             top: 0;
             overflow-y: auto;
-            overflow-x: hidden;
             z-index: 1000;
-            box-shadow: 6px 0 25px rgba(0, 0, 0, 0.35), 0 0 50px rgba(0, 0, 0, 0.15);
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            backdrop-filter: blur(20px);
-            border-right: 2px solid rgba(255, 255, 255, 0.12);
-        }
-
-        .sidebar::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.02) 50%, transparent 70%);
-            animation: shimmer 3s ease-in-out infinite;
-            pointer-events: none;
-        }
-
-        @keyframes shimmer {
-            0%, 100% { transform: translateX(-100%); opacity: 0; }
-            50% { transform: translateX(100%); opacity: 1; }
-        }
-            transition: transform var(--transition-speed) ease;
-            display: flex;
-            flex-direction: column;
+            box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
         }
 
         .sidebar-header {
-            padding: 2rem 2rem 2rem 2rem;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.15);
-            background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
-            color: white;
-            position: relative;
-            overflow: hidden;
+            padding: 2rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             text-align: center;
-            margin-bottom: 1rem;
-        }
-
-        .sidebar-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, #ffffff, #e5e7eb, #ffffff);
-            animation: headerShimmer 2s ease-in-out infinite;
-        }
-
-        @keyframes headerShimmer {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
         }
 
         .sidebar-header h3 {
-            font-size: 1.3rem;
-            font-weight: 800;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.75rem;
-            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            position: relative;
-            margin: 0.5rem 0 0.5rem 0;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-            line-height: 1.3;
-            text-align: center;
+            gap: 0.5rem;
         }
 
         .sidebar-header h3 i {
-            font-size: 1.6rem;
-            color: #ffffff;
-            background: linear-gradient(135deg, #ffffff 0%, #d1d5db 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
-        }
-
-        .sidebar-header h3 i {
-            color: @if($office === 'NSTP') #10b981 @elseif($office === 'SSC') #3b82f6 @elseif($office === 'GUIDANCE') #8b5cf6 @elseif($office === 'REGISTRAR') #f59e0b @elseif($office === 'CLINIC') #ef4444 @else #667eea @endif;
-            font-size: 1.4rem;
-            filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
-            animation: iconGlow 2s ease-in-out infinite alternate;
-            flex-shrink: 0;
-        }
-
-        @keyframes iconGlow {
-            0% { 
-                filter: drop-shadow(0 2px 6px rgba(@if($office === 'NSTP') 16, 185, 129 @elseif($office === 'SSC') 59, 130, 246 @elseif($office === 'GUIDANCE') 139, 92, 246 @elseif($office === 'REGISTRAR') 245, 158, 11 @elseif($office === 'CLINIC') 239, 68, 68 @else 102, 126, 234 @endif, 0.4)); 
-            }
-            100% { 
-                filter: drop-shadow(0 4px 12px rgba(@if($office === 'NSTP') 16, 185, 129 @elseif($office === 'SSC') 59, 130, 246 @elseif($office === 'GUIDANCE') 139, 92, 246 @elseif($office === 'REGISTRAR') 245, 158, 11 @elseif($office === 'CLINIC') 239, 68, 68 @else 102, 126, 234 @endif, 0.6)); 
-            }
+            color: #10b981;
+            font-size: 1.5rem;
         }
 
         .office-info {
-            color: #e2e8f0;
+            color: #cbd5e1;
             font-size: 0.9rem;
             margin-top: 0.5rem;
-            font-weight: 600;
-            opacity: 0.9;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-align: center;
-            padding: 0 0.5rem;
-        }
-
-        .greeting-text {
-            color: #94a3b8;
-            font-size: 0.8rem;
-            margin-top: 0.6rem;
             font-weight: 400;
             opacity: 0.8;
-            font-style: italic;
-            text-align: center;
-            line-height: 1.4;
-            padding: 0 1rem;
         }
 
         .sidebar-menu {
             list-style: none;
-            padding: 1.5rem 0;
-            flex-grow: 1;
+            padding: 1rem 0;
         }
 
         .sidebar-menu li {
-            margin: 0.4rem 0;
+            margin: 0.5rem 0;
         }
 
         .sidebar-menu a {
             display: flex;
             align-items: center;
-            padding: 1.4rem 2rem;
-            color: #e2e8f0;
+            padding: 0.875rem 1.5rem;
+            color: #cbd5e1;
             text-decoration: none;
-            font-weight: 600;
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            gap: 1.2rem;
-            font-size: 0.95rem;
-            border-left: 4px solid transparent;
-            position: relative;
-            overflow: hidden;
-            margin: 0.5rem 0;
-            border-radius: 0 14px 14px 0;
-            letter-spacing: 0.4px;
-            line-height: 1.3;
-        }
-
-        .sidebar-menu a::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: linear-gradient(135deg, #ffffff, #e5e7eb);
-            transform: scaleY(0);
-            transition: transform 0.3s ease;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            gap: 0.75rem;
         }
 
         .sidebar-menu a:hover,
         .sidebar-menu a.active {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.08) 100%);
-            color: #ffffff;
-            transform: translateX(12px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(@if($office === 'NSTP') 16, 185, 129 @elseif($office === 'SSC') 59, 130, 246 @elseif($office === 'GUIDANCE') 139, 92, 246 @elseif($office === 'REGISTRAR') 245, 158, 11 @elseif($office === 'CLINIC') 239, 68, 68 @else 102, 126, 234 @endif, 0.25);
-            backdrop-filter: blur(15px);
-            border-left-color: @if($office === 'NSTP') #10b981 @elseif($office === 'SSC') #3b82f6 @elseif($office === 'GUIDANCE') #8b5cf6 @elseif($office === 'REGISTRAR') #f59e0b @elseif($office === 'CLINIC') #ef4444 @else #667eea @endif;
-        }
-
-        .sidebar-menu a:hover::before,
-        .sidebar-menu a.active::before {
-            transform: scaleY(1);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            transform: translateX(5px);
         }
 
         .sidebar-menu a i {
-            width: 24px;
+            width: 20px;
             text-align: center;
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
-            font-size: 1.1rem;
-            color: #cbd5e1;
-            flex-shrink: 0;
+            transition: all 0.3s ease;
         }
 
         .sidebar-menu a:hover i,
         .sidebar-menu a.active i {
-            transform: scale(1.25) rotate(6deg);
-            color: #ffffff;
-            filter: drop-shadow(0 3px 6px rgba(@if($office === 'NSTP') 16, 185, 129 @elseif($office === 'SSC') 59, 130, 246 @elseif($office === 'GUIDANCE') 139, 92, 246 @elseif($office === 'REGISTRAR') 245, 158, 11 @elseif($office === 'CLINIC') 239, 68, 68 @else 102, 126, 234 @endif, 0.3));
+            transform: scale(1.1);
         }
 
    /* Add this to your CSS */

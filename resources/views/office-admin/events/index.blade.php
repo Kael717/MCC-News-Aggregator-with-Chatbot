@@ -87,98 +87,45 @@
             min-height: 100vh;
         }
 
-        /* Sidebar Styles - Enhanced to match department admin */
         .sidebar {
-            width: var(--sidebar-width);
-            background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #2d2d2d 100%);
+            width: 280px;
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
             color: white;
             position: fixed;
             height: 100vh;
             left: 0;
             top: 0;
             overflow-y: auto;
-            overflow-x: hidden;
             z-index: 1000;
-            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1);
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            backdrop-filter: blur(20px);
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .sidebar::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.02) 50%, transparent 70%);
-            animation: shimmer 3s ease-in-out infinite;
-            pointer-events: none;
-        }
-
-        @keyframes shimmer {
-            0%, 100% { transform: translateX(-100%); opacity: 0; }
-            50% { transform: translateX(100%); opacity: 1; }
+            box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
         }
 
         .sidebar-header {
             padding: 2rem 1.5rem;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
-            color: white;
-            position: relative;
-            overflow: hidden;
             text-align: center;
-            margin-bottom: 0.5rem;
-        }
-
-        .sidebar-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, #ffffff, #e5e7eb, #ffffff);
-            animation: headerShimmer 2s ease-in-out infinite;
-        }
-
-        @keyframes headerShimmer {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
         }
 
         .sidebar-header h3 {
             color: white;
-            font-size: 1.4rem;
-            font-weight: 700;
+            font-size: 1.2rem;
+            font-weight: 600;
             margin: 0;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
-            background: linear-gradient(135deg, #ffffff 0%, #e5e7eb 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            position: relative;
         }
 
         .sidebar-header h3 i {
-            font-size: 1.6rem;
-            background: linear-gradient(135deg, #ffffff 0%, #d1d5db 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+            color: #10b981;
+            font-size: 1.5rem;
         }
 
         .office-info {
-            color: var(--text-light);
-            font-size: 0.8rem;
+            color: #cbd5e1;
+            font-size: 0.9rem;
             margin-top: 0.5rem;
             font-weight: 400;
             opacity: 0.8;
@@ -187,49 +134,39 @@
         .sidebar-menu {
             list-style: none;
             padding: 1rem 0;
-            flex-grow: 1;
         }
 
         .sidebar-menu li {
-            margin: 0.25rem 0;
+            margin: 0.5rem 0;
         }
 
         .sidebar-menu a {
             display: flex;
             align-items: center;
-            padding: 0.75rem 1.25rem;
-            color: #d1d5db;
+            padding: 0.875rem 1.5rem;
+            color: #cbd5e1;
             text-decoration: none;
             font-weight: 500;
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: all 0.3s ease;
             gap: 0.75rem;
-            font-size: 0.9rem;
-            border-left: 3px solid transparent;
-            margin: 0 0.5rem;
-            border-radius: 6px;
-            position: relative;
-            overflow: hidden;
         }
 
-        .sidebar-menu a:hover {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
-            color: white;
-            border-left-color: var(--primary-color);
-            transform: translateX(4px);
-        }
-
+        .sidebar-menu a:hover,
         .sidebar-menu a.active {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+            background: rgba(255, 255, 255, 0.1);
             color: white;
-            border-left-color: var(--primary-color);
-            font-weight: 600;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transform: translateX(5px);
         }
 
         .sidebar-menu a i {
             width: 20px;
             text-align: center;
-            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-menu a:hover i,
+        .sidebar-menu a.active i {
+            transform: scale(1.1);
         }
 
         .logout-btn {

@@ -306,18 +306,14 @@ class AnnouncementController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        if ($admin->isOfficeAdmin() && $announcement->target_office !== $admin->office) {
-            abort(403, 'Unauthorized action.');
-        }
+        // Office admins can view announcements targeted to their office OR announcements they created
+        if ($admin->isOfficeAdmin()) {
+            $canViewByOffice = $announcement->target_office === $admin->office;
+            $canViewByOwnership = $announcement->admin_id === $admin->id;
 
-        // Department admins can only view their own announcements
-        if ($admin->isDepartmentAdmin() && $announcement->admin_id !== $admin->id) {
-            abort(403, 'Unauthorized access to this announcement.');
-        }
-
-        // Office admins can only view their own announcements
-        if ($admin->isOfficeAdmin() && $announcement->admin_id !== $admin->id) {
-            abort(403, 'Unauthorized access to this announcement.');
+            if (!$canViewByOffice && !$canViewByOwnership) {
+                abort(403, 'Unauthorized access to this announcement.');
+            }
         }
 
         if ($admin->isDepartmentAdmin()) {
@@ -345,9 +341,14 @@ class AnnouncementController extends Controller
             abort(403, 'Unauthorized access to this announcement.');
         }
 
-        // Office admins can only edit their own announcements
-        if ($admin->isOfficeAdmin() && $announcement->admin_id !== $admin->id) {
-            abort(403, 'Unauthorized access to this announcement.');
+        // Office admins can only edit announcements they created OR announcements targeted to their office
+        if ($admin->isOfficeAdmin()) {
+            $canEditByOffice = $announcement->target_office === $admin->office;
+            $canEditByOwnership = $announcement->admin_id === $admin->id;
+
+            if (!$canEditByOffice && !$canEditByOwnership) {
+                abort(403, 'Unauthorized access to this announcement.');
+            }
         }
 
         if ($admin->isDepartmentAdmin()) {
@@ -624,9 +625,14 @@ class AnnouncementController extends Controller
             abort(403, 'Unauthorized access to this announcement.');
         }
 
-        // Office admins can only delete their own announcements
-        if ($admin->isOfficeAdmin() && $announcement->admin_id !== $admin->id) {
-            abort(403, 'Unauthorized access to this announcement.');
+        // Office admins can only delete announcements they created OR announcements targeted to their office
+        if ($admin->isOfficeAdmin()) {
+            $canDeleteByOffice = $announcement->target_office === $admin->office;
+            $canDeleteByOwnership = $announcement->admin_id === $admin->id;
+
+            if (!$canDeleteByOffice && !$canDeleteByOwnership) {
+                abort(403, 'Unauthorized access to this announcement.');
+            }
         }
 
         // Delete associated files
@@ -667,14 +673,19 @@ class AnnouncementController extends Controller
     public function showModal(Announcement $announcement)
     {
         $admin = Auth::guard('admin')->user();
-        
+
         // Check permissions
         if ($admin->isDepartmentAdmin() && $announcement->admin_id !== $admin->id) {
             abort(403, 'Unauthorized access to this announcement.');
         }
 
-        if ($admin->isOfficeAdmin() && $announcement->target_office !== $admin->office) {
-            abort(403, 'Unauthorized access to this announcement.');
+        if ($admin->isOfficeAdmin()) {
+            $canViewByOffice = $announcement->target_office === $admin->office;
+            $canViewByOwnership = $announcement->admin_id === $admin->id;
+
+            if (!$canViewByOffice && !$canViewByOwnership) {
+                abort(403, 'Unauthorized access to this announcement.');
+            }
         }
 
         // Determine the correct view based on admin type
@@ -698,8 +709,13 @@ class AnnouncementController extends Controller
             abort(403, 'Unauthorized access to this announcement.');
         }
 
-        if ($admin->isOfficeAdmin() && $announcement->admin_id !== $admin->id) {
-            abort(403, 'Unauthorized access to this announcement.');
+        if ($admin->isOfficeAdmin()) {
+            $canEditByOffice = $announcement->target_office === $admin->office;
+            $canEditByOwnership = $announcement->admin_id === $admin->id;
+
+            if (!$canEditByOffice && !$canEditByOwnership) {
+                abort(403, 'Unauthorized access to this announcement.');
+            }
         }
 
         if ($admin->isDepartmentAdmin()) {

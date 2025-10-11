@@ -387,10 +387,9 @@
         --success-color: #10b981;
     }
 
-    /* Update the sidebar styles */
     .sidebar {
-        width: var(--sidebar-width);
-        background: var(--bg-sidebar);
+        width: 280px;
+        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
         color: white;
         position: fixed;
         height: 100vh;
@@ -398,23 +397,19 @@
         top: 0;
         overflow-y: auto;
         z-index: 1000;
-        box-shadow: var(--box-shadow);
-        transition: transform var(--transition-speed) ease;
-        display: flex;
-        flex-direction: column;
+        box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
     }
 
     .sidebar-header {
-        padding: 1.5rem;
+        padding: 2rem 1.5rem;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         text-align: center;
-        margin-bottom: 0.5rem;
-        background: var(--bg-sidebar);
     }
 
     .sidebar-header h3 {
         color: white;
-        font-size: 1.1rem;
+        font-size: 1.2rem;
         font-weight: 600;
         margin: 0;
         display: flex;
@@ -424,59 +419,54 @@
     }
 
     .sidebar-header h3 i {
-        color: var(--primary-color);
-        font-size: 1.3rem;
+        color: #10b981;
+        font-size: 1.5rem;
     }
 
     .office-info {
-        color: rgba(255, 255, 255, 0.8);
-        font-size: 0.8rem;
+        color: #cbd5e1;
+        font-size: 0.9rem;
         margin-top: 0.5rem;
         font-weight: 400;
+        opacity: 0.8;
     }
 
     .sidebar-menu {
         list-style: none;
-        padding: 0.5rem 0;
-        flex-grow: 1;
+        padding: 1rem 0;
     }
 
     .sidebar-menu li {
-        margin: 0.25rem 0;
+        margin: 0.5rem 0;
     }
 
     .sidebar-menu a {
         display: flex;
         align-items: center;
-        padding: 0.75rem 1.25rem;
-        color: rgba(255, 255, 255, 0.8);
+        padding: 0.875rem 1.5rem;
+        color: #cbd5e1;
         text-decoration: none;
         font-weight: 500;
-        transition: all var(--transition-speed) ease;
+        transition: all 0.3s ease;
         gap: 0.75rem;
-        font-size: 0.9rem;
-        border-left: 3px solid transparent;
-        margin: 0 0.5rem;
-        border-radius: 6px;
     }
 
-    .sidebar-menu a:hover {
-        background: var(--bg-sidebar-hover);
-        color: white;
-        border-left-color: var(--primary-color);
-    }
-
+    .sidebar-menu a:hover,
     .sidebar-menu a.active {
-        background: var(--bg-sidebar-hover);
+        background: rgba(255, 255, 255, 0.1);
         color: white;
-        border-left-color: var(--primary-color);
-        font-weight: 600;
+        transform: translateX(5px);
     }
 
     .sidebar-menu a i {
         width: 20px;
         text-align: center;
-        font-size: 0.95rem;
+        transition: all 0.3s ease;
+    }
+
+    .sidebar-menu a:hover i,
+    .sidebar-menu a.active i {
+        transform: scale(1.1);
     }
 
     .main-content {

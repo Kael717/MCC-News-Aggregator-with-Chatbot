@@ -57,9 +57,6 @@
                 </div>
             </div>
             <div class="header-actions">
-                <a href="{{ route('superadmin.news.edit', $news) }}" class="btn btn-primary btn-enhanced">
-                    <i class="fas fa-edit"></i> Edit
-                </a>
                 <a href="{{ route('superadmin.news.index') }}" class="btn btn-green btn-enhanced">
                     <i class="fas fa-arrow-left"></i> Back to List
                 </a>
@@ -215,80 +212,79 @@
 
     .sidebar {
         width: 280px;
-        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        background: #1a1a1a;
         color: white;
         position: fixed;
         height: 100vh;
         left: 0;
         top: 0;
         z-index: 1000;
-        overflow-y: auto;
         transition: transform 0.3s ease;
-        box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+        overflow-y: auto;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
     }
 
     .sidebar-header {
-        padding: 2rem 1.5rem;
+        padding: 1.5rem;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        background: rgba(0, 0, 0, 0.2);
+        text-align: left;
     }
 
     .sidebar-header h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
         margin: 0;
-        font-size: 1.25rem;
-        font-weight: 700;
         display: flex;
         align-items: center;
-        gap: 0.75rem;
+        gap: 0.5rem;
         color: white;
     }
 
-    .sidebar-header i {
-        color: #64748b;
-        font-size: 1.5rem;
+    .sidebar-header h3 i {
+        color: white;
+        font-size: 1.3rem;
+    }
+
+    .office-info {
+        color: white;
+        font-size: 0.8rem;
+        margin-top: 0.5rem;
+        font-weight: 400;
+        opacity: 0.8;
     }
 
     .sidebar-menu {
         list-style: none;
-        padding: 1rem 0;
-        margin: 0;
+        padding: 0.5rem 0;
     }
 
     .sidebar-menu li {
-        margin: 0;
+        margin: 0.25rem 0;
     }
 
-    .sidebar-menu a {
+    .sidebar-menu a, .sidebar-menu button {
         display: flex;
         align-items: center;
         gap: 0.75rem;
-        padding: 1rem 1.5rem;
-        color: rgba(255, 255, 255, 0.8);
-        text-decoration: none;
-        transition: all 0.3s ease;
-        border-left: 3px solid transparent;
-        font-weight: 500;
-    }
-
-    .sidebar-menu a:hover {
-        background: rgba(255, 255, 255, 0.1);
+        padding: 0.75rem 1.25rem;
         color: white;
-        border-left-color: #64748b;
-        transform: translateX(5px);
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        border: none;
+        background: none;
+        width: 100%;
+        text-align: left;
+        cursor: pointer;
     }
 
+    .sidebar-menu a:hover, .sidebar-menu button:hover,
     .sidebar-menu a.active {
-        background: rgba(255, 255, 255, 0.15);
-        color: #ffffff;
-        border-left-color: #ffffff;
-        font-weight: 600;
-        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-    }
-
-    .sidebar-menu i {
-        width: 20px;
-        text-align: center;
-        font-size: 1rem;
+        background: #333333;
+        color: white;
     }
 
     .main-content {

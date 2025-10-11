@@ -52,8 +52,9 @@
                 <p style="margin: 0; color: var(--text-secondary); font-size: 0.875rem;">Share important news with the campus community</p>
             </div>
             <div class="header-actions">
-                <a href="{{ route('superadmin.news.index') }}" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i> Back to List
+                <a href="{{ route('superadmin.news.index') }}" class="btn btn-back">
+                    <div class="btn-shine"></div>
+                    <span><i class="fas fa-arrow-left"></i> Back to List</span>
                 </a>
             </div>
         </div>
@@ -228,11 +229,13 @@
                 </div>
 
                 <div class="form-actions">
-                    <button type="submit" name="action" value="save_and_publish" class="btn btn-primary">
-                        <i class="fas fa-paper-plane"></i> Create News
+                    <button type="submit" name="action" value="save_and_publish" class="btn btn-create">
+                        <div class="btn-shine"></div>
+                        <span><i class="fas fa-paper-plane"></i> Create News</span>
                     </button>
-                    <a href="{{ route('superadmin.news.index') }}" class="btn btn-danger">
-                        <i class="fas fa-times"></i> Cancel
+                    <a href="{{ route('superadmin.news.index') }}" class="btn btn-cancel">
+                        <div class="btn-shine"></div>
+                        <span><i class="fas fa-times"></i> Cancel</span>
                     </a>
                 </div>
             </form>
@@ -582,41 +585,128 @@
         }
     }
 
-    /* Button Styles */
-    .btn-danger {
-        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
-        color: white;
-        border: 2px solid transparent;
+    /* Enhanced Button Styles */
+    .btn {
+        position: relative;
+        overflow: hidden;
+        border: none;
+        border-radius: 12px;
+        padding: 14px 28px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        min-width: 160px;
+        z-index: 1;
+    }
+
+    .btn span {
+        position: relative;
+        z-index: 3;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
         transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
     }
 
-    .btn-danger:hover {
-        background: linear-gradient(135deg, #c82333 0%, #a71e2a 100%);
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4);
+    .btn i {
+        transition: all 0.3s ease;
     }
 
-    .btn-danger:active {
-        transform: translateY(0);
-        box-shadow: 0 2px 10px rgba(220, 53, 69, 0.3);
+    .btn-shine {
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: left 0.6s ease;
+        z-index: 2;
     }
 
-    .btn-primary {
-        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    /* Back Button (Blue) */
+    .btn-back {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
         color: white;
-        border: 2px solid transparent;
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     }
 
-    .btn-primary:hover {
-        background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    .btn-back:hover {
         transform: translateY(-2px);
-        box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4), 0 10px 10px -5px rgba(16, 185, 129, 0.04);
+        box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5);
+        background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
     }
 
-    .btn-primary:focus {
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.3);
+    .btn-back:hover .btn-shine {
+        left: 100%;
+    }
+
+    .btn-back:hover i {
+        transform: scale(1.1) rotate(-5deg);
+    }
+
+    /* Create Button (Green) */
+    .btn-create {
+        background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-create:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(16, 185, 129, 0.5);
+        background: linear-gradient(135deg, #059669 0%, #065f46 100%);
+    }
+
+    .btn-create:hover .btn-shine {
+        left: 100%;
+    }
+
+    .btn-create:hover i {
+        transform: scale(1.1) rotate(5deg);
+    }
+
+    /* Cancel Button (Red) */
+    .btn-cancel {
+        background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-cancel:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(239, 68, 68, 0.5);
+        background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+    }
+
+    .btn-cancel:hover .btn-shine {
+        left: 100%;
+    }
+
+    .btn-cancel:hover i {
+        transform: scale(1.1) rotate(-5deg);
+    }
+
+    /* Disabled State */
+    .btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none !important;
+        box-shadow: none !important;
+    }
+
+    .btn:disabled:hover .btn-shine {
+        left: -100% !important;
     }
     
     </style>
